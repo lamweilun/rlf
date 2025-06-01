@@ -11,8 +11,8 @@ namespace rlf {
         bool    active         = true;
         bool    markForDestroy = false;
 
-        NodeBase*       parent = nullptr;
-        std::list<Node> children;
+        NodeBase*       parent   = nullptr;
+        std::list<Node> children = {};
 
         template <class T>
         T& addChild() {
