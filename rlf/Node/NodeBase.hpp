@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Node/Node.hpp>
-#include <list>
+#include <vector>
 
 namespace rlf {
     class NodeBase {
@@ -11,15 +11,21 @@ namespace rlf {
         bool    active         = true;
         bool    markForDestroy = false;
 
-        std::list<Node> children;
+        std::vector<Node> children;
+
+        NodeBase();
+        ~NodeBase()                          = default;
+        NodeBase(NodeBase const&)            = default;
+        NodeBase(NodeBase&&)                 = default;
+        NodeBase& operator=(NodeBase const&) = default;
+        NodeBase& operator=(NodeBase&&)      = default;
 
         static Node&     getRootNode();
         static NodeBase& getRootNodeBase();
 
         template <class T>
         T& addChild() {
-            T& child = std::get<T>(children.emplace_back(T{}));
-            return child;
+            return std::get<T>(children.emplace_back(T{}));
         }
 
         Matrix getLocalTransform() const;

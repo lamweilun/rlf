@@ -1,15 +1,8 @@
-#include <Node/Node.hpp>
-
-#include <Node/NodeBase.hpp>
-#include <Node/Physics/RigidbodyNode.hpp>
-#include <Node/Player/PlayerNode.hpp>
-#include <Node/Player/PlayerBulletNode.hpp>
+#include <Node/NodeInclude.hpp>
 
 #include <NodeSystem/NodeDestroyer.hpp>
 #include <NodeSystem/NodeRenderer.hpp>
 #include <NodeSystem/NodeUpdater.hpp>
-
-#include <print>
 
 int main() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI);
@@ -20,14 +13,15 @@ int main() {
     rlf::NodeUpdater   updater;
     rlf::NodeRenderer  renderer;
 
-    auto &playerNode    = rlf::NodeBase::getRootNodeBase().addChild<rlf::PlayerNode>();
-    playerNode.position = Vector3{640, 360, 0};
+    auto& rootNode      = rlf::NodeBase::getRootNode();
+    auto& playerNode    = rlf::NodeBase::getRootNodeBase().addChild<rlf::PlayerNode>();
+    playerNode.position = Vector3{0, 360, 0};
 
     while (!WindowShouldClose()) {
-        std::visit(destroyer, rlf::NodeBase::getRootNode());
-        std::visit(updater, rlf::NodeBase::getRootNode());
+        std::visit(destroyer, rootNode);
+        std::visit(updater, rootNode);
 
-        auto rootNodeCopy = rlf::NodeBase::getRootNode();
+        auto rootNodeCopy = rootNode;
         BeginDrawing();
         ClearBackground(BLACK);
 

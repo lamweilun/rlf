@@ -1,9 +1,5 @@
 #include <Node/NodeBase.hpp>
-
-#include <Node/NodeBase.hpp>
-#include <Node/Physics/RigidbodyNode.hpp>
-#include <Node/Player/PlayerNode.hpp>
-#include <Node/Player/PlayerBulletNode.hpp>
+#include <Node/NodeInclude.hpp>
 
 namespace rlf {
 
@@ -13,6 +9,10 @@ namespace rlf {
     }
     NodeBase& NodeBase::getRootNodeBase() {
         return std::get<NodeBase>(getRootNode());
+    }
+
+    NodeBase::NodeBase() {
+        children.reserve(128);
     }
 
     Matrix NodeBase::getLocalTransform() const {
