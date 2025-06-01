@@ -1,5 +1,7 @@
 #pragma once
 
+#include <variant>
+
 namespace rlf {
     class NodeDestroyer {
     public:
@@ -9,7 +11,7 @@ namespace rlf {
             }
 
             for (auto& child : node.children) {
-                child.visit(*this);
+                std::visit(*this, child);
             }
 
             node.children.clear();

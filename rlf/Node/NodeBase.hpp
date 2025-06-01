@@ -11,20 +11,19 @@ namespace rlf {
         bool    active         = true;
         bool    markForDestroy = false;
 
-        NodeBase*       parent   = nullptr;
-        std::list<Node> children = {};
+        std::list<Node> children;
+
+        static Node&     getRootNode();
+        static NodeBase& getRootNodeBase();
 
         template <class T>
         T& addChild() {
-            T& child     = std::get<T>(children.emplace_back(T{}));
-            child.parent = this;
+            T& child = std::get<T>(children.emplace_back(T{}));
             return child;
         }
 
-        NodeBase* getRootNode();
-        Matrix    getLocalTransform() const;
-
-        void update();
-        void render();
+        Matrix getLocalTransform() const;
+        void   update();
+        void   render();
     };
 }

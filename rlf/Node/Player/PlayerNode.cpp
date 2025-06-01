@@ -19,7 +19,7 @@ namespace rlf {
 
     void PlayerNode::mouseControls() {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            auto& bulletNode    = getRootNode()->addChild<PlayerBulletNode>();
+            auto& bulletNode    = getRootNodeBase().addChild<PlayerBulletNode>();
             bulletNode.position = position;
             bulletNode.velocity = Vector3{GetMousePosition().x, GetMousePosition().y, 0.0f} - bulletNode.position;
             bulletNode.velocity = Vector3Normalize(bulletNode.velocity);

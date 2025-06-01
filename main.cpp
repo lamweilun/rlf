@@ -1,3 +1,5 @@
+#include <Node/Node.hpp>
+
 #include <Node/NodeBase.hpp>
 #include <Node/Physics/RigidbodyNode.hpp>
 #include <Node/Player/PlayerNode.hpp>
@@ -13,25 +15,23 @@ int main() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI);
     InitWindow(1280, 720, "Hello rlf");
     SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
-    // SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
-    // ToggleBorderlessWindowed();
 
     rlf::NodeDestroyer destroyer;
     rlf::NodeUpdater   updater;
     rlf::NodeRenderer  renderer;
 
-    rlf::Node rootNode   = rlf::NodeBase();
-    auto     &playerNode = std::get<rlf::NodeBase>(rootNode).addChild<rlf::PlayerNode>();
-    playerNode.position  = Vector3{640, 360, 0};
+    auto &playerNode    = rlf::NodeBase::getRootNodeBase().addChild<rlf::PlayerNode>();
+    playerNode.position = Vector3{640, 360, 0};
 
     while (!WindowShouldClose()) {
-        rootNode.visit(destroyer);
-        rootNode.visit(updater);
+        std::visit(destroyer, rlf::NodeBase::getRootNode());
+        std::visit(updater, rlf::NodeBase::getRootNode());
 
+        auto rootNodeCopy = rlf::NodeBase::getRootNode();
         BeginDrawing();
         ClearBackground(BLACK);
 
-        rootNode.visit(renderer);
+        std::visit(renderer, rootNodeCopy);
 
         DrawFPS(10, 10);
         EndDrawing();

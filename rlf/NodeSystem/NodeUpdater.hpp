@@ -1,5 +1,7 @@
 #pragma once
 
+#include <variant>
+
 namespace rlf {
     class NodeUpdater {
     public:
@@ -10,7 +12,7 @@ namespace rlf {
 
             node.update();
             for (auto& child : node.children) {
-                child.visit(*this);
+                std::visit(*this, child);
             }
         }
     };

@@ -27,7 +27,7 @@ function(add_warning_flags TARGET)
             -Wconversion
             -Wctor-dtor-privacy
             -Wdouble-promotion
-            -Weffc++
+            # -Weffc++
             -Wextra-semi
             -Wfloat-equal
             -Wformat=2

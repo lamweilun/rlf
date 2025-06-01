@@ -1,13 +1,18 @@
 #include <Node/NodeBase.hpp>
 
+#include <Node/NodeBase.hpp>
+#include <Node/Physics/RigidbodyNode.hpp>
+#include <Node/Player/PlayerNode.hpp>
+#include <Node/Player/PlayerBulletNode.hpp>
+
 namespace rlf {
 
-    NodeBase* NodeBase::getRootNode() {
-        NodeBase* currNode = this;
-        while (currNode->parent) {
-            currNode = currNode->parent;
-        }
-        return currNode;
+    Node& NodeBase::getRootNode() {
+        static Node rootNode = rlf::NodeBase();
+        return rootNode;
+    }
+    NodeBase& NodeBase::getRootNodeBase() {
+        return std::get<NodeBase>(getRootNode());
     }
 
     Matrix NodeBase::getLocalTransform() const {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <variant>
+
 namespace rlf {
     class NodeRenderer {
     public:
@@ -15,7 +17,7 @@ namespace rlf {
 
             node.render();
             for (auto& child : node.children) {
-                child.visit(*this);
+                std::visit(*this, child);
             }
 
             rlPopMatrix();
