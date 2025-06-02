@@ -16,13 +16,15 @@ CPMAddPackage("gh:raysan5/raylib#5.5")
 project(rlf)
 add_executable(
     ${PROJECT_NAME}
-
+    
+    rlf/Node/Enemy/EnemyNode.cpp
+    
     rlf/Node/Physics/RigidbodyNode.cpp
-
+    
     rlf/Node/Player/PlayerBulletNode.cpp
     rlf/Node/Player/PlayerNode.cpp
-
-    rlf/Node/NodeBase.cpp
+    
+    rlf/Node/BaseNode.cpp
 
     main.cpp
 )

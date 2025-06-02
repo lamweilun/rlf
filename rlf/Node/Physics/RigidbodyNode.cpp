@@ -1,7 +1,7 @@
 #include <Node/Physics/RigidbodyNode.hpp>
 
 namespace rlf {
-    void RigidbodyNode::update() {
+    void RigidbodyNode::updateImpl() {
         position += velocity * speed * GetFrameTime();
     }
 }

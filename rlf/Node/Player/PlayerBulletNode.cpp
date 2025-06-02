@@ -2,16 +2,15 @@
 
 namespace rlf {
 
-    void PlayerBulletNode::update() {
-        if (position.x < 0.0f || position.x > 1280 || position.y < 0.0f || position.y > 720) {
+    void PlayerBulletNode::updateImpl() {
+        if (position.x < 0 || position.x > 1280 || position.y < 0 || position.y > 720) {
             markForDestroy = true;
-            std::cout << "Marked for Destroy" << std::endl;
         }
 
-        RigidbodyNode::update();
+        RigidbodyNode::updateImpl();
     }
 
-    void PlayerBulletNode::render() {
-        DrawCircleV(Vector2Zeros, 5.0f, BLUE);
+    void PlayerBulletNode::renderImpl() {
+        DrawCircle(0, 0, 1.0f, BLUE);
     }
 }

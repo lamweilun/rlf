@@ -6,24 +6,27 @@ namespace rlf {
 
     PlayerNode::PlayerNode() {
         speed = 200.0f;
+        scale = Vector3{10, 10, 0};
     }
 
-    void PlayerNode::update() {
+    void PlayerNode::updateImpl() {
         mouseControls();
         movementControls();
+        RigidbodyNode::updateImpl();
     }
 
-    void PlayerNode::render() {
-        DrawCircle(0, 0, 10.0f, WHITE);
+    void PlayerNode::renderImpl() {
+        DrawCircle(0, 0, 1.0f, WHITE);
     }
 
     void PlayerNode::mouseControls() {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            auto& bulletNode    = getRootNodeBase().addChild<PlayerBulletNode>();
-            bulletNode.position = position;
-            bulletNode.velocity = Vector3{GetMousePosition().x, GetMousePosition().y, 0.0f} - bulletNode.position;
-            bulletNode.velocity = Vector3Normalize(bulletNode.velocity);
-            bulletNode.speed    = 700.0f;
+            auto bulletNode      = getRootNode()->addChild<PlayerBulletNode>();
+            bulletNode->position = position;
+            bulletNode->scale    = Vector3{5, 5, 0};
+            bulletNode->velocity = Vector3{GetMousePosition().x, GetMousePosition().y, 0.0f} - bulletNode->position;
+            bulletNode->velocity = Vector3Normalize(bulletNode->velocity);
+            bulletNode->speed    = 1000.0f;
         }
     }
 
@@ -43,6 +46,5 @@ namespace rlf {
         }
 
         velocity = Vector3Normalize(velocity);
-        RigidbodyNode::update();
     }
 }

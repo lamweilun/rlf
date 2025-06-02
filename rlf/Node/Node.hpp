@@ -1,17 +1,12 @@
 #pragma once
 
-#include <variant>
+#include <Node/Node.hpp>
 
-namespace rlf {
+#include <Node/BaseNode.hpp>
 
-    class NodeBase;
-    class RigidbodyNode;
-    class PlayerNode;
-    class PlayerBulletNode;
+#include <Node/Physics/RigidbodyNode.hpp>
 
-    using Node = std::variant<
-        rlf::NodeBase,
-        rlf::RigidbodyNode,
-        rlf::PlayerNode,
-        rlf::PlayerBulletNode>;
-}
+#include <Node/Player/PlayerNode.hpp>
+#include <Node/Player/PlayerBulletNode.hpp>
+
+#include <Node/Enemy/EnemyNode.hpp>

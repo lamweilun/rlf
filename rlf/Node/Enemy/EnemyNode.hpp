@@ -3,9 +3,10 @@
 #include <Node/Physics/RigidbodyNode.hpp>
 
 namespace rlf {
-    class PlayerBulletNode : public rlf::RigidbodyNode {
+    class EnemyNode : public RigidbodyNode {
     public:
-        void updateImpl() override;
+        EnemyNode();
+
         void renderImpl() override;
     };
 }

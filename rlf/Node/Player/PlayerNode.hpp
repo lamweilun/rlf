@@ -7,8 +7,8 @@ namespace rlf {
     public:
         PlayerNode();
 
-        void update();
-        void render();
+        void updateImpl() override;
+        void renderImpl() override;
 
     private:
         void movementControls();
