@@ -1,14 +1,22 @@
 #include <Node/Node.hpp>
 
+#include <System/PhysicsSystem.hpp>
+
 int main() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI);
     InitWindow(1280, 720, "Hello rlf");
     // SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 
+    auto& physicsSystem = rlf::PhysicsSystem::getInstance();
+    (void)physicsSystem;
+
     auto rootNode = std::make_shared<rlf::BaseNode>();
     rootNode->addChild<rlf::PlayerNode>();
-    auto enemy1      = rootNode->addChild<rlf::EnemyNode>();
-    enemy1->position = Vector3{640, 360, 0};
+    auto enemy1       = rootNode->addChild<rlf::EnemyNode>();
+    enemy1->position  = Vector3{640, 360, 0};
+    auto colliderNode = enemy1->addChild<rlf::ColliderNode>();
+
+    rootNode->init();
 
     while (!WindowShouldClose()) {
         rootNode->update();
@@ -21,6 +29,8 @@ int main() {
         DrawFPS(10, 10);
         EndDrawing();
     }
+
+    rootNode->shutdown();
 
     CloseWindow();
 }

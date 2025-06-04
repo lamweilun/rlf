@@ -19,12 +19,15 @@ add_executable(
     
     rlf/Node/Enemy/EnemyNode.cpp
     
+    rlf/Node/Physics/ColliderNode.cpp
     rlf/Node/Physics/RigidbodyNode.cpp
     
     rlf/Node/Player/PlayerBulletNode.cpp
     rlf/Node/Player/PlayerNode.cpp
     
     rlf/Node/BaseNode.cpp
+
+    rlf/System/PhysicsSystem.cpp
 
     main.cpp
 )

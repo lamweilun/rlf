@@ -10,6 +10,7 @@ namespace rlf {
         Vector3 scale          = Vector3Ones;
         bool    active         = true;
         bool    markForDestroy = false;
+        bool    hasInited      = false;
 
         std::weak_ptr<BaseNode>                parent;
         std::vector<std::shared_ptr<BaseNode>> children;
@@ -33,10 +34,14 @@ namespace rlf {
         std::shared_ptr<BaseNode> getRootNode();
         Matrix                    getLocalTransform() const;
 
+        void init();
         void update();
         void render();
+        void shutdown();
 
+        virtual void initImpl();
         virtual void updateImpl();
         virtual void renderImpl();
+        virtual void shutdownImpl();
     };
 }

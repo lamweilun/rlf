@@ -14,10 +14,23 @@ namespace rlf {
         return MatrixScale(scale.x, scale.y, scale.z) * MatrixTranslate(position.x, position.y, position.z);
     }
 
+    void BaseNode::init() {
+        if (!hasInited) {
+            initImpl();
+            hasInited = true;
+        }
+
+        for (auto& child : children) {
+            child->init();
+        }
+    }
+
     void BaseNode::update() {
         // Append newly created children
         children.append_range(newChildren);
         newChildren.clear();
+
+        init();
 
         // Update self then updateImpl all other children
         updateImpl();
@@ -34,6 +47,9 @@ namespace rlf {
             } else {
                 ++i;
             }
+        }
+        for (size_t i = newSize; i < children.size(); ++i) {
+            children[i]->shutdown();
         }
         children.resize(newSize);
     }
@@ -53,9 +69,29 @@ namespace rlf {
         rlPopMatrix();
     }
 
+    void BaseNode::shutdown() {
+        // Append newly created children
+        children.append_range(newChildren);
+        newChildren.clear();
+
+        init();
+
+        for (auto& child : children) {
+            child->shutdown();
+        }
+
+        shutdownImpl();
+    }
+
+    void BaseNode::initImpl() {
+    }
+
     void BaseNode::updateImpl() {
     }
 
     void BaseNode::renderImpl() {
+    }
+
+    void BaseNode::shutdownImpl() {
     }
 }
