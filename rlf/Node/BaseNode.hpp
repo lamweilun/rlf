@@ -33,7 +33,11 @@ namespace rlf {
         void setToDestroy(bool const toDestroy);
 
         std::shared_ptr<BaseNode> getRootNode();
-        Matrix                    getLocalTransform();
+        Matrix const&             getLocalTransform();
+        Matrix                    getGlobalTransform();
+
+        std::vector<std::shared_ptr<BaseNode>> const&
+        getChildren() const;
 
         void init();
         void update();
@@ -58,7 +62,7 @@ namespace rlf {
         bool mHasInited = false;
 
         std::weak_ptr<BaseNode>                parent;
-        std::vector<std::shared_ptr<BaseNode>> children;
+        std::vector<std::shared_ptr<BaseNode>> mChildren;
         std::vector<std::shared_ptr<BaseNode>> newChildren;
     };
 }

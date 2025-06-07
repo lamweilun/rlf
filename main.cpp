@@ -11,7 +11,11 @@ int main() {
     (void)physicsSystem;
 
     auto rootNode = std::make_shared<rlf::BaseNode>();
-    rootNode->addChild<rlf::PlayerNode>();
+
+    auto player = rootNode->addChild<rlf::PlayerNode>();
+    player->setPosition(Vector3{300, 360, 0});
+    auto playerColliderNode = player->addChild<rlf::ColliderNode>();
+
     auto enemy1 = rootNode->addChild<rlf::EnemyNode>();
     enemy1->setPosition(Vector3{640, 360, 0});
     auto colliderNode = enemy1->addChild<rlf::ColliderNode>();

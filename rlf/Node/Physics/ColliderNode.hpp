@@ -5,7 +5,10 @@
 namespace rlf {
     class ColliderNode : public BaseNode {
     public:
-        void initImpl() override;
-        void shutdownImpl() override;
+        void updateImpl() override;
+        void renderImpl() override;
+
+        BoundingBox getBoundingBox();
+        bool        collided = false;
     };
 }
