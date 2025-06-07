@@ -12,8 +12,8 @@ int main() {
 
     auto rootNode = std::make_shared<rlf::BaseNode>();
     rootNode->addChild<rlf::PlayerNode>();
-    auto enemy1       = rootNode->addChild<rlf::EnemyNode>();
-    enemy1->position  = Vector3{640, 360, 0};
+    auto enemy1 = rootNode->addChild<rlf::EnemyNode>();
+    enemy1->setPosition(Vector3{640, 360, 0});
     auto colliderNode = enemy1->addChild<rlf::ColliderNode>();
 
     rootNode->init();

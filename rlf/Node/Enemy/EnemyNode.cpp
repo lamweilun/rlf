@@ -2,7 +2,7 @@
 
 namespace rlf {
     EnemyNode::EnemyNode() {
-        scale = Vector3{20, 20, 0};
+        setScale(Vector3{20, 20, 0});
     }
 
     void EnemyNode::renderImpl() {

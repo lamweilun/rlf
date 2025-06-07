@@ -2,6 +2,33 @@
 
 namespace rlf {
 
+    Vector3 const& BaseNode::getPosition() const {
+        return mPosition;
+    }
+    void BaseNode::setPosition(Vector3 const& position) {
+        mPosition = position;
+        mDirty    = true;
+    }
+
+    Vector3 const& BaseNode::getScale() const {
+        return mScale;
+    }
+    void BaseNode::setScale(Vector3 const& scale) {
+        mScale = scale;
+        mDirty = true;
+    }
+
+    bool BaseNode::getActive() const {
+        return mActive;
+    }
+    void BaseNode::setActive(bool const active) {
+        mActive = active;
+    }
+
+    void BaseNode::setToDestroy(bool const toDestroy) {
+        mToDestroy = toDestroy;
+    }
+
     std::shared_ptr<BaseNode> BaseNode::getRootNode() {
         std::shared_ptr<BaseNode> rootNode = shared_from_this();
         while (auto parentNode = rootNode->parent.lock()) {
@@ -10,14 +37,17 @@ namespace rlf {
         return rootNode;
     }
 
-    Matrix BaseNode::getLocalTransform() const {
-        return MatrixScale(scale.x, scale.y, scale.z) * MatrixTranslate(position.x, position.y, position.z);
+    Matrix BaseNode::getLocalTransform() {
+        if (mDirty) {
+            mLocalTransform = MatrixScale(mScale.x, mScale.y, mScale.z) * MatrixTranslate(mPosition.x, mPosition.y, mPosition.z);
+        }
+        return mLocalTransform;
     }
 
     void BaseNode::init() {
-        if (!hasInited) {
+        if (!mHasInited) {
             initImpl();
-            hasInited = true;
+            mHasInited = true;
         }
 
         for (auto& child : children) {
@@ -26,11 +56,7 @@ namespace rlf {
     }
 
     void BaseNode::update() {
-        // Append newly created children
-        children.append_range(newChildren);
-        newChildren.clear();
-
-        init();
+        appendNewChildren();
 
         // Update self then updateImpl all other children
         updateImpl();
@@ -41,13 +67,14 @@ namespace rlf {
         // Clears those child that are marked for destroy
         size_t newSize = children.size();
         for (size_t i = 0; i < newSize;) {
-            if (children[i]->markForDestroy) {
+            if (children[i]->mToDestroy) {
                 std::swap(children[i], children[newSize - 1]);
                 --newSize;
             } else {
                 ++i;
             }
         }
+        // Nodes that are marked for destroy will call shutdown
         for (size_t i = newSize; i < children.size(); ++i) {
             children[i]->shutdown();
         }
@@ -70,15 +97,12 @@ namespace rlf {
     }
 
     void BaseNode::shutdown() {
-        // Append newly created children
-        children.append_range(newChildren);
-        newChildren.clear();
-
-        init();
+        appendNewChildren();
 
         for (auto& child : children) {
             child->shutdown();
         }
+        children.clear();
 
         shutdownImpl();
     }
@@ -93,5 +117,14 @@ namespace rlf {
     }
 
     void BaseNode::shutdownImpl() {
+    }
+
+    void BaseNode::appendNewChildren() {
+        // Append newly created children after calling init on them
+        for (auto& newChild : newChildren) {
+            newChild->init();
+        }
+        children.append_range(newChildren);
+        newChildren.clear();
     }
 }

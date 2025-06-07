@@ -6,7 +6,7 @@ namespace rlf {
 
     PlayerNode::PlayerNode() {
         speed = 200.0f;
-        scale = Vector3{10, 10, 0};
+        setScale(Vector3{10, 10, 0});
     }
 
     void PlayerNode::updateImpl() {
@@ -20,13 +20,12 @@ namespace rlf {
     }
 
     void PlayerNode::mouseControls() {
+        // Spawn a player bullet at the position of the player
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            auto bulletNode      = getRootNode()->addChild<PlayerBulletNode>();
-            bulletNode->position = position;
-            bulletNode->scale    = Vector3{5, 5, 0};
-            bulletNode->velocity = Vector3{GetMousePosition().x, GetMousePosition().y, 0.0f} - bulletNode->position;
+            auto bulletNode = getRootNode()->addChild<PlayerBulletNode>();
+            bulletNode->setPosition(getPosition());
+            bulletNode->velocity = Vector3{GetMousePosition().x, GetMousePosition().y, 0.0f} - bulletNode->getPosition();
             bulletNode->velocity = Vector3Normalize(bulletNode->velocity);
-            bulletNode->speed    = 1000.0f;
         }
     }
 

@@ -6,16 +6,6 @@
 namespace rlf {
     class BaseNode : public std::enable_shared_from_this<BaseNode> {
     public:
-        Vector3 position       = Vector3Zeros;
-        Vector3 scale          = Vector3Ones;
-        bool    active         = true;
-        bool    markForDestroy = false;
-        bool    hasInited      = false;
-
-        std::weak_ptr<BaseNode>                parent;
-        std::vector<std::shared_ptr<BaseNode>> children;
-        std::vector<std::shared_ptr<BaseNode>> newChildren;
-
         BaseNode()                           = default;
         virtual ~BaseNode()                  = default;
         BaseNode(BaseNode const&)            = default;
@@ -31,8 +21,19 @@ namespace rlf {
             return newChild;
         }
 
+        Vector3 const& getPosition() const;
+        void           setPosition(Vector3 const& position);
+
+        Vector3 const& getScale() const;
+        void           setScale(Vector3 const& scale);
+
+        bool getActive() const;
+        void setActive(bool const active);
+
+        void setToDestroy(bool const toDestroy);
+
         std::shared_ptr<BaseNode> getRootNode();
-        Matrix                    getLocalTransform() const;
+        Matrix                    getLocalTransform();
 
         void init();
         void update();
@@ -43,5 +44,21 @@ namespace rlf {
         virtual void updateImpl();
         virtual void renderImpl();
         virtual void shutdownImpl();
+
+    private:
+        void appendNewChildren();
+
+        Matrix  mLocalTransform = MatrixIdentity();
+        Vector3 mPosition       = Vector3Zeros;
+        Vector3 mScale          = Vector3Ones;
+        bool    mDirty          = true;
+
+        bool mActive    = true;
+        bool mToDestroy = false;
+        bool mHasInited = false;
+
+        std::weak_ptr<BaseNode>                parent;
+        std::vector<std::shared_ptr<BaseNode>> children;
+        std::vector<std::shared_ptr<BaseNode>> newChildren;
     };
 }
