@@ -5,10 +5,8 @@
 namespace rlf {
     class PlayerNode : public rlf::RigidbodyNode {
     public:
-        PlayerNode();
-
+        void initImpl() override;
         void updateImpl() override;
-        void renderImpl() override;
 
     private:
         void movementControls();

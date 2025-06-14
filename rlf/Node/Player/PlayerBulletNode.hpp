@@ -7,6 +7,5 @@ namespace rlf {
     public:
         void initImpl() override;
         void updateImpl() override;
-        void renderImpl() override;
     };
 }

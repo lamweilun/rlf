@@ -1,11 +1,11 @@
 #include <Node/Enemy/EnemyNode.hpp>
+#include <Node/Enemy/EnemyRenderNode.hpp>
+#include <Node/Physics/BoxColliderNode.hpp>
 
 namespace rlf {
-    EnemyNode::EnemyNode() {
+    void EnemyNode::initImpl() {
         setScale(Vector3{20, 20, 0});
-    }
-
-    void EnemyNode::renderImpl() {
-        DrawCircle(0, 0, 1.0f, RED);
+        addChild<EnemyRenderNode>();
+        addChild<BoxColliderNode>();
     }
 }

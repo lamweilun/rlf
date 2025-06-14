@@ -3,14 +3,13 @@
 namespace rlf {
     template <class T>
     class Singleton {
-        Singleton(Singleton const &)            = default;
-        Singleton(Singleton &&)                 = default;
-        Singleton &operator=(Singleton const &) = default;
-        Singleton &operator=(Singleton &&)      = default;
-
     public:
-        Singleton()  = default;
-        ~Singleton() = default;
+        Singleton()                             = default;
+        ~Singleton()                            = default;
+        Singleton(Singleton const &)            = delete;
+        Singleton(Singleton &&)                 = delete;
+        Singleton &operator=(Singleton const &) = delete;
+        Singleton &operator=(Singleton &&)      = delete;
 
         static T &getInstance() {
             static T instance;
