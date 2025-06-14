@@ -10,6 +10,10 @@ namespace rlf {
 
     void RendererSystem::render() {
         for (auto& rn : mRenderableNodes) {
+            if (!rn->getActive()) {
+                continue;
+            }
+
             auto const& globalTransform = rn->getGlobalTransform();
             auto        matF            = MatrixToFloatV(globalTransform);
 

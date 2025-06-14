@@ -2,6 +2,7 @@
 
 namespace rlf {
     void RigidbodyNode::updateImpl() {
-        setPosition(getPosition() + velocity * speed * GetFrameTime());
+        auto newPosition = getPosition() + velocity * speed * GetFrameTime();
+        setPosition(newPosition);
     }
 }

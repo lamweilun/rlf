@@ -8,6 +8,9 @@ namespace rlf {
         return mPosition;
     }
     void BaseNode::setPosition(Vector3 const& position) {
+        if (Vector3Equals(mPosition, position)) {
+            return;
+        }
         mPosition   = position;
         mLocalDirty = true;
         markGlobalDirty();
@@ -17,6 +20,9 @@ namespace rlf {
         return mScale;
     }
     void BaseNode::setScale(Vector3 const& scale) {
+        if (Vector3Equals(mScale, scale)) {
+            return;
+        }
         mScale      = scale;
         mLocalDirty = true;
         markGlobalDirty();
@@ -26,6 +32,9 @@ namespace rlf {
         return mRotation;
     }
     void BaseNode::setRotation(Quaternion const& rotation) {
+        if (QuaternionEquals(mRotation, rotation)) {
+            return;
+        }
         mRotation   = rotation;
         mLocalDirty = true;
         markGlobalDirty();
