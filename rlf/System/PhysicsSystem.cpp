@@ -24,6 +24,10 @@ namespace rlf {
 
         // Check against box colliders
         for (auto const& cn : mBoxColliderNodes) {
+            if (cn->hasAnyOfTags(colliderNode->getTags())) {
+                continue;
+            }
+
             if (!cn->getActive()) {
                 continue;
             }
@@ -39,6 +43,10 @@ namespace rlf {
 
         // Check against sphere colliders
         for (auto const& cn : mSphereColliderNodes) {
+            if (cn->hasAnyOfTags(colliderNode->getTags())) {
+                continue;
+            }
+
             if (!cn->getActive()) {
                 continue;
             }
@@ -64,6 +72,10 @@ namespace rlf {
 
         // Check against box colliders
         for (auto const& cn : mBoxColliderNodes) {
+            if (cn->hasAnyOfTags(colliderNode->getTags())) {
+                continue;
+            }
+
             if (!cn->getActive()) {
                 continue;
             }
@@ -75,6 +87,10 @@ namespace rlf {
 
         // Check against sphere colliders
         for (auto const& cn : mSphereColliderNodes) {
+            if (cn->hasAnyOfTags(colliderNode->getTags())) {
+                continue;
+            }
+
             if (!cn->getActive()) {
                 continue;
             }

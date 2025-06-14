@@ -14,6 +14,7 @@ namespace rlf {
         addChild<PlayerBulletRenderNode>();
 
         auto bulletColliderNode = addChild<rlf::SphereColliderNode>();
+        bulletColliderNode->addTag("PlayerBullet");
         bulletColliderNode->setCollidedCallback([this](std::shared_ptr<rlf::ColliderNode> cn) {
             if (auto cnParent = cn->getParent().lock()) {
                 if (std::dynamic_pointer_cast<rlf::EnemyNode>(cnParent)) {
