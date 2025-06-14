@@ -47,6 +47,15 @@ namespace rlf {
     }
 
     bool BaseNode::getActive() const {
+        bool active = getActiveSelf();
+        if (active) {
+            if (auto parent = mParent.lock()) {
+                active |= parent->getActive();
+            }
+        }
+        return active;
+    }
+    bool BaseNode::getActiveSelf() const {
         return mActive;
     }
     void BaseNode::setActive(bool const active) {

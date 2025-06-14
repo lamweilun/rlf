@@ -31,6 +31,7 @@ namespace rlf {
         void              setRotationEulerDeg(Vector3 const& angleDeg);
 
         bool getActive() const;
+        bool getActiveSelf() const;
         void setActive(bool const active);
 
         void setToDestroy(bool const toDestroy);
@@ -58,6 +59,7 @@ namespace rlf {
     private:
         void appendNewChildren();
         void markGlobalDirty();
+        void markChildrenActiveInHierarchy(bool activeInHierarchy);
 
         mutable Matrix mLocalTransform  = MatrixIdentity();
         mutable Matrix mGlobalTransform = MatrixIdentity();
