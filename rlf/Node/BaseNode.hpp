@@ -49,12 +49,14 @@ namespace rlf {
         std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
 
         void init();
-        void update();
         void shutdown();
+        void update();
+        void render();
 
         virtual void initImpl();
-        virtual void updateImpl();
         virtual void shutdownImpl();
+        virtual void updateImpl();
+        virtual void renderImpl();
 
     private:
         void appendNewChildren();

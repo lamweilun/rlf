@@ -29,13 +29,10 @@ add_executable(
     rlf/Node/Player/PlayerBulletRenderNode.cpp
     rlf/Node/Player/PlayerNode.cpp
     rlf/Node/Player/PlayerRenderNode.cpp
-
-    rlf/Node/Renderable/RenderableNode.cpp
     
     rlf/Node/BaseNode.cpp
 
     rlf/System/PhysicsSystem.cpp
-    rlf/System/RendererSystem.cpp
 
     rlf/Util/Math.cpp
 

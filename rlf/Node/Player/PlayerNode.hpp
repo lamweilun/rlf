@@ -10,6 +10,6 @@ namespace rlf {
 
     private:
         void movementControls();
-        void mouseControls();
+        void attackControls();
     };
 }

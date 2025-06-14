@@ -161,7 +161,24 @@ namespace rlf {
         }
     }
 
+    void BaseNode::shutdown() {
+        // Shutdown all children first
+        for (auto& child : mChildren) {
+            child->shutdown();
+        }
+        mChildren.clear();
+
+        // Calls shutdown on self
+        shutdownImpl();
+    }
+
     void BaseNode::update() {
+        // If inactive just return
+        if (!mActive) {
+            return;
+        }
+
+        // Append any newly created nodes
         appendNewChildren();
 
         // Update self then updateImpl all other mChildren
@@ -170,7 +187,7 @@ namespace rlf {
             child->update();
         }
 
-        // Clears those child that are marked for destroy
+        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
         size_t newSize = mChildren.size();
         for (size_t i = 0; i < newSize;) {
             if (mChildren[i]->mToDestroy) {
@@ -180,31 +197,39 @@ namespace rlf {
                 ++i;
             }
         }
-        // Nodes that are marked for destroy will call shutdown
         for (size_t i = newSize; i < mChildren.size(); ++i) {
             mChildren[i]->shutdown();
         }
         mChildren.resize(newSize);
     }
 
-    void BaseNode::shutdown() {
-        appendNewChildren();
-
-        for (auto& child : mChildren) {
-            child->shutdown();
+    void BaseNode::render() {
+        if (!mActive) {
+            return;
         }
-        mChildren.clear();
 
-        shutdownImpl();
+        auto matF = MatrixToFloatV(getLocalTransform());
+        rlPushMatrix();
+        rlMultMatrixf(matF.v);
+
+        renderImpl();
+        for (auto& child : mChildren) {
+            child->render();
+        }
+
+        rlPopMatrix();
     }
 
     void BaseNode::initImpl() {
     }
 
+    void BaseNode::shutdownImpl() {
+    }
+
     void BaseNode::updateImpl() {
     }
 
-    void BaseNode::shutdownImpl() {
+    void BaseNode::renderImpl() {
     }
 
     void BaseNode::appendNewChildren() {

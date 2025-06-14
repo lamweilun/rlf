@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Node/Renderable/RenderableNode.hpp>
+#include <Node/BaseNode.hpp>
 
 namespace rlf {
-    class PlayerRenderNode : public rlf::RenderableNode {
+    class PlayerRenderNode : public rlf::BaseNode {
     public:
         void renderImpl() override;
 
