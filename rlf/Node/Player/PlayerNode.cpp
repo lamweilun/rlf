@@ -20,11 +20,11 @@ namespace rlf {
 
     void PlayerNode::attackControls() {
         // Spawn a player bullet at the position of the player
-        bool const isFiring = IsMouseButtonDown(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE);
+        bool const isFiring = IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE);
         if (isFiring) {
             auto bulletNode = getRootNode()->addChild<PlayerBulletNode>();
             bulletNode->setPosition(getPosition());
-            bulletNode->velocity = Vector3{0, -1, 0};
+            bulletNode->velocity = Vector3Normalize(Vector3{static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()), 0} - bulletNode->getPosition());
 
             // float angle = std::atan2f(bulletNode->velocity.y, bulletNode->velocity.x);
             // bulletNode->setRotationEulerRad(Vector3{0, 0, angle});
@@ -34,12 +34,15 @@ namespace rlf {
     void PlayerNode::movementControls() {
         velocity = Vector3Zeros;
 
-        bool const moveLeft  = (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT));
-        bool const moveRight = (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT));
+        if (IsKeyDown(KEY_W)) {
+            velocity.y = -1.0f;
+        } else if (IsKeyDown(KEY_S)) {
+            velocity.y = 1.0f;
+        }
 
-        if (moveLeft) {
+        if (IsKeyDown(KEY_A)) {
             velocity.x = -1.0f;
-        } else if (moveRight) {
+        } else if (IsKeyDown(KEY_D)) {
             velocity.x = 1.0f;
         }
 

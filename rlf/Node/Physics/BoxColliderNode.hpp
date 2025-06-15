@@ -12,6 +12,10 @@ namespace rlf {
 
         BoundingBox getBoundingBox() const;
 
+#ifdef RLF_DEBUG
+        void renderImpl() override;
+#endif
+
     private:
     };
 }

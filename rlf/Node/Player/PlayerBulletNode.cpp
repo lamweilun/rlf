@@ -13,7 +13,7 @@ namespace rlf {
 
         addChild<PlayerBulletRenderNode>();
 
-        auto bulletColliderNode = addChild<rlf::SphereColliderNode>();
+        auto bulletColliderNode = addChild<rlf::BoxColliderNode>();
         bulletColliderNode->addTag("PlayerBullet");
         bulletColliderNode->setCollidedCallback([this](std::shared_ptr<rlf::ColliderNode> cn) {
             if (auto cnParent = cn->getParent().lock()) {

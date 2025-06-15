@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 4.0.0)
 
 # Setup CPM
 file(
@@ -14,6 +14,19 @@ CPMAddPackage("gh:nlohmann/json@3.12.0")
 CPMAddPackage("gh:raysan5/raylib#5.5")
 
 project(rlf)
+
+# rlf environment variables
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(RLF_DEBUG ON)
+else()
+    set(RLF_DEBUG OFF)
+endif()
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/rlf/Config/Config.h.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/rlf/Config/Config.h
+    @ONLY
+)
+
 add_executable(
     ${PROJECT_NAME}
     
@@ -40,6 +53,6 @@ add_executable(
 )
 target_precompile_headers(${PROJECT_NAME} PRIVATE rlf/precompiled.hpp)
 target_include_directories(${PROJECT_NAME} PRIVATE rlf ./)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_26)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json raylib)
 add_warning_flags(${PROJECT_NAME})
