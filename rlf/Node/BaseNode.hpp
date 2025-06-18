@@ -1,5 +1,7 @@
 #pragma once
 
+#include <System/TypeSystem.hpp>
+
 #include <memory>
 #include <vector>
 
@@ -12,6 +14,10 @@ namespace rlf {
         BaseNode(BaseNode&&)                 = default;
         BaseNode& operator=(BaseNode const&) = default;
         BaseNode& operator=(BaseNode&&)      = default;
+
+        static inline constexpr std::string_view getTypeName() { return "BaseNode"; }
+        inline virtual std::string_view          getTypeNameImpl() const { return getTypeName(); }
+        static inline bool                       typeRegistered = rlf::TypeSystem::getInstance().registerType<BaseNode>();
 
         template <class T>
         std::shared_ptr<T> addChild() {
@@ -48,20 +54,25 @@ namespace rlf {
         std::weak_ptr<BaseNode>                       getParent() const;
         std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
 
-        void init();
-        void shutdown();
-        void update();
-        void render();
+        void      init();
+        void      shutdown();
+        void      update();
+        void      render();
+        rlf::Json serialize() const;
 
-        virtual void initImpl();
-        virtual void shutdownImpl();
-        virtual void updateImpl();
-        virtual void renderImpl();
+        virtual void      initImpl();
+        virtual void      shutdownImpl();
+        virtual void      updateImpl();
+        virtual void      renderImpl();
+        virtual rlf::Json serializeImpl() const;
 
     private:
         void appendNewChildren();
         void markGlobalDirty();
-        void markChildrenActiveInHierarchy(bool activeInHierarchy);
+
+        bool mActive    = true;
+        bool mToDestroy = false;
+        bool mHasInited = false;
 
         mutable Matrix mLocalTransform  = MatrixIdentity();
         mutable Matrix mGlobalTransform = MatrixIdentity();
@@ -70,10 +81,6 @@ namespace rlf {
         Vector3        mScale           = Vector3Ones;
         mutable bool   mLocalDirty      = true;
         mutable bool   mGlobalDirty     = true;
-
-        bool mActive    = true;
-        bool mToDestroy = false;
-        bool mHasInited = false;
 
         std::weak_ptr<BaseNode>                mParent;
         std::vector<std::shared_ptr<BaseNode>> mChildren;

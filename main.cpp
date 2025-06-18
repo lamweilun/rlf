@@ -2,6 +2,8 @@
 
 #include <System/PhysicsSystem.hpp>
 
+#include <fstream>
+
 int main() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI);
     InitWindow(1280, 720, "Hello rlf");
@@ -20,6 +22,12 @@ int main() {
     rootNode->init();
 
     while (!WindowShouldClose()) {
+        if (IsKeyPressed(KEY_SPACE)) {
+            rlf::Json     j = rootNode->serialize();
+            std::ofstream ofs("output.json");
+            ofs << j.dump(2);
+        }
+
         rootNode->update();
 
         BeginDrawing();

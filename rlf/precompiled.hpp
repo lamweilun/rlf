@@ -7,6 +7,7 @@
 #include <rlgl.h>
 
 #include <Util/Types.hpp>
+#include <Util/Json.hpp>
 #include <Util/Math.hpp>
 
 #include <string>

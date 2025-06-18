@@ -5,6 +5,8 @@
 namespace rlf {
     class BoxColliderNode : public ColliderNode {
     public:
+        RLF_TYPE_REGISTER_QUICK(BoxColliderNode)
+
         void initImpl() override;
         void shutdownImpl() override;
 

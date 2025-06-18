@@ -5,4 +5,11 @@ namespace rlf {
         auto newPosition = getPosition() + velocity * speed * GetFrameTime();
         setPosition(newPosition);
     }
+
+    rlf::Json RigidbodyNode::serializeImpl() const {
+        rlf::Json j   = BaseNode::serializeImpl();
+        j["velocity"] = velocity;
+        j["speed"]    = speed;
+        return j;
+    }
 }

@@ -220,6 +220,16 @@ namespace rlf {
         rlPopMatrix();
     }
 
+    rlf::Json BaseNode::serialize() const {
+        rlf::Json j;
+        j["type"] = getTypeNameImpl();
+        j["data"] = serializeImpl();
+        for (auto const& child : mChildren) {
+            j["data"]["children"].push_back(child->serialize());
+        }
+        return j;
+    }
+
     void BaseNode::initImpl() {
     }
 
@@ -230,6 +240,15 @@ namespace rlf {
     }
 
     void BaseNode::renderImpl() {
+    }
+
+    rlf::Json BaseNode::serializeImpl() const {
+        rlf::Json j;
+        j["active"]   = mActive;
+        j["position"] = mPosition;
+        j["rotation"] = mRotation;
+        j["scale"]    = mScale;
+        return j;
     }
 
     void BaseNode::appendNewChildren() {

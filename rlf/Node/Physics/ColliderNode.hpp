@@ -7,8 +7,11 @@
 namespace rlf {
     class ColliderNode : public BaseNode {
     public:
-        void updateImpl() override;
-        void setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback);
+        RLF_TYPE_REGISTER_QUICK(ColliderNode)
+
+        void      updateImpl() override;
+        rlf::Json serializeImpl() const override;
+        void      setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback);
 
         void                         addTag(std::string const& tag);
         std::set<std::string> const& getTags() const;

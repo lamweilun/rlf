@@ -26,3 +26,41 @@ std::ostream& operator<<(std::ostream& os, Vector4 const& v4) {
     os << "]";
     return os;
 }
+
+void to_json(rlf::Json& j, Vector2 const& v2) {
+    std::stringstream ss;
+    ss << v2.x << ' ' << v2.y;
+    j = ss.str();
+}
+void to_json(rlf::Json& j, Vector3 const& v3) {
+    std::stringstream ss;
+    ss << v3.x << ' ' << v3.y << ' ' << v3.z;
+    j = ss.str();
+}
+void to_json(rlf::Json& j, Vector4 const& v4) {
+    std::stringstream ss;
+    ss << v4.x << ' ' << v4.y << ' ' << v4.z << ' ' << v4.w;
+    j = ss.str();
+}
+
+void from_json(rlf::Json const& j, Vector2& v2) {
+    std::stringstream ss;
+    ss.str() = j.get<std::string>();
+    ss >> v2.x;
+    ss >> v2.y;
+}
+void from_json(rlf::Json const& j, Vector3& v3) {
+    std::stringstream ss;
+    ss.str() = j.get<std::string>();
+    ss >> v3.x;
+    ss >> v3.y;
+    ss >> v3.z;
+}
+void from_json(rlf::Json const& j, Vector4& v4) {
+    std::stringstream ss;
+    ss.str() = j.get<std::string>();
+    ss >> v4.x;
+    ss >> v4.y;
+    ss >> v4.z;
+    ss >> v4.w;
+}

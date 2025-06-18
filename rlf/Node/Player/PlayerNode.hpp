@@ -5,6 +5,8 @@
 namespace rlf {
     class PlayerNode : public rlf::RigidbodyNode {
     public:
+        RLF_TYPE_REGISTER_QUICK(PlayerNode)
+
         void initImpl() override;
         void updateImpl() override;
 
