@@ -17,6 +17,11 @@ namespace rlf {
         return j;
     }
 
+    void ColliderNode::deserializeImpl(rlf::Json const& j) {
+        BaseNode::deserializeImpl(j);
+        mTags = j["tags"];
+    }
+
     void ColliderNode::setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback) {
         mCollidedCallback = callback;
     }

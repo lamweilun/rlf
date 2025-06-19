@@ -12,4 +12,9 @@ namespace rlf {
         j["speed"]    = speed;
         return j;
     }
+    void RigidbodyNode::deserializeImpl(rlf::Json const& j) {
+        BaseNode::deserializeImpl(j);
+        velocity = j["velocity"];
+        speed    = j["speed"];
+    }
 }

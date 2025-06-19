@@ -46,6 +46,7 @@ add_executable(
     rlf/Node/BaseNode.cpp
 
     rlf/System/PhysicsSystem.cpp
+    rlf/System/TypeSystem.cpp
 
     rlf/Util/Math.cpp
 

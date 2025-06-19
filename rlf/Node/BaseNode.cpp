@@ -229,6 +229,30 @@ namespace rlf {
         }
         return j;
     }
+    void BaseNode::deserialize(rlf::Json const& j) {
+        deserializeImpl(j["data"]);
+
+        std::vector<std::shared_ptr<BaseNode>> newChildren;
+        if (j["data"].contains("children")) {
+            for (auto const& entry : j["data"]["children"]) {
+                auto childNodeOpt = rlf::TypeSystem::getInstance().createNode(entry["type"]);
+                if (!childNodeOpt.has_value()) {
+                    continue;
+                }
+                std::shared_ptr<BaseNode> childNode = childNodeOpt.value();
+                childNode->deserialize(entry);
+                childNode->mParent = shared_from_this();
+                newChildren.push_back(childNode);
+            }
+        }
+
+        mChildren.clear();
+        mNewChildren = std::move(newChildren);
+        mToDestroy   = false;
+        mHasInited   = false;
+        mLocalDirty  = true;
+        mGlobalDirty = true;
+    }
 
     void BaseNode::initImpl() {
     }
@@ -251,13 +275,20 @@ namespace rlf {
         return j;
     }
 
+    void BaseNode::deserializeImpl(rlf::Json const& j) {
+        mActive   = j["active"];
+        mPosition = j["position"];
+        mRotation = j["rotation"];
+        mScale    = j["scale"];
+    }
+
     void BaseNode::appendNewChildren() {
         // Append newly created mChildren after calling init on them
-        for (auto& newChild : newChildren) {
+        for (auto& newChild : mNewChildren) {
             newChild->init();
         }
-        mChildren.append_range(newChildren);
-        newChildren.clear();
+        mChildren.append_range(mNewChildren);
+        mNewChildren.clear();
     }
 
     void BaseNode::markGlobalDirty() {

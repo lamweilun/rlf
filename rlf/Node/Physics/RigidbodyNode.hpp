@@ -12,5 +12,6 @@ namespace rlf {
 
         void      updateImpl() override;
         rlf::Json serializeImpl() const override;
+        void      deserializeImpl(rlf::Json const& j) override;
     };
 }

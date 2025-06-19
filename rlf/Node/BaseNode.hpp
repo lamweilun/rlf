@@ -23,7 +23,7 @@ namespace rlf {
         std::shared_ptr<T> addChild() {
             std::shared_ptr<T> newChild = std::make_shared<T>();
             newChild->mParent           = weak_from_this();
-            newChildren.push_back(newChild);
+            mNewChildren.push_back(newChild);
             return newChild;
         }
 
@@ -59,12 +59,14 @@ namespace rlf {
         void      update();
         void      render();
         rlf::Json serialize() const;
+        void      deserialize(rlf::Json const& j);
 
         virtual void      initImpl();
         virtual void      shutdownImpl();
         virtual void      updateImpl();
         virtual void      renderImpl();
         virtual rlf::Json serializeImpl() const;
+        virtual void      deserializeImpl(rlf::Json const& j);
 
     private:
         void appendNewChildren();
@@ -84,6 +86,6 @@ namespace rlf {
 
         std::weak_ptr<BaseNode>                mParent;
         std::vector<std::shared_ptr<BaseNode>> mChildren;
-        std::vector<std::shared_ptr<BaseNode>> newChildren;
+        std::vector<std::shared_ptr<BaseNode>> mNewChildren;
     };
 }

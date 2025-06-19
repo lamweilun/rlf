@@ -19,6 +19,12 @@ namespace rlf {
                              }});
             return true;
         }
+
+        template <class T>
+        std::optional<std::shared_ptr<T>> createNode() const {
+            return createNode(T::getTypeName());
+        }
+        std::optional<std::shared_ptr<BaseNode>> createNode(std::string_view typeName);
     };
 }
 

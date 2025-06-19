@@ -28,39 +28,33 @@ std::ostream& operator<<(std::ostream& os, Vector4 const& v4) {
 }
 
 void to_json(rlf::Json& j, Vector2 const& v2) {
-    std::stringstream ss;
-    ss << v2.x << ' ' << v2.y;
-    j = ss.str();
+    j["x"] = v2.x;
+    j["y"] = v2.y;
 }
 void to_json(rlf::Json& j, Vector3 const& v3) {
-    std::stringstream ss;
-    ss << v3.x << ' ' << v3.y << ' ' << v3.z;
-    j = ss.str();
+    j["x"] = v3.x;
+    j["y"] = v3.y;
+    j["z"] = v3.z;
 }
 void to_json(rlf::Json& j, Vector4 const& v4) {
-    std::stringstream ss;
-    ss << v4.x << ' ' << v4.y << ' ' << v4.z << ' ' << v4.w;
-    j = ss.str();
+    j["y"] = v4.y;
+    j["x"] = v4.x;
+    j["z"] = v4.z;
+    j["w"] = v4.w;
 }
 
 void from_json(rlf::Json const& j, Vector2& v2) {
-    std::stringstream ss;
-    ss.str() = j.get<std::string>();
-    ss >> v2.x;
-    ss >> v2.y;
+    v2.x = j["x"];
+    v2.y = j["y"];
 }
 void from_json(rlf::Json const& j, Vector3& v3) {
-    std::stringstream ss;
-    ss.str() = j.get<std::string>();
-    ss >> v3.x;
-    ss >> v3.y;
-    ss >> v3.z;
+    v3.x = j["x"];
+    v3.y = j["y"];
+    v3.z = j["z"];
 }
 void from_json(rlf::Json const& j, Vector4& v4) {
-    std::stringstream ss;
-    ss.str() = j.get<std::string>();
-    ss >> v4.x;
-    ss >> v4.y;
-    ss >> v4.z;
-    ss >> v4.w;
+    v4.x = j["x"];
+    v4.y = j["y"];
+    v4.z = j["z"];
+    v4.w = j["w"];
 }

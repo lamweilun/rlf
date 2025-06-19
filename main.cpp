@@ -11,6 +11,7 @@ int main() {
 
     rlf::PhysicsSystem::getInstance();
 
+    // DO NOT CHANGE THIS
     auto rootNode = std::make_shared<rlf::BaseNode>();
 
     auto playerNode = rootNode->addChild<rlf::PlayerNode>();
@@ -22,10 +23,14 @@ int main() {
     rootNode->init();
 
     while (!WindowShouldClose()) {
-        if (IsKeyPressed(KEY_SPACE)) {
+        if (IsKeyPressed(KEY_O)) {
             rlf::Json     j = rootNode->serialize();
             std::ofstream ofs("output.json");
             ofs << j.dump(2);
+        } else if (IsKeyPressed(KEY_L)) {
+            std::ifstream ifs("output.json");
+            rlf::Json     j = rlf::Json::parse(ifs);
+            rootNode->deserialize(j);
         }
 
         rootNode->update();

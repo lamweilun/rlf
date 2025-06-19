@@ -11,6 +11,7 @@ namespace rlf {
 
         void      updateImpl() override;
         rlf::Json serializeImpl() const override;
+        void      deserializeImpl(rlf::Json const& j) override;
         void      setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback);
 
         void                         addTag(std::string const& tag);
