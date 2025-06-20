@@ -235,7 +235,7 @@ namespace rlf {
         std::vector<std::shared_ptr<BaseNode>> newChildren;
         if (j["data"].contains("children")) {
             for (auto const& entry : j["data"]["children"]) {
-                auto childNodeOpt = rlf::TypeSystem::getInstance().createNode(entry["type"]);
+                auto childNodeOpt = rlf::TypeSystem::getInstance().createNode(entry["type"].get<std::string_view>());
                 if (!childNodeOpt.has_value()) {
                     continue;
                 }
