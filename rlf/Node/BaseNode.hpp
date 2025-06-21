@@ -20,12 +20,16 @@ namespace rlf {
         static inline bool                       typeRegistered = rlf::TypeSystem::getInstance().registerType<BaseNode>();
 
         template <class T>
-        std::shared_ptr<T> addChild() {
-            std::shared_ptr<T> newChild = std::make_shared<T>();
-            newChild->mParent           = weak_from_this();
-            mNewChildren.push_back(newChild);
-            return newChild;
-        }
+        std::shared_ptr<T>        addChild();
+        std::shared_ptr<BaseNode> addChild(std::string_view typeName);
+
+        template <class T>
+        std::optional<std::shared_ptr<T>>        getFirstChildOfType() const;
+        std::optional<std::shared_ptr<BaseNode>> getFirstChildOfType(std::string_view typeName) const;
+
+        template <class T>
+        std::shared_ptr<T>        getOrAddFirstChildOfType();
+        std::shared_ptr<BaseNode> getOrAddFirstChildOfType(std::string_view typeName);
 
         Vector3 const&    getPosition() const;
         void              setPosition(Vector3 const& position);
@@ -89,3 +93,5 @@ namespace rlf {
         std::vector<std::shared_ptr<BaseNode>> mNewChildren;
     };
 }
+
+#include <Node/BaseNodeImpl.hpp>

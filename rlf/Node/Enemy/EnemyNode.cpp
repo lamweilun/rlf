@@ -5,7 +5,7 @@
 namespace rlf {
     void EnemyNode::initImpl() {
         setScale(Vector3{20, 20, 0});
-        addChild<EnemyRenderNode>();
-        addChild<BoxColliderNode>();
+        getOrAddFirstChildOfType<EnemyRenderNode>();
+        getOrAddFirstChildOfType<BoxColliderNode>();
     }
 }

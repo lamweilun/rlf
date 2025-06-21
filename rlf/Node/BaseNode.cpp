@@ -4,6 +4,40 @@
 
 namespace rlf {
 
+    std::shared_ptr<BaseNode> BaseNode::addChild(std::string_view typeName) {
+        auto newChild = rlf::TypeSystem::getInstance().createNode(typeName);
+        if (!newChild.has_value()) {
+            return nullptr;
+        }
+
+        newChild.value()->mParent = weak_from_this();
+        mNewChildren.push_back(newChild.value());
+        return newChild.value();
+    }
+
+    std::optional<std::shared_ptr<BaseNode>> BaseNode::getFirstChildOfType(std::string_view typeName) const {
+        for (auto const& child : mChildren) {
+            if (child->getTypeNameImpl() == typeName) {
+                return child;
+            }
+        }
+        for (auto const& child : mNewChildren) {
+            if (child->getTypeNameImpl() == typeName) {
+                return child;
+            }
+        }
+        return std::nullopt;
+    }
+
+    std::shared_ptr<BaseNode> BaseNode::getOrAddFirstChildOfType(std::string_view typeName) {
+        auto child = getFirstChildOfType(typeName);
+        if (child.has_value()) {
+            return child.value();
+        }
+        child = addChild(typeName);
+        return child.value();
+    }
+
     Vector3 const& BaseNode::getPosition() const {
         return mPosition;
     }
@@ -283,12 +317,18 @@ namespace rlf {
     }
 
     void BaseNode::appendNewChildren() {
-        // Append newly created mChildren after calling init on them
-        for (auto& newChild : mNewChildren) {
-            newChild->init();
+        if (mNewChildren.empty()) {
+            return;
         }
+
+        // Append newly created children and call init on them
+        size_t const oldSize = mChildren.size();
+        size_t const newSize = oldSize + mNewChildren.size();
         mChildren.append_range(mNewChildren);
         mNewChildren.clear();
+        for (size_t i = oldSize; i < newSize; ++i) {
+            mChildren[i]->init();
+        }
     }
 
     void BaseNode::markGlobalDirty() {

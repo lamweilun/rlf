@@ -1,5 +1,6 @@
 #include <Node/Node.hpp>
 
+#include <System/TypeSystem.hpp>
 #include <System/PhysicsSystem.hpp>
 
 #include <fstream>
@@ -9,6 +10,7 @@ int main() {
     InitWindow(1280, 720, "Hello rlf");
     // ToggleFullscreen();
 
+    rlf::TypeSystem::getInstance();
     rlf::PhysicsSystem::getInstance();
 
     // DO NOT CHANGE THIS

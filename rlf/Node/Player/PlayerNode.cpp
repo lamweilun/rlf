@@ -7,9 +7,9 @@ namespace rlf {
 
     void PlayerNode::initImpl() {
         setScale(Vector3{10, 10, 0});
-        speed = 200.0f;
+        mSpeed = 200.0f;
 
-        addChild<PlayerRenderNode>();
+        getOrAddFirstChildOfType<PlayerRenderNode>();
     }
 
     void PlayerNode::updateImpl() {
@@ -24,7 +24,7 @@ namespace rlf {
         if (isFiring) {
             auto bulletNode = getRootNode()->addChild<PlayerBulletNode>();
             bulletNode->setPosition(getPosition());
-            bulletNode->velocity = Vector3Normalize(Vector3{static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()), 0} - bulletNode->getPosition());
+            bulletNode->mVelocity = Vector3Normalize(Vector3{static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()), 0} - bulletNode->getPosition());
 
             // float angle = std::atan2f(bulletNode->velocity.y, bulletNode->velocity.x);
             // bulletNode->setRotationEulerRad(Vector3{0, 0, angle});
@@ -32,20 +32,20 @@ namespace rlf {
     }
 
     void PlayerNode::movementControls() {
-        velocity = Vector3Zeros;
+        mVelocity = Vector3Zeros;
 
         if (IsKeyDown(KEY_W)) {
-            velocity.y = -1.0f;
+            mVelocity.y = -1.0f;
         } else if (IsKeyDown(KEY_S)) {
-            velocity.y = 1.0f;
+            mVelocity.y = 1.0f;
         }
 
         if (IsKeyDown(KEY_A)) {
-            velocity.x = -1.0f;
+            mVelocity.x = -1.0f;
         } else if (IsKeyDown(KEY_D)) {
-            velocity.x = 1.0f;
+            mVelocity.x = 1.0f;
         }
 
-        velocity = Vector3Normalize(velocity);
+        mVelocity = Vector3Normalize(mVelocity);
     }
 }

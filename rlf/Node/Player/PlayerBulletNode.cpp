@@ -9,11 +9,11 @@ namespace rlf {
 
     void PlayerBulletNode::initImpl() {
         setScale(Vector3{5, 5, 0});
-        speed = 1000.0f;
+        mSpeed = 1000.0f;
 
-        addChild<PlayerBulletRenderNode>();
+        getOrAddFirstChildOfType<PlayerBulletRenderNode>();
 
-        auto bulletColliderNode = addChild<rlf::BoxColliderNode>();
+        auto bulletColliderNode = getOrAddFirstChildOfType<rlf::BoxColliderNode>();
         bulletColliderNode->addTag("PlayerBullet");
         bulletColliderNode->setCollidedCallback([this](std::shared_ptr<rlf::ColliderNode> cn) {
             if (auto cnParent = cn->getParent().lock()) {
