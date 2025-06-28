@@ -20,14 +20,11 @@ namespace rlf {
 
     void PlayerNode::attackControls() {
         // Spawn a player bullet at the position of the player
-        bool const isFiring = IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE);
+        bool const isFiring = IsMouseButtonDown(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE);
         if (isFiring) {
             auto bulletNode = getRootNode()->addChild<PlayerBulletNode>();
             bulletNode->setPosition(getPosition());
             bulletNode->mVelocity = Vector3Normalize(Vector3{static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()), 0} - bulletNode->getPosition());
-
-            // float angle = std::atan2f(bulletNode->velocity.y, bulletNode->velocity.x);
-            // bulletNode->setRotationEulerRad(Vector3{0, 0, angle});
         }
     }
 

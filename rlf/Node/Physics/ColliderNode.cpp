@@ -34,6 +34,10 @@ namespace rlf {
         return mTags;
     }
 
+    bool ColliderNode::hasTag(std::string const& tag) const {
+        return mTags.contains(tag);
+    }
+
     bool ColliderNode::hasAnyOfTags(std::set<std::string> const& tags) const {
         for (auto const& tag : mTags) {
             if (tags.contains(tag)) {

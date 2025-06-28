@@ -16,6 +16,7 @@ namespace rlf {
 
         void                         addTag(std::string const& tag);
         std::set<std::string> const& getTags() const;
+        bool                         hasTag(std::string const& tag) const;
         bool                         hasAnyOfTags(std::set<std::string> const& tags) const;
 
     protected:

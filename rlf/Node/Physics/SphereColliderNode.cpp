@@ -17,7 +17,7 @@ namespace rlf {
 
 #ifdef RLF_DEBUG
     void SphereColliderNode::renderImpl() {
-        DrawSphere(Vector3Zeros, 1.0f, GREEN);
+        DrawSphereWires(Vector3Zeros, 1.0f, 8, 8, GREEN);
     }
 #endif
 }

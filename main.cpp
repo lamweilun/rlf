@@ -19,8 +19,8 @@ int main() {
     auto playerNode = rootNode->addChild<rlf::PlayerNode>();
     playerNode->setPosition(Vector3{640, 600, 0});
 
-    // auto enemy1 = rootNode->addChild<rlf::EnemyNode>();
-    // enemy1->setPosition(Vector3{640, 360, 0});
+    auto enemy1 = rootNode->addChild<rlf::EnemyNode>();
+    enemy1->setPosition(Vector3{640, 360, 0});
 
     rootNode->init();
 
