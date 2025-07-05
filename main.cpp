@@ -25,14 +25,16 @@ int main() {
     rootNode->init();
 
     while (!WindowShouldClose()) {
-        if (IsKeyPressed(KEY_O)) {
+        if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_O)) {
             rlf::Json     j = rootNode->serialize();
             std::ofstream ofs("output.json");
             ofs << j.dump(2);
-        } else if (IsKeyPressed(KEY_L)) {
+        } else if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_I)) {
             std::ifstream ifs("output.json");
-            rlf::Json     j = rlf::Json::parse(ifs);
-            rootNode->deserialize(j);
+            if (ifs.good()) {
+                rlf::Json j = rlf::Json::parse(ifs);
+                rootNode->deserialize(j);
+            }
         }
 
         rootNode->update();

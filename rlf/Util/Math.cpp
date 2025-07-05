@@ -1,72 +1,72 @@
 #include <Util/Math.hpp>
 
-std::ostream& operator<<(std::ostream& os, Vector2 const& v2) {
+std::ostream& operator<<(std::ostream& os, Vector2 const& v) {
     os << "[";
-    os << v2.x << ", ";
-    os << v2.y;
+    os << v.x << ", ";
+    os << v.y;
     os << "]";
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, Vector3 const& v3) {
+std::ostream& operator<<(std::ostream& os, Vector3 const& v) {
     os << "[";
-    os << v3.x << ", ";
-    os << v3.y << ", ";
-    os << v3.z;
+    os << v.x << ", ";
+    os << v.y << ", ";
+    os << v.z;
     os << "]";
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, Vector4 const& v4) {
+std::ostream& operator<<(std::ostream& os, Vector4 const& v) {
     os << "[";
-    os << v4.x << ", ";
-    os << v4.y << ", ";
-    os << v4.z << ", ";
-    os << v4.w;
+    os << v.x << ", ";
+    os << v.y << ", ";
+    os << v.z << ", ";
+    os << v.w;
     os << "]";
     return os;
 }
 
-void to_json(rlf::Json& j, Vector2 const& v2) {
+void to_json(rlf::Json& j, Vector2 const& v) {
     std::stringstream ss;
-    ss << v2.x;
-    ss << ' ' << v2.y;
+    ss << v.x;
+    ss << ' ' << v.y;
     j = ss.str();
 }
-void to_json(rlf::Json& j, Vector3 const& v3) {
+void to_json(rlf::Json& j, Vector3 const& v) {
     std::stringstream ss;
-    ss << v3.x;
-    ss << ' ' << v3.y;
-    ss << ' ' << v3.z;
+    ss << v.x;
+    ss << ' ' << v.y;
+    ss << ' ' << v.z;
     j = ss.str();
 }
-void to_json(rlf::Json& j, Vector4 const& v4) {
+void to_json(rlf::Json& j, Vector4 const& v) {
     std::stringstream ss;
-    ss << v4.x;
-    ss << ' ' << v4.y;
-    ss << ' ' << v4.z;
-    ss << ' ' << v4.w;
+    ss << v.x;
+    ss << ' ' << v.y;
+    ss << ' ' << v.z;
+    ss << ' ' << v.w;
     j = ss.str();
 }
 
-void from_json(rlf::Json const& j, Vector2& v2) {
+void from_json(rlf::Json const& j, Vector2& v) {
     std::stringstream ss;
     ss.str(j.get<std::string>());
-    ss >> v2.x;
-    ss >> v2.y;
+    ss >> v.x;
+    ss >> v.y;
 }
-void from_json(rlf::Json const& j, Vector3& v3) {
+void from_json(rlf::Json const& j, Vector3& v) {
     std::stringstream ss;
     ss.str(j.get<std::string>());
-    ss >> v3.x;
-    ss >> v3.y;
-    ss >> v3.z;
+    ss >> v.x;
+    ss >> v.y;
+    ss >> v.z;
 }
-void from_json(rlf::Json const& j, Vector4& v4) {
+void from_json(rlf::Json const& j, Vector4& v) {
     std::stringstream ss;
     ss.str(j.get<std::string>());
-    ss >> v4.x;
-    ss >> v4.y;
-    ss >> v4.z;
-    ss >> v4.w;
+    ss >> v.x;
+    ss >> v.y;
+    ss >> v.z;
+    ss >> v.w;
 }
