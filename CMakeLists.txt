@@ -49,6 +49,7 @@ add_executable(
     rlf/System/TypeSystem.cpp
 
     rlf/Util/Reflection/NamedValue.cpp
+    rlf/Util/Color.cpp
     rlf/Util/Math.cpp
 
     main.cpp

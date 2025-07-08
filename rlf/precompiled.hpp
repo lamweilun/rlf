@@ -9,6 +9,7 @@
 #include <Util/Reflection/Reflection.hpp>
 #include <Util/Types.hpp>
 #include <Util/Json.hpp>
+#include <Util/Color.hpp>
 #include <Util/Math.hpp>
 
 #include <string>
