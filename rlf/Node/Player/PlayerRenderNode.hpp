@@ -1,13 +1,11 @@
 #pragma once
 
-#include <Node/BaseNode.hpp>
+#include <Node/Render/RenderNode.hpp>
 
 namespace rlf {
-    class PlayerRenderNode : public rlf::BaseNode {
+    class PlayerRenderNode : public rlf::RenderNode {
     public:
         RLF_TYPE_REGISTER_QUICK(PlayerRenderNode)
-
-        void renderImpl() override;
 
     private:
     };

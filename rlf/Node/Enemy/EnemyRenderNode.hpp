@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Node/BaseNode.hpp>
+#include <Node/Render/RenderNode.hpp>
 
 namespace rlf {
-    class EnemyRenderNode : public rlf::BaseNode {
+    class EnemyRenderNode : public rlf::RenderNode {
     public:
         RLF_TYPE_REGISTER_QUICK(EnemyRenderNode)
 
-        void renderImpl() override;
+        void initImpl() override;
 
     private:
     };

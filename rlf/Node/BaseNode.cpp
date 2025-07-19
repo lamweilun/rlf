@@ -94,6 +94,7 @@ namespace rlf {
     }
     void BaseNode::setActive(bool const active) {
         mActive = active;
+        setActiveImpl(active);
     }
 
     void BaseNode::setToDestroy(bool const toDestroy) {
@@ -101,10 +102,14 @@ namespace rlf {
     }
 
     std::shared_ptr<BaseNode> BaseNode::getRootNode() {
+        if (auto rootNode = mRootNode.lock()) {
+            return rootNode;
+        }
         std::shared_ptr<BaseNode> rootNode = shared_from_this();
         while (auto parentNode = rootNode->mParent.lock()) {
             rootNode = parentNode;
         }
+        mRootNode = rootNode;
         return rootNode;
     }
 
@@ -184,6 +189,9 @@ namespace rlf {
         return mChildren;
     }
 
+    void BaseNode::setActiveImpl([[maybe_unused]] bool const active) {
+    }
+
     void BaseNode::init() {
         if (!mHasInited) {
             initImpl();
@@ -207,51 +215,44 @@ namespace rlf {
     }
 
     void BaseNode::update() {
+        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
+        {
+            size_t newSize = mChildren.size();
+            for (size_t i = 0; i < newSize;) {
+                if (mChildren[i]->mToDestroy) {
+                    std::swap(mChildren[i], mChildren[newSize - 1]);
+                    --newSize;
+                } else {
+                    ++i;
+                }
+            }
+            for (size_t i = newSize; i < mChildren.size(); ++i) {
+                mChildren[i]->shutdown();
+            }
+            mChildren.resize(newSize);
+        }
+
+        // Append newly created children and call init on them
+        if (!mNewChildren.empty()) {
+            size_t const oldSize = mChildren.size();
+            size_t const newSize = oldSize + mNewChildren.size();
+            mChildren.append_range(mNewChildren);
+            mNewChildren.clear();
+            for (size_t i = oldSize; i < newSize; ++i) {
+                mChildren[i]->init();
+            }
+        }
+
         // If inactive just return
         if (!mActive) {
             return;
         }
-
-        // Append any newly created nodes
-        appendNewChildren();
 
         // Update self then updateImpl all other mChildren
         updateImpl();
         for (auto& child : mChildren) {
             child->update();
         }
-
-        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
-        size_t newSize = mChildren.size();
-        for (size_t i = 0; i < newSize;) {
-            if (mChildren[i]->mToDestroy) {
-                std::swap(mChildren[i], mChildren[newSize - 1]);
-                --newSize;
-            } else {
-                ++i;
-            }
-        }
-        for (size_t i = newSize; i < mChildren.size(); ++i) {
-            mChildren[i]->shutdown();
-        }
-        mChildren.resize(newSize);
-    }
-
-    void BaseNode::render() {
-        if (!mActive) {
-            return;
-        }
-
-        auto matF = MatrixToFloatV(getLocalTransform());
-        rlPushMatrix();
-        rlMultMatrixf(matF.v);
-
-        renderImpl();
-        for (auto& child : mChildren) {
-            child->render();
-        }
-
-        rlPopMatrix();
     }
 
     rlf::Json BaseNode::serialize() const {
@@ -297,9 +298,6 @@ namespace rlf {
     void BaseNode::updateImpl() {
     }
 
-    void BaseNode::renderImpl() {
-    }
-
     rlf::Json BaseNode::serializeImpl() const {
         rlf::Json j;
         j["active"]   = mActive;
@@ -314,21 +312,6 @@ namespace rlf {
         mPosition = j["position"];
         mRotation = j["rotation"];
         mScale    = j["scale"];
-    }
-
-    void BaseNode::appendNewChildren() {
-        if (mNewChildren.empty()) {
-            return;
-        }
-
-        // Append newly created children and call init on them
-        size_t const oldSize = mChildren.size();
-        size_t const newSize = oldSize + mNewChildren.size();
-        mChildren.append_range(mNewChildren);
-        mNewChildren.clear();
-        for (size_t i = oldSize; i < newSize; ++i) {
-            mChildren[i]->init();
-        }
     }
 
     void BaseNode::markGlobalDirty() {

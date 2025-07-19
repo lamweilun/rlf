@@ -1,6 +1,7 @@
 #include <Node/Node.hpp>
 
 #include <System/TypeSystem.hpp>
+#include <System/RenderSystem.hpp>
 #include <System/PhysicsSystem.hpp>
 
 #include <fstream>
@@ -11,6 +12,7 @@ int main() {
     // ToggleFullscreen();
 
     rlf::TypeSystem::getInstance();
+    auto& renderSystem = rlf::RenderSystem::getInstance();
     rlf::PhysicsSystem::getInstance();
 
     // DO NOT CHANGE THIS
@@ -42,7 +44,7 @@ int main() {
         BeginDrawing();
         ClearBackground(BLACK);
 
-        rootNode->render();
+        renderSystem.render();
 
         DrawFPS(10, 10);
         EndDrawing();

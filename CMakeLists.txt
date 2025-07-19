@@ -43,9 +43,12 @@ add_executable(
     rlf/Node/Player/PlayerNode.cpp
     rlf/Node/Player/PlayerRenderNode.cpp
     
+    rlf/Node/Render/RenderNode.cpp
+    
     rlf/Node/BaseNode.cpp
 
     rlf/System/PhysicsSystem.cpp
+    rlf/System/RenderSystem.cpp
     rlf/System/TypeSystem.cpp
 
     rlf/Util/Reflection/NamedValue.cpp

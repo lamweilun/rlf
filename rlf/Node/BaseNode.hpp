@@ -61,19 +61,18 @@ namespace rlf {
         void      init();
         void      shutdown();
         void      update();
-        void      render();
         rlf::Json serialize() const;
         void      deserialize(rlf::Json const& j);
 
+    protected:
+        virtual void      setActiveImpl(bool const selfActive);
         virtual void      initImpl();
         virtual void      shutdownImpl();
         virtual void      updateImpl();
-        virtual void      renderImpl();
         virtual rlf::Json serializeImpl() const;
         virtual void      deserializeImpl(rlf::Json const& j);
 
     private:
-        void appendNewChildren();
         void markGlobalDirty();
 
         bool mActive    = true;
@@ -88,6 +87,7 @@ namespace rlf {
         mutable bool   mLocalDirty      = true;
         mutable bool   mGlobalDirty     = true;
 
+        std::weak_ptr<BaseNode>                mRootNode;
         std::weak_ptr<BaseNode>                mParent;
         std::vector<std::shared_ptr<BaseNode>> mChildren;
         std::vector<std::shared_ptr<BaseNode>> mNewChildren;

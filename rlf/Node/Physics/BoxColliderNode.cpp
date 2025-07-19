@@ -25,13 +25,4 @@ namespace rlf {
 
         return bb;
     }
-
-#ifdef RLF_DEBUG
-    void BoxColliderNode::renderImpl() {
-        BoundingBox bb;
-        bb.min = Vector3{-1, -1, -1};
-        bb.max = Vector3{1, 1, 1};
-        DrawBoundingBox(bb, GREEN);
-    }
-#endif
 }

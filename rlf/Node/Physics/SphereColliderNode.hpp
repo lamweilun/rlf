@@ -11,10 +11,6 @@ namespace rlf {
         void shutdownImpl() override;
         void updateImpl() override;
 
-#ifdef RLF_DEBUG
-        void renderImpl() override;
-#endif
-
     private:
     };
 }

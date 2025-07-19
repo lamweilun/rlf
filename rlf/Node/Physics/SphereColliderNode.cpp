@@ -14,10 +14,4 @@ namespace rlf {
         mCollidedNodes = rlf::PhysicsSystem::getInstance().checkCollision(std::static_pointer_cast<SphereColliderNode>(shared_from_this()));
         ColliderNode::updateImpl();
     }
-
-#ifdef RLF_DEBUG
-    void SphereColliderNode::renderImpl() {
-        DrawSphereWires(Vector3Zeros, 1.0f, 8, 8, GREEN);
-    }
-#endif
 }
