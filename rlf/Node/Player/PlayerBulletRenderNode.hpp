@@ -7,7 +7,9 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(PlayerBulletRenderNode)
 
+    protected:
         void initImpl() override;
+        void renderImpl() override;
 
     private:
     };

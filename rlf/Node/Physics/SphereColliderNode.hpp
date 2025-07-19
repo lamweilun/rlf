@@ -7,6 +7,7 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(SphereColliderNode)
 
+    protected:
         void initImpl() override;
         void shutdownImpl() override;
         void updateImpl() override;

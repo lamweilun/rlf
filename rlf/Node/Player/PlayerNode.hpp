@@ -7,6 +7,7 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(PlayerNode)
 
+    protected:
         void initImpl() override;
         void updateImpl() override;
 

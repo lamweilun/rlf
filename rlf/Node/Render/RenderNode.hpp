@@ -7,10 +7,6 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(RenderNode)
 
-        void setActiveImpl(bool const selfActive) override;
-        void initImpl() override;
-        void shutdownImpl() override;
-
         virtual void renderImpl();
 
         void         setTint(Color const& tint);
@@ -18,6 +14,11 @@ namespace rlf {
 
         void setLayer(int const layer);
         int  getLayer() const;
+
+    protected:
+        void setActiveImpl(bool const selfActive) override;
+        void initImpl() override;
+        void shutdownImpl() override;
 
     private:
         Color mTint  = WHITE;

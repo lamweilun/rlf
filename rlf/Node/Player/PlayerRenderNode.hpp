@@ -7,6 +7,9 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(PlayerRenderNode)
 
+    protected:
+        void renderImpl() override;
+
     private:
     };
 }

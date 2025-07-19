@@ -5,4 +5,8 @@ namespace rlf {
         RenderNode::initImpl();
         setTint(BLUE);
     }
+
+    void PlayerBulletRenderNode::renderImpl() {
+        DrawCircleV(Vector2Zeros, 1.0f, getTint());
+    }
 }

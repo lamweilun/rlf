@@ -19,7 +19,6 @@ namespace rlf {
     }
 
     void RenderNode::renderImpl() {
-        DrawCircleV(Vector2Zeros, 1.0f, mTint);
     }
 
     void RenderNode::setTint(Color const& tint) {

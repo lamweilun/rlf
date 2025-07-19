@@ -7,6 +7,7 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(EnemyNode)
 
+    protected:
         void initImpl() override;
     };
 }
