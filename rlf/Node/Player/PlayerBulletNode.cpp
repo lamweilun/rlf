@@ -18,6 +18,11 @@ namespace rlf {
         bulletColliderNode->setCollidedCallback([this](std::shared_ptr<rlf::ColliderNode> cn) {
             if (cn->hasTag("Enemy")) {
                 setToDestroy(true);
+
+                auto newScale = cn->getParent().lock()->getScale();
+                newScale.x -= Vector3Ones.x * 0.01f;
+                newScale.y -= Vector3Ones.y * 0.01f;
+                cn->getParent().lock()->setScale(newScale);
             }
         });
     }

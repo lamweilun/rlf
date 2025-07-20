@@ -11,17 +11,6 @@ namespace rlf {
         }
     }
 
-    rlf::Json ColliderNode::serializeImpl() const {
-        rlf::Json j = BaseNode::serializeImpl();
-        j["tags"]   = mTags;
-        return j;
-    }
-
-    void ColliderNode::deserializeImpl(rlf::Json const& j) {
-        BaseNode::deserializeImpl(j);
-        mTags = j["tags"];
-    }
-
     void ColliderNode::setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback) {
         mCollidedCallback = callback;
     }

@@ -255,7 +255,7 @@ namespace rlf {
         }
     }
 
-    rlf::Json BaseNode::serialize() const {
+    rlf::Json BaseNode::serialize() {
         rlf::Json j;
         j["type"] = getTypeNameImpl();
         j["data"] = serializeImpl();
@@ -281,7 +281,9 @@ namespace rlf {
             }
         }
 
-        mChildren.clear();
+        for (auto& child : mChildren) {
+            child->setToDestroy(true);
+        }
         mNewChildren = std::move(newChildren);
         mToDestroy   = false;
         mHasInited   = false;
@@ -296,22 +298,6 @@ namespace rlf {
     }
 
     void BaseNode::updateImpl() {
-    }
-
-    rlf::Json BaseNode::serializeImpl() const {
-        rlf::Json j;
-        j["active"]   = mActive;
-        j["position"] = mPosition;
-        j["rotation"] = mRotation;
-        j["scale"]    = mScale;
-        return j;
-    }
-
-    void BaseNode::deserializeImpl(rlf::Json const& j) {
-        mActive   = j["active"];
-        mPosition = j["position"];
-        mRotation = j["rotation"];
-        mScale    = j["scale"];
     }
 
     void BaseNode::markGlobalDirty() {

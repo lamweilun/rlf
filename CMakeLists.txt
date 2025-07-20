@@ -51,6 +51,9 @@ add_executable(
     rlf/System/RenderSystem.cpp
     rlf/System/TypeSystem.cpp
 
+    rlf/Util/Accessor/JsonDeserializer.cpp
+    rlf/Util/Accessor/JsonSerializer.cpp
+
     rlf/Util/Reflection/NamedValue.cpp
     rlf/Util/Color.cpp
     rlf/Util/Math.cpp

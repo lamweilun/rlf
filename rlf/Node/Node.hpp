@@ -14,5 +14,7 @@
 #include <Node/Player/PlayerBulletNode.hpp>
 #include <Node/Player/PlayerBulletRenderNode.hpp>
 
+#include <Node/Render/RenderNode.hpp>
+
 #include <Node/Enemy/EnemyNode.hpp>
 #include <Node/Enemy/EnemyRenderNode.hpp>

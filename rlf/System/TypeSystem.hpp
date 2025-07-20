@@ -9,8 +9,6 @@ namespace rlf {
     class BaseNode;
 
     class TypeSystem : public Singleton<TypeSystem> {
-        std::unordered_map<std::string_view, std::function<std::shared_ptr<BaseNode>()>> mCreator;
-
     public:
         template <class T>
         bool registerType() {
@@ -25,6 +23,9 @@ namespace rlf {
             return createNode(T::getTypeName());
         }
         std::optional<std::shared_ptr<BaseNode>> createNode(std::string_view typeName);
+
+    private:
+        std::unordered_map<std::string_view, std::function<std::shared_ptr<BaseNode>()>> mCreator;
     };
 }
 

@@ -2,6 +2,9 @@
 
 #include <System/TypeSystem.hpp>
 
+#include <Util/Accessor/JsonSerializer.hpp>
+#include <Util/Accessor/JsonDeserializer.hpp>
+
 #include <memory>
 #include <vector>
 
@@ -61,16 +64,31 @@ namespace rlf {
         void      init();
         void      shutdown();
         void      update();
-        rlf::Json serialize() const;
+        rlf::Json serialize();
         void      deserialize(rlf::Json const& j);
 
     protected:
-        virtual void      setActiveImpl(bool const selfActive);
-        virtual void      initImpl();
-        virtual void      shutdownImpl();
-        virtual void      updateImpl();
-        virtual rlf::Json serializeImpl() const;
-        virtual void      deserializeImpl(rlf::Json const& j);
+        virtual void setActiveImpl(bool const selfActive);
+        virtual void initImpl();
+        virtual void shutdownImpl();
+        virtual void updateImpl();
+
+        inline void access(auto& acc) {
+            acc("active", mActive);
+            acc("position", mPosition);
+            acc("rotation", mRotation);
+            acc("scale", mScale);
+        }
+        inline virtual rlf::Json serializeImpl() {
+            rlf::JsonSerializer js;
+            access(js);
+            return js.getJson();
+        }
+        inline virtual void deserializeImpl(rlf::Json const& j) {
+            rlf::JsonDeserializer jd;
+            jd.setJson(j);
+            access(jd);
+        }
 
     private:
         void markGlobalDirty();
@@ -95,3 +113,25 @@ namespace rlf {
 }
 
 #include <Node/BaseNodeImpl.hpp>
+
+#define RLF_NODE_ACCESS_START                                          \
+    inline virtual rlf::Json serializeImpl() override {                \
+        rlf::JsonSerializer js;                                        \
+        access(js);                                                    \
+        return js.getJson();                                           \
+    }                                                                  \
+    inline virtual void deserializeImpl(rlf::Json const& j) override { \
+        rlf::JsonDeserializer jd;                                      \
+        jd.setJson(j);                                                 \
+        access(jd);                                                    \
+    }                                                                  \
+    inline void access(auto& acc) {
+#define RLF_NODE_ACCESS_END }
+
+#define RLF_NODE_ACCESS_PARENT(PARENT)       PARENT::access(acc);
+#define RLF_NODE_ACCESS_MEMBER(NAME, MEMBER) acc(NAME, MEMBER);
+#define RLF_NODE_ACCESS_MEMBER_GET_SET(NAME, GETTER, SETTER) \
+    {                                                        \
+        using T = typename std::decay_t<decltype(*this)>;    \
+        acc(NAME, &T::GETTER, &T::SETTER, *this);            \
+    }

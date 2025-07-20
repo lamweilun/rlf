@@ -4,6 +4,9 @@
 #include <System/RenderSystem.hpp>
 #include <System/PhysicsSystem.hpp>
 
+#include <Util/Accessor/JsonDeserializer.hpp>
+#include <Util/Accessor/JsonSerializer.hpp>
+
 #include <fstream>
 
 int main() {

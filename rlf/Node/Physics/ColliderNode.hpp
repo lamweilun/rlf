@@ -16,9 +16,12 @@ namespace rlf {
         bool                         hasAnyOfTags(std::set<std::string> const& tags) const;
 
     protected:
-        void      updateImpl() override;
-        rlf::Json serializeImpl() const override;
-        void      deserializeImpl(rlf::Json const& j) override;
+        void updateImpl() override;
+
+        RLF_NODE_ACCESS_START
+        RLF_NODE_ACCESS_PARENT(BaseNode)
+        RLF_NODE_ACCESS_MEMBER("tags", mTags)
+        RLF_NODE_ACCESS_END
 
         std::vector<std::shared_ptr<ColliderNode>> mCollidedNodes;
 
