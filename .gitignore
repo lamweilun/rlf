@@ -36,3 +36,6 @@ build
 
 # rlf
 rlf/Config/Config.h
+
+# clangd cache
+.cache
