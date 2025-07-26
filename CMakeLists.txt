@@ -44,6 +44,7 @@ add_executable(
     rlf/Node/Player/PlayerRenderNode.cpp
     
     rlf/Node/Render/RenderNode.cpp
+    rlf/Node/Render/SpriteRenderNode.cpp
     
     rlf/Node/BaseNode.cpp
 
@@ -62,6 +63,6 @@ add_executable(
 )
 target_precompile_headers(${PROJECT_NAME} PRIVATE rlf/precompiled.hpp)
 target_include_directories(${PROJECT_NAME} PRIVATE rlf ./)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_26)
 target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json raylib)
 add_warning_flags(${PROJECT_NAME})

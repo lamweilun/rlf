@@ -8,7 +8,7 @@
 namespace rlf {
 
     void PlayerBulletNode::initImpl() {
-        setScale(Vector3{5, 5, 0});
+        setScale(Vector3{5, 5, 1});
         mSpeed = 1000.0f;
 
         getOrAddFirstChildOfType<PlayerBulletRenderNode>();
@@ -20,8 +20,8 @@ namespace rlf {
                 setToDestroy(true);
 
                 auto newScale = cn->getParent().lock()->getScale();
-                newScale.x -= Vector3Ones.x * 0.01f;
-                newScale.y -= Vector3Ones.y * 0.01f;
+                newScale -= Vector3Ones * 0.01f;
+                newScale.z = 1;
                 cn->getParent().lock()->setScale(newScale);
             }
         });
@@ -32,9 +32,6 @@ namespace rlf {
         if (position.x < 0 || position.x > 1280 || position.y < 0 || position.y > 720) {
             setToDestroy(true);
         }
-
-        float angle = std::atan2f(mVelocity.y, mVelocity.x);
-        setRotationEulerRad(Vector3{0, 0, angle});
 
         RigidbodyNode::updateImpl();
     }

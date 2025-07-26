@@ -20,27 +20,22 @@ int main() {
 
     // DO NOT CHANGE THIS
     auto rootNode = std::make_shared<rlf::BaseNode>();
-
-    auto playerNode = rootNode->addChild<rlf::PlayerNode>();
-    playerNode->setPosition(Vector3{640, 600, 0});
-
-    auto enemy1 = rootNode->addChild<rlf::EnemyNode>();
-    enemy1->setPosition(Vector3{640, 360, 0});
+    rootNode->addChild<rlf::SpriteRenderNode>();
 
     rootNode->init();
 
     while (!WindowShouldClose()) {
-        if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_O)) {
-            rlf::Json     j = rootNode->serialize();
-            std::ofstream ofs("output.json");
-            ofs << j.dump(2);
-        } else if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_I)) {
-            std::ifstream ifs("output.json");
-            if (ifs.good()) {
-                rlf::Json j = rlf::Json::parse(ifs);
-                rootNode->deserialize(j);
-            }
-        }
+        // if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_O)) {
+        //     rlf::Json     j = rootNode->serialize();
+        //     std::ofstream ofs("output.json");
+        //     ofs << j.dump(2);
+        // } else if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_I)) {
+        //     std::ifstream ifs("output.json");
+        //     if (ifs.good()) {
+        //         rlf::Json j = rlf::Json::parse(ifs);
+        //         rootNode->deserialize(j);
+        //     }
+        // }
 
         rootNode->update();
 

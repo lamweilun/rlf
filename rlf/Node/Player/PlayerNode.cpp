@@ -25,6 +25,9 @@ namespace rlf {
             auto bulletNode = getRootNode()->addChild<PlayerBulletNode>();
             bulletNode->setPosition(getPosition());
             bulletNode->mVelocity = Vector3Normalize(Vector3{static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()), 0} - bulletNode->getPosition());
+
+            float angle = std::atan2f(bulletNode->mVelocity.y, bulletNode->mVelocity.x);
+            bulletNode->setRotationEulerRad(Vector3{0, 0, angle});
         }
     }
 
