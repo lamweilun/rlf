@@ -9,9 +9,6 @@ namespace rlf {
 
         void initImpl() override;
 
-    protected:
-        void updateImpl() override;
-
     private:
     };
 }

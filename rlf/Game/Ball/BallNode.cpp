@@ -23,8 +23,4 @@ namespace rlf {
         velocity.y       = static_cast<f32>(GetRandomValue(-100, 100)) / 100.0f - 0.5f;
         setVelocity(Vector3Normalize(velocity));
     }
-
-    void BallNode::updateImpl() {
-        RigidbodyNode::updateImpl();
-    }
 }
