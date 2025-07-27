@@ -1,5 +1,3 @@
-#include <Node/Node.hpp>
-
 #include <System/TypeSystem.hpp>
 #include <System/RenderSystem.hpp>
 #include <System/PhysicsSystem.hpp>
@@ -7,11 +5,14 @@
 #include <Util/Accessor/JsonDeserializer.hpp>
 #include <Util/Accessor/JsonSerializer.hpp>
 
-#include <fstream>
+#include <Game/Player/PlayerNode.hpp>
+#include <Game/Environment/WallNode.hpp>
+#include <Game/Ball/BallNode.hpp>
 
 int main() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI);
     InitWindow(1280, 720, "Hello rlf");
+    // SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
     // ToggleFullscreen();
 
     rlf::TypeSystem::getInstance();
@@ -20,9 +21,29 @@ int main() {
 
     // DO NOT CHANGE THIS
     auto rootNode = std::make_shared<rlf::BaseNode>();
-    rootNode->addChild<rlf::SpriteRenderNode>();
-
     rootNode->init();
+
+    // Add new children here
+    auto playerNode = rootNode->addChild<rlf::PlayerNode>();
+    playerNode->setPosition({50.0f, 360.0f, 0.0f});
+
+    auto topWallNode = rootNode->addChild<rlf::WallNode>();
+    topWallNode->setPosition({640.0f, 20.0f, 0.0f});
+    topWallNode->setScale({10.0f, 1200.0f, 1.0f});
+    topWallNode->setRotationEulerDeg({0.0f, 0.0f, 90.0f});
+
+    auto bottomWallNode = rootNode->addChild<rlf::WallNode>();
+    bottomWallNode->setPosition({640.0f, 700.0f, 0.0f});
+    bottomWallNode->setScale({10.0f, 1200.0f, 1.0f});
+    bottomWallNode->setRotationEulerDeg({0.0f, 0.0f, -90.0f});
+
+    auto backWallNode = rootNode->addChild<rlf::WallNode>();
+    backWallNode->setPosition({1200.0f, 360.0f, 0.0f});
+    backWallNode->setScale({10.0f, 700.0f, 1.0f});
+    backWallNode->setRotationEulerDeg({0.0f, 0.0f, 180.0f});
+
+    auto ballNode = rootNode->addChild<rlf::BallNode>();
+    ballNode->setPosition({640.0f, 360.0f, 0.0f});
 
     while (!WindowShouldClose()) {
         // if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_O)) {
@@ -37,14 +58,15 @@ int main() {
         //     }
         // }
 
-        rootNode->update();
-
         BeginDrawing();
         ClearBackground(BLACK);
 
+        rootNode->update();
         renderSystem.render();
 
+#ifdef RLF_DEBUG
         DrawFPS(10, 10);
+#endif
         EndDrawing();
     }
 

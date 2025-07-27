@@ -3,12 +3,15 @@
 #include <Node/Physics/RigidbodyNode.hpp>
 
 namespace rlf {
-    class PlayerBulletNode : public rlf::RigidbodyNode {
+    class BallNode : public RigidbodyNode {
     public:
-        RLF_TYPE_REGISTER_QUICK(PlayerBulletNode)
+        RLF_TYPE_REGISTER_QUICK(BallNode)
+
+        void initImpl() override;
 
     protected:
-        void initImpl() override;
         void updateImpl() override;
+
+    private:
     };
 }

@@ -23,11 +23,10 @@ namespace rlf {
         RLF_NODE_ACCESS_MEMBER("tags", mTags)
         RLF_NODE_ACCESS_END
 
-        std::vector<std::shared_ptr<ColliderNode>> mCollidedNodes;
+        std::vector<std::shared_ptr<ColliderNode>>              mCollidedNodes;
+        std::function<void(std::shared_ptr<rlf::ColliderNode>)> mCollidedCallback;
 
     private:
         std::set<std::string> mTags;
-
-        std::function<void(std::shared_ptr<rlf::ColliderNode>)> mCollidedCallback;
     };
 }

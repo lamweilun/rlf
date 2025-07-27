@@ -52,6 +52,7 @@ namespace rlf {
         std::shared_ptr<BaseNode> getRootNode();
         Matrix const&             getLocalTransform() const;
         Matrix const&             getGlobalTransform() const;
+        Vector3                   getGlobalRight() const;
         Vector3                   getGlobalPosition() const;
         Vector3                   getGlobalScale() const;
         Quaternion                getGlobalRotation() const;

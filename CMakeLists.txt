@@ -30,20 +30,15 @@ configure_file(
 add_executable(
     ${PROJECT_NAME}
     
-    rlf/Node/Enemy/EnemyNode.cpp
-    rlf/Node/Enemy/EnemyRenderNode.cpp
-    
+    # Engine Related Stuffs
     rlf/Node/Physics/ColliderNode.cpp
-    rlf/Node/Physics/BoxColliderNode.cpp
+    rlf/Node/Physics/LineColliderNode.cpp
     rlf/Node/Physics/SphereColliderNode.cpp
     rlf/Node/Physics/RigidbodyNode.cpp
     
-    rlf/Node/Player/PlayerBulletNode.cpp
-    rlf/Node/Player/PlayerBulletRenderNode.cpp
-    rlf/Node/Player/PlayerNode.cpp
-    rlf/Node/Player/PlayerRenderNode.cpp
-    
     rlf/Node/Render/RenderNode.cpp
+    rlf/Node/Render/LineRenderNode.cpp
+    rlf/Node/Render/SphereRenderNode.cpp
     rlf/Node/Render/SpriteRenderNode.cpp
     
     rlf/Node/BaseNode.cpp
@@ -54,10 +49,18 @@ add_executable(
 
     rlf/Util/Accessor/JsonDeserializer.cpp
     rlf/Util/Accessor/JsonSerializer.cpp
-
+    rlf/Util/Physics/CollisionDetection.cpp
     rlf/Util/Reflection/NamedValue.cpp
     rlf/Util/Color.cpp
     rlf/Util/Math.cpp
+
+    # Game Related Stuffs
+    rlf/Game/Player/PlayerNode.cpp
+    rlf/Game/Player/PlayerRenderNode.cpp
+    rlf/Game/Environment/WallNode.cpp
+    rlf/Game/Environment/WallRenderNode.cpp
+    rlf/Game/Ball/BallNode.cpp
+    rlf/Game/Ball/BallRenderNode.cpp
 
     main.cpp
 )

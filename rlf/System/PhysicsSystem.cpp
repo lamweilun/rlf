@@ -1,29 +1,34 @@
 #include <System/PhysicsSystem.hpp>
 
+#include <Util/Physics/CollisionDetection.hpp>
+
 namespace rlf {
-    void PhysicsSystem::addColliderNode(std::shared_ptr<BoxColliderNode> boxColliderNode) {
-        mBoxColliderNodes.insert(boxColliderNode);
+    void PhysicsSystem::addColliderNode(std::shared_ptr<LineColliderNode> lineColliderNode) {
+        mLineColliderNodes.insert(lineColliderNode);
     }
 
     void PhysicsSystem::addColliderNode(std::shared_ptr<SphereColliderNode> sphereColliderNode) {
         mSphereColliderNodes.insert(sphereColliderNode);
     }
 
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<BoxColliderNode> boxColliderNode) {
-        mBoxColliderNodes.erase(boxColliderNode);
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<LineColliderNode> lineColliderNode) {
+        mLineColliderNodes.erase(lineColliderNode);
     }
 
     void PhysicsSystem::removeColliderNode(std::shared_ptr<SphereColliderNode> sphereColliderNode) {
         mSphereColliderNodes.erase(sphereColliderNode);
     }
 
-    std::vector<std::shared_ptr<ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<BoxColliderNode> colliderNode) {
+    std::vector<std::shared_ptr<ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<LineColliderNode> colliderNode) {
         // Initialize data
         std::vector<std::shared_ptr<ColliderNode>> collided;
-        BoundingBox                                colliderBB = colliderNode->getBoundingBox();
 
-        // Check against box colliders
-        for (auto const& cn : mBoxColliderNodes) {
+        auto const& globalTransform1 = colliderNode->getGlobalTransform();
+        auto const  startPt1         = colliderNode->getStartPoint() * globalTransform1;
+        auto const  endPt1           = colliderNode->getEndPoint() * globalTransform1;
+
+        // Check against other line colliders
+        for (auto const& cn : mLineColliderNodes) {
             if (cn->hasAnyOfTags(colliderNode->getTags())) {
                 continue;
             }
@@ -36,9 +41,12 @@ namespace rlf {
                 continue;
             }
 
-            if (CheckCollisionBoxes(colliderBB, cn->getBoundingBox())) {
-                collided.push_back(cn);
-            }
+            auto const& globalTransform2 = cn->getGlobalTransform();
+            auto const  startPt2         = cn->getStartPoint() * globalTransform2;
+            auto const  endPt2           = cn->getEndPoint() * globalTransform2;
+
+            // Perform line to line collision here
+            rlf::CheckCollisionLines(startPt1, endPt1, startPt2, endPt2);
         }
 
         // Check against sphere colliders
@@ -55,7 +63,7 @@ namespace rlf {
             Vector3 const cnGlobalScale = cn->getGlobalScale();
             float const   cnMaxScale    = std::max(cnGlobalScale.x, std::max(cnGlobalScale.y, cnGlobalScale.z));
 
-            if (CheckCollisionBoxSphere(colliderBB, cnGlobalPos, cnMaxScale)) {
+            if (rlf::CheckCollisionLineSphere(startPt1, endPt1, cnGlobalPos, cnMaxScale)) {
                 collided.push_back(cn);
             }
         }
@@ -66,12 +74,13 @@ namespace rlf {
     std::vector<std::shared_ptr<ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<SphereColliderNode> colliderNode) {
         // Initialize data
         std::vector<std::shared_ptr<ColliderNode>> collided;
-        Vector3                                    colliderGlobalPosition = colliderNode->getGlobalPosition();
-        Vector3                                    colliderGlobalScale    = colliderNode->getGlobalScale();
-        float                                      colliderMaxScale       = std::max(colliderGlobalScale.x, std::max(colliderGlobalScale.y, colliderGlobalScale.z));
 
-        // Check against box colliders
-        for (auto const& cn : mBoxColliderNodes) {
+        Vector3 colliderGlobalPosition = colliderNode->getGlobalPosition();
+        Vector3 colliderGlobalScale    = colliderNode->getGlobalScale();
+        f32     colliderMaxScale       = std::max(colliderGlobalScale.x, std::max(colliderGlobalScale.y, colliderGlobalScale.z));
+
+        // Check against line colliders
+        for (auto const& cn : mLineColliderNodes) {
             if (cn->hasAnyOfTags(colliderNode->getTags())) {
                 continue;
             }
@@ -80,7 +89,10 @@ namespace rlf {
                 continue;
             }
 
-            if (CheckCollisionBoxSphere(cn->getBoundingBox(), colliderGlobalPosition, colliderMaxScale)) {
+            auto const& globalTransform = cn->getGlobalTransform();
+            auto const  startPt         = cn->getStartPoint() * globalTransform;
+            auto const  endPt           = cn->getEndPoint() * globalTransform;
+            if (rlf::CheckCollisionLineSphere(startPt, endPt, colliderGlobalPosition, colliderMaxScale)) {
                 collided.push_back(cn);
             }
         }

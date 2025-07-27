@@ -135,6 +135,11 @@ namespace rlf {
         return mGlobalTransform;
     }
 
+    Vector3 BaseNode::getGlobalRight() const {
+        Matrix const& globalMat = getGlobalTransform();
+        return Vector3{globalMat.m0, globalMat.m4, globalMat.m8};
+    }
+
     Vector3 BaseNode::getGlobalPosition() const {
         auto const& globalMat = getGlobalTransform();
         return Vector3{globalMat.m12, globalMat.m13, globalMat.m14};
@@ -303,7 +308,7 @@ namespace rlf {
     void BaseNode::markGlobalDirty() {
         mGlobalDirty = true;
         for (auto& child : mChildren) {
-            child->mGlobalDirty = true;
+            child->markGlobalDirty();
         }
     }
 }
