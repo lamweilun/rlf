@@ -5,9 +5,9 @@
 #include <Util/Accessor/JsonDeserializer.hpp>
 #include <Util/Accessor/JsonSerializer.hpp>
 
-#include <game/Player/PlayerNode.hpp>
-#include <game/Environment/WallNode.hpp>
-#include <game/Ball/BallNode.hpp>
+#include <Player/PlayerNode.hpp>
+#include <Environment/WallNode.hpp>
+#include <Ball/BallNode.hpp>
 
 int main() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI);

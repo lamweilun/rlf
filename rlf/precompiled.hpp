@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Config/Config.h>
-
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>

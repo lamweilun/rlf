@@ -1,5 +1,5 @@
-#include <game/Player/PlayerNode.hpp>
-#include <game/Player/PlayerRenderNode.hpp>
+#include <Player/PlayerNode.hpp>
+#include <Player/PlayerRenderNode.hpp>
 
 #include <Node/Physics/LineColliderNode.hpp>
 

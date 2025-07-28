@@ -1,4 +1,4 @@
-#include <game/Ball/BallRenderNode.hpp>
+#include <Ball/BallRenderNode.hpp>
 
 namespace rlf {
     void BallRenderNode::renderImpl() {
