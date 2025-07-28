@@ -5,14 +5,14 @@
 #include <Util/Accessor/JsonDeserializer.hpp>
 #include <Util/Accessor/JsonSerializer.hpp>
 
-#include <Game/Player/PlayerNode.hpp>
-#include <Game/Environment/WallNode.hpp>
-#include <Game/Ball/BallNode.hpp>
+#include <game/Player/PlayerNode.hpp>
+#include <game/Environment/WallNode.hpp>
+#include <game/Ball/BallNode.hpp>
 
 int main() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI);
     InitWindow(1280, 720, "Hello rlf");
-    // SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
+    SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
     // ToggleFullscreen();
 
     rlf::TypeSystem::getInstance();

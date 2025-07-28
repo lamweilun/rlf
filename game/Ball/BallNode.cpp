@@ -1,5 +1,5 @@
-#include <Game/Ball/BallNode.hpp>
-#include <Game/Ball/BallRenderNode.hpp>
+#include <game/Ball/BallNode.hpp>
+#include <game/Ball/BallRenderNode.hpp>
 #include <Node/Physics/SphereColliderNode.hpp>
 
 namespace rlf {

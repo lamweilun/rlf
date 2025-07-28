@@ -1,5 +1,5 @@
-#include <Game/Environment/WallNode.hpp>
-#include <Game/Environment/WallRenderNode.hpp>
+#include <game/Environment/WallNode.hpp>
+#include <game/Environment/WallRenderNode.hpp>
 
 #include <Node/Physics/LineColliderNode.hpp>
 

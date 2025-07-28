@@ -27,9 +27,9 @@ configure_file(
     @ONLY
 )
 
-add_executable(
+add_library(
     ${PROJECT_NAME}
-    
+
     # Engine Related Stuffs
     rlf/Node/Physics/ColliderNode.cpp
     rlf/Node/Physics/LineColliderNode.cpp
@@ -53,19 +53,26 @@ add_executable(
     rlf/Util/Reflection/NamedValue.cpp
     rlf/Util/Color.cpp
     rlf/Util/Math.cpp
+)
+target_precompile_headers(${PROJECT_NAME} PUBLIC rlf/precompiled.hpp)
+target_include_directories(${PROJECT_NAME} PUBLIC rlf ./)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
+target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json raylib)
+add_warning_flags(${PROJECT_NAME})
+
+add_executable(
+    ${PROJECT_NAME}_game
 
     # Game Related Stuffs
-    rlf/Game/Player/PlayerNode.cpp
-    rlf/Game/Player/PlayerRenderNode.cpp
-    rlf/Game/Environment/WallNode.cpp
-    rlf/Game/Environment/WallRenderNode.cpp
-    rlf/Game/Ball/BallNode.cpp
-    rlf/Game/Ball/BallRenderNode.cpp
+    game/Player/PlayerNode.cpp
+    game/Player/PlayerRenderNode.cpp
+    game/Environment/WallNode.cpp
+    game/Environment/WallRenderNode.cpp
+    game/Ball/BallNode.cpp
+    game/Ball/BallRenderNode.cpp
 
     main.cpp
 )
-target_precompile_headers(${PROJECT_NAME} PRIVATE rlf/precompiled.hpp)
-target_include_directories(${PROJECT_NAME} PRIVATE rlf ./)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_26)
-target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json raylib)
-add_warning_flags(${PROJECT_NAME})
+target_include_directories(${PROJECT_NAME}_game PUBLIC game)
+target_link_libraries(${PROJECT_NAME}_game PUBLIC rlf)
+add_warning_flags(${PROJECT_NAME}_game)

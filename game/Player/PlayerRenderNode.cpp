@@ -1,7 +1,7 @@
-#include <Game/Environment/WallRenderNode.hpp>
+#include <game/Player/PlayerRenderNode.hpp>
 
 namespace rlf {
-    void WallRenderNode::renderImpl() {
+    void PlayerRenderNode::renderImpl() {
         DrawRectangleV({-0.5f, -0.5f}, Vector2Ones, getTint());
     }
 }
