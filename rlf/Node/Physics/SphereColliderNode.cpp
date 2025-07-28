@@ -1,6 +1,6 @@
 #include <Node/Physics/SphereColliderNode.hpp>
 
-#include <System/PhysicsSystem.hpp>
+#include <System/Physics/PhysicsSystem.hpp>
 
 #ifdef RLF_DEBUG
 #include <Node/Render/SphereRenderNode.hpp>
@@ -8,7 +8,7 @@
 
 namespace rlf {
     void SphereColliderNode::initImpl() {
-        rlf::PhysicsSystem::getInstance().addColliderNode(std::static_pointer_cast<SphereColliderNode>(shared_from_this()));
+        rlf::System::PhysicsSystem::getInstance().addColliderNode(std::static_pointer_cast<SphereColliderNode>(shared_from_this()));
 
 #ifdef RLF_DEBUG
         auto childNode = addChild<SphereRenderNode>();
@@ -17,14 +17,15 @@ namespace rlf {
 #endif
     }
     void SphereColliderNode::shutdownImpl() {
-        rlf::PhysicsSystem::getInstance().removeColliderNode(std::static_pointer_cast<SphereColliderNode>(shared_from_this()));
+        rlf::System::PhysicsSystem::getInstance().removeColliderNode(std::static_pointer_cast<SphereColliderNode>(shared_from_this()));
+        ColliderNode::shutdownImpl();
     }
 
     void SphereColliderNode::updateImpl() {
         if (!mCollidedCallback) {
             return;
         }
-        mCollidedNodes = rlf::PhysicsSystem::getInstance().checkCollision(std::static_pointer_cast<SphereColliderNode>(shared_from_this()));
+        mCollidedNodes = rlf::System::PhysicsSystem::getInstance().checkCollision(std::static_pointer_cast<SphereColliderNode>(shared_from_this()));
         ColliderNode::updateImpl();
     }
 }

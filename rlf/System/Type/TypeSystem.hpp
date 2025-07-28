@@ -4,9 +4,13 @@
 
 #include <unordered_map>
 #include <functional>
+#include <memory>
 
 namespace rlf {
     class BaseNode;
+}
+
+namespace rlf::System {
 
     class TypeSystem : public Singleton<TypeSystem> {
     public:
@@ -22,10 +26,10 @@ namespace rlf {
         std::optional<std::shared_ptr<T>> createNode() const {
             return createNode(T::getTypeName());
         }
-        std::optional<std::shared_ptr<BaseNode>> createNode(std::string_view typeName);
+        std::optional<std::shared_ptr<rlf::BaseNode>> createNode(std::string_view typeName);
 
     private:
-        std::unordered_map<std::string_view, std::function<std::shared_ptr<BaseNode>()>> mCreator;
+        std::unordered_map<std::string_view, std::function<std::shared_ptr<rlf::BaseNode>()>> mCreator;
     };
 }
 
@@ -36,6 +40,6 @@ namespace rlf {
     inline virtual std::string_view getTypeNameImpl() const override { \
         return getTypeName();                                          \
     }                                                                  \
-    inline static bool typeRegistered = rlf::TypeSystem::getInstance().registerType<TYPE>();
+    inline static bool typeRegistered = rlf::System::TypeSystem::getInstance().registerType<TYPE>();
 
 #define RLF_TYPE_REGISTER_QUICK(TYPE) RLF_TYPE_REGISTER(TYPE, #TYPE)

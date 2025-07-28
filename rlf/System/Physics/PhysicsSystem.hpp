@@ -6,7 +6,7 @@
 
 #include <unordered_set>
 
-namespace rlf {
+namespace rlf::System {
     class PhysicsSystem : public Singleton<PhysicsSystem> {
     public:
         void addColliderNode(std::shared_ptr<LineColliderNode> lineColliderNode);

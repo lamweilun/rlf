@@ -1,21 +1,21 @@
 #include <Node/Render/RenderNode.hpp>
 
-#include <System/RenderSystem.hpp>
+#include <System/Render/RenderSystem.hpp>
 
 namespace rlf {
     void RenderNode::setActiveImpl(bool const selfActive) {
         if (selfActive) {
-            rlf::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+            rlf::System::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
         } else {
-            rlf::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+            rlf::System::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
         }
     }
 
     void RenderNode::initImpl() {
-        rlf::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
     void RenderNode::shutdownImpl() {
-        rlf::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
 
     void RenderNode::renderImpl() {
@@ -33,9 +33,9 @@ namespace rlf {
         if (mLayer == layer) {
             return;
         }
-        rlf::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
         mLayer = layer;
-        rlf::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
     int RenderNode::getLayer() const {
         return mLayer;

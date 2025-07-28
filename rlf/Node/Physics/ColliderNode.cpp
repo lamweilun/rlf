@@ -1,6 +1,6 @@
 #include <Node/Physics/ColliderNode.hpp>
 
-#include <System/PhysicsSystem.hpp>
+#include <System/Physics/PhysicsSystem.hpp>
 
 namespace rlf {
     void ColliderNode::updateImpl() {
@@ -9,6 +9,10 @@ namespace rlf {
                 mCollidedCallback(cn);
             }
         }
+    }
+
+    void ColliderNode::shutdownImpl() {
+        mCollidedCallback = nullptr;
     }
 
     void ColliderNode::setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback) {

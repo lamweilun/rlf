@@ -17,6 +17,7 @@ namespace rlf {
 
     protected:
         void updateImpl() override;
+        void shutdownImpl() override;
 
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)

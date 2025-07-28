@@ -2,6 +2,8 @@
 #include <Ball/BallRenderNode.hpp>
 #include <Node/Physics/SphereColliderNode.hpp>
 
+#include <Node/Audio/SoundNode.hpp>
+
 namespace rlf {
     void BallNode::initImpl() {
         setScale({10.0f, 10.0f, 1.0f});
@@ -10,12 +12,20 @@ namespace rlf {
         auto renderNode = addChild<rlf::BallRenderNode>();
         renderNode->setTint(RED);
 
+        auto            soundNode = addChild<rlf::SoundNode>();
+        std::vector<u8> beepData{
+#embed "beep.wav"
+        };
+        soundNode->setSoundFromMemory(beepData, ".wav");
+
         auto colliderNode = addChild<rlf::SphereColliderNode>();
-        colliderNode->setCollidedCallback([&](std::shared_ptr<rlf::ColliderNode> node) {
+        colliderNode->setCollidedCallback([this](std::shared_ptr<rlf::ColliderNode> node) {
             if (node->hasTag("Player") || node->hasTag("Wall")) {
                 auto velocity = Vector3Reflect(getVelocity(), Vector3Normalize(node->getGlobalRight()));
                 setVelocity(Vector3Normalize(velocity));
             }
+            auto sn = getFirstChildOfType<rlf::SoundNode>();
+            sn.value()->play();
         });
 
         Vector3 velocity = Vector3Zeros;

@@ -5,7 +5,7 @@
 namespace rlf {
 
     std::shared_ptr<BaseNode> BaseNode::addChild(std::string_view typeName) {
-        auto newChild = rlf::TypeSystem::getInstance().createNode(typeName);
+        auto newChild = rlf::System::TypeSystem::getInstance().createNode(typeName);
         if (!newChild.has_value()) {
             return nullptr;
         }
@@ -275,7 +275,7 @@ namespace rlf {
         std::vector<std::shared_ptr<BaseNode>> newChildren;
         if (j["data"].contains("children")) {
             for (auto const& entry : j["data"]["children"]) {
-                auto childNodeOpt = rlf::TypeSystem::getInstance().createNode(entry["type"].get<std::string_view>());
+                auto childNodeOpt = rlf::System::TypeSystem::getInstance().createNode(entry["type"].get<std::string_view>());
                 if (!childNodeOpt.has_value()) {
                     continue;
                 }

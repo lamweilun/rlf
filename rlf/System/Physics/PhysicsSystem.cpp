@@ -1,8 +1,8 @@
-#include <System/PhysicsSystem.hpp>
+#include <System/Physics/PhysicsSystem.hpp>
 
 #include <Util/Physics/CollisionDetection.hpp>
 
-namespace rlf {
+namespace rlf::System {
     void PhysicsSystem::addColliderNode(std::shared_ptr<LineColliderNode> lineColliderNode) {
         mLineColliderNodes.insert(lineColliderNode);
     }

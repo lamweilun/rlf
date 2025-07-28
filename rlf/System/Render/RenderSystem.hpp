@@ -4,9 +4,10 @@
 #include <Node/Render/RenderNode.hpp>
 
 #include <map>
+#include <memory>
 #include <unordered_set>
 
-namespace rlf {
+namespace rlf::System {
     class RenderSystem : public Singleton<RenderSystem> {
     public:
         void addRenderNode(std::shared_ptr<RenderNode> renderNode);

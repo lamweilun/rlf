@@ -1,6 +1,6 @@
 #pragma once
 
-#include <System/TypeSystem.hpp>
+#include <System/Type/TypeSystem.hpp>
 
 #include <Util/Accessor/JsonSerializer.hpp>
 #include <Util/Accessor/JsonDeserializer.hpp>
@@ -20,7 +20,7 @@ namespace rlf {
 
         static inline constexpr std::string_view getTypeName() { return "BaseNode"; }
         inline virtual std::string_view          getTypeNameImpl() const { return getTypeName(); }
-        static inline bool                       typeRegistered = rlf::TypeSystem::getInstance().registerType<BaseNode>();
+        static inline bool                       typeRegistered = rlf::System::TypeSystem::getInstance().registerType<BaseNode>();
 
         template <class T>
         std::shared_ptr<T>        addChild();
