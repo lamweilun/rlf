@@ -1,6 +1,6 @@
 #pragma once
 
-namespace rlf {
+namespace rlf::traits {
 
     template <class T>
     class MemberTraits;

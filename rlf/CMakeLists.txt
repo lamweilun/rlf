@@ -20,6 +20,7 @@ add_library(
     
     Node/Render/RenderNode.cpp
     Node/Render/LineRenderNode.cpp
+    Node/Render/ParticleRenderNode.cpp
     Node/Render/SphereRenderNode.cpp
     Node/Render/SpriteRenderNode.cpp
     

@@ -7,7 +7,7 @@
 #include <memory>
 #include <unordered_set>
 
-namespace rlf::System {
+namespace rlf::system {
     class RenderSystem : public Singleton<RenderSystem> {
     public:
         void addRenderNode(std::shared_ptr<RenderNode> renderNode);

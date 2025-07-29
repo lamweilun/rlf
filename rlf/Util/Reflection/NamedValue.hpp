@@ -7,7 +7,7 @@
 #include <string>
 #include <type_traits>
 
-namespace rlf {
+namespace rlf::refl {
     class NamedValue {
     public:
         virtual ~NamedValue() = default;
@@ -55,16 +55,16 @@ namespace rlf {
         }
 
         rlf::Json toJson(std::any const& instance) const override {
-            using type    = std::decay_t<typename rlf::FunctionTraits<Getter>::Type>;
+            using type    = std::decay_t<typename rlf::traits::FunctionTraits<Getter>::Type>;
             type const& t = std::any_cast<type>(instance);
             rlf::Json   j = (t.*getter)();
             return j;
         }
 
         void fromJson(rlf::Json const& j, std::any& instance) override {
-            using type    = std::decay_t<typename rlf::FunctionTraits<Setter>::Type>;
+            using type    = std::decay_t<typename rlf::traits::FunctionTraits<Setter>::Type>;
             type t        = std::any_cast<type>(instance);
-            using argType = std::decay_t<typename rlf::FunctionTraits<Setter>::template ArgType<0>>;
+            using argType = std::decay_t<typename rlf::traits::FunctionTraits<Setter>::template ArgType<0>>;
             argType s     = j;
             (t.*setter)(s);
             instance = t;

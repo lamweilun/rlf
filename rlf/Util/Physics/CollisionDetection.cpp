@@ -1,6 +1,6 @@
 #include <Util/Physics/CollisionDetection.hpp>
 
-namespace rlf {
+namespace rlf::phys {
     bool CheckCollisionLines(Vector3 const& l1Start, Vector3 const& l1End, Vector3 const& l2Start, Vector3 const& l2End) {
         Vector3 D1 = l1End - l1Start;    // Direction vector of segment 1
         Vector3 D2 = l2End - l2Start;    // Direction vector of segment 2
@@ -22,18 +22,18 @@ namespace rlf {
 
             // Case 1: Both segments are points
             if (a < EPSILON && c < EPSILON) {
-                s = 0.0;
-                t = 0.0;
+                s = 0.0f;
+                t = 0.0f;
             }
             // Case 2: Segment 1 is a point (l1Start == l1End)
             else if (a < EPSILON) {  // l1Start is a point
-                s = 0.0;
+                s = 0.0f;
                 // Find closest point on segment 2 to l1Start
                 t = std::clamp(Vector3DotProduct(R, D2) / c, 0.0f, 1.0f);
             }
             // Case 3: Segment 2 is a point (l2Start == l2End)
             else if (c < EPSILON) {  // l2Start is a point
-                t = 0.0;
+                t = 0.0f;
                 // Find closest point on segment 1 to l2Start
                 s = std::clamp(Vector3DotProduct(Vector3Negate(R), D1) / a, 0.0f, 1.0f);
             }
@@ -54,7 +54,7 @@ namespace rlf {
                 // For practical collision, if parallel, we need to check if they overlap
                 // and if the perpendicular distance is zero. This approach simplifies
                 // to finding a point of closest approach based on clamping.
-                t = 0.0;  // Default or calculate based on chosen s for line 1
+                t = 0.0f;  // Default or calculate based on chosen s for line 1
             }
         } else {
             // Skew lines or lines that intersect

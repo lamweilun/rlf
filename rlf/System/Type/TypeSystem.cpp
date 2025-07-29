@@ -2,7 +2,7 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf::System {
+namespace rlf::system {
     std::optional<std::shared_ptr<BaseNode>> TypeSystem::createNode(std::string_view typeName) {
         auto itr = mCreator.find(typeName);
         if (itr == std::end(mCreator)) {

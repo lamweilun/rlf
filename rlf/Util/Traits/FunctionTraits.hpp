@@ -2,7 +2,7 @@
 
 #include <tuple>
 
-namespace rlf {
+namespace rlf::traits {
 
     template <class T>
     class FunctionTraits;

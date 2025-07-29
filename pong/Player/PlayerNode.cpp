@@ -5,12 +5,14 @@
 
 namespace rlf {
     void PlayerNode::initImpl() {
-        setScale({10.0f, 100.0f, 1.0f});
         setSpeed(300.0f);
 
-        addChild<rlf::PlayerRenderNode>();
+        Vector3 const scale = {10.0f, 100.0f, 1.0f};
+
+        addChild<rlf::PlayerRenderNode>()->setScale(scale);
 
         auto colliderNode = addChild<rlf::LineColliderNode>();
+        colliderNode->setScale(scale);
         colliderNode->addTag("Player");
         colliderNode->setStartPoint({0.5f, -0.5f, 0.0f});
         colliderNode->setEndPoint({0.5f, 0.5f, 0.0f});

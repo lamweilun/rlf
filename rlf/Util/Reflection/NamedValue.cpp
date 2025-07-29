@@ -1,6 +1,6 @@
 #include <Util/Reflection/NamedValue.hpp>
 
-namespace rlf {
+namespace rlf::refl {
     NamedValue::NamedValue(std::string_view name)
         : mName{name} {
     }

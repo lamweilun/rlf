@@ -1,6 +1,6 @@
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::System {
+namespace rlf::system {
     void RenderSystem::addRenderNode(std::shared_ptr<RenderNode> renderNode) {
         mRenderNodes[renderNode->getLayer()].insert(renderNode);
     }

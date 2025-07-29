@@ -2,7 +2,7 @@
 
 #include <Util/Singleton.hpp>
 
-namespace rlf::System {
+namespace rlf::system {
     class AudioSystem : public Singleton<AudioSystem> {
     public:
         void init();

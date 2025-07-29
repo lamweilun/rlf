@@ -1,6 +1,6 @@
 #pragma once
 
-namespace rlf {
+namespace rlf::acc {
     class JsonDeserializer {
     public:
         rlf::Json const& getJson() const;

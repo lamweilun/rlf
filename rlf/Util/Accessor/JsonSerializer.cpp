@@ -1,6 +1,6 @@
 #include <Util/Accessor/JsonSerializer.hpp>
 
-namespace rlf {
+namespace rlf::acc {
     rlf::Json const& JsonSerializer::getJson() const {
         return mJson;
     }

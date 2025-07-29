@@ -2,7 +2,7 @@
 
 #include <Util/Physics/CollisionDetection.hpp>
 
-namespace rlf::System {
+namespace rlf::system {
     void PhysicsSystem::addColliderNode(std::shared_ptr<LineColliderNode> lineColliderNode) {
         mLineColliderNodes.insert(lineColliderNode);
     }
@@ -46,7 +46,7 @@ namespace rlf::System {
             auto const  endPt2           = cn->getEndPoint() * globalTransform2;
 
             // Perform line to line collision here
-            rlf::CheckCollisionLines(startPt1, endPt1, startPt2, endPt2);
+            rlf::phys::CheckCollisionLines(startPt1, endPt1, startPt2, endPt2);
         }
 
         // Check against sphere colliders
@@ -63,7 +63,7 @@ namespace rlf::System {
             Vector3 const cnGlobalScale = cn->getGlobalScale();
             float const   cnMaxScale    = std::max(cnGlobalScale.x, std::max(cnGlobalScale.y, cnGlobalScale.z));
 
-            if (rlf::CheckCollisionLineSphere(startPt1, endPt1, cnGlobalPos, cnMaxScale)) {
+            if (rlf::phys::CheckCollisionLineSphere(startPt1, endPt1, cnGlobalPos, cnMaxScale)) {
                 collided.push_back(cn);
             }
         }
@@ -92,7 +92,7 @@ namespace rlf::System {
             auto const& globalTransform = cn->getGlobalTransform();
             auto const  startPt         = cn->getStartPoint() * globalTransform;
             auto const  endPt           = cn->getEndPoint() * globalTransform;
-            if (rlf::CheckCollisionLineSphere(startPt, endPt, colliderGlobalPosition, colliderMaxScale)) {
+            if (rlf::phys::CheckCollisionLineSphere(startPt, endPt, colliderGlobalPosition, colliderMaxScale)) {
                 collided.push_back(cn);
             }
         }

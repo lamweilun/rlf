@@ -10,7 +10,7 @@ namespace rlf {
     class BaseNode;
 }
 
-namespace rlf::System {
+namespace rlf::system {
 
     class TypeSystem : public Singleton<TypeSystem> {
     public:
@@ -40,6 +40,6 @@ namespace rlf::System {
     inline virtual std::string_view getTypeNameImpl() const override { \
         return getTypeName();                                          \
     }                                                                  \
-    inline static bool typeRegistered = rlf::System::TypeSystem::getInstance().registerType<TYPE>();
+    inline static bool typeRegistered = rlf::system::TypeSystem::getInstance().registerType<TYPE>();
 
 #define RLF_TYPE_REGISTER_QUICK(TYPE) RLF_TYPE_REGISTER(TYPE, #TYPE)

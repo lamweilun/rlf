@@ -11,16 +11,16 @@ namespace rlf {
         InitWindow(static_cast<int>(width), static_cast<int>(height), title);
         // SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 
-        rlf::System::TypeSystem::getInstance();
-        auto& audioSystem = rlf::System::AudioSystem::getInstance();
-        rlf::System::RenderSystem::getInstance();
-        rlf::System::PhysicsSystem::getInstance();
+        rlf::system::TypeSystem::getInstance();
+        auto& audioSystem = rlf::system::AudioSystem::getInstance();
+        rlf::system::RenderSystem::getInstance();
+        rlf::system::PhysicsSystem::getInstance();
 
         audioSystem.init();
     }
 
     Engine::~Engine() {
-        rlf::System::AudioSystem::getInstance().shutdown();
+        rlf::system::AudioSystem::getInstance().shutdown();
 
         CloseWindow();
     }
@@ -33,7 +33,7 @@ namespace rlf {
             setupFunc(rootNode);
         }
 
-        auto& rendererSystem = rlf::System::RenderSystem::getInstance();
+        auto& rendererSystem = rlf::system::RenderSystem::getInstance();
 
         while (!WindowShouldClose()) {
             rootNode->update();
@@ -43,9 +43,7 @@ namespace rlf {
 
             rendererSystem.render();
 
-#ifdef RLF_DEBUG
             DrawFPS(10, 10);
-#endif
             EndDrawing();
         }
 

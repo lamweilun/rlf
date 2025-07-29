@@ -20,7 +20,7 @@ namespace rlf {
 
         static inline constexpr std::string_view getTypeName() { return "BaseNode"; }
         inline virtual std::string_view          getTypeNameImpl() const { return getTypeName(); }
-        static inline bool                       typeRegistered = rlf::System::TypeSystem::getInstance().registerType<BaseNode>();
+        static inline bool                       typeRegistered = rlf::system::TypeSystem::getInstance().registerType<BaseNode>();
 
         template <class T>
         std::shared_ptr<T>        addChild();
@@ -81,12 +81,12 @@ namespace rlf {
             acc("scale", mScale);
         }
         inline virtual rlf::Json serializeImpl() {
-            rlf::JsonSerializer js;
+            rlf::acc::JsonSerializer js;
             access(js);
             return js.getJson();
         }
         inline virtual void deserializeImpl(rlf::Json const& j) {
-            rlf::JsonDeserializer jd;
+            rlf::acc::JsonDeserializer jd;
             jd.setJson(j);
             access(jd);
         }
@@ -117,12 +117,12 @@ namespace rlf {
 
 #define RLF_NODE_ACCESS_START                                          \
     inline virtual rlf::Json serializeImpl() override {                \
-        rlf::JsonSerializer js;                                        \
+        rlf::acc::JsonSerializer js;                                   \
         access(js);                                                    \
         return js.getJson();                                           \
     }                                                                  \
     inline virtual void deserializeImpl(rlf::Json const& j) override { \
-        rlf::JsonDeserializer jd;                                      \
+        rlf::acc::JsonDeserializer jd;                                 \
         jd.setJson(j);                                                 \
         access(jd);                                                    \
     }                                                                  \
