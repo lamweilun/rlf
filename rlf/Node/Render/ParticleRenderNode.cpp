@@ -3,7 +3,14 @@
 namespace rlf {
     void ParticleRenderNode::renderImpl() {
         for (auto const& index : mLiveIndices) {
-            DrawCircleV({}, 10.0f * mScales[index], WHITE);
+            rlPushMatrix();
+
+            auto const& position = mPositions[index];
+            rlTranslatef(position.x, position.y, position.z);
+
+            DrawCircleV({}, mScales[index], WHITE);
+
+            rlPopMatrix();
         }
     }
 
@@ -39,6 +46,8 @@ namespace rlf {
         // Update particle params
         for (auto const& index : mLiveIndices) {
             mScales[index] += mScaleDeltas[index] * GetFrameTime();
+            mSpeeds[index] += mSpeedDeltas[index] * GetFrameTime();
+            mPositions[index] += mDirections[index] * mSpeeds[index] * GetFrameTime();
         }
 
         // Check if we can spawn a new particle
@@ -68,6 +77,48 @@ namespace rlf {
         mCurrentSpawnRate = mSpawnRate;
     }
 
+    rlf::Range<f32> const& ParticleRenderNode::getLifeTimeRange() const {
+        return mLifeTimeRange;
+    }
+    void ParticleRenderNode::setLifeTimeRange(rlf::Range<f32> const& lifeTimeRange) {
+        mLifeTimeRange = lifeTimeRange;
+    }
+
+    rlf::Range<f32> const& ParticleRenderNode::getStartScaleRange() const {
+        return mStartScaleRange;
+    }
+    void ParticleRenderNode::setStartScaleRange(rlf::Range<f32> const& startScaleRange) {
+        mStartScaleRange = startScaleRange;
+    }
+
+    rlf::Range<f32> const& ParticleRenderNode::getEndScaleRange() const {
+        return mEndScaleRange;
+    }
+    void ParticleRenderNode::setEndScaleRange(rlf::Range<f32> const& endScaleRange) {
+        mEndScaleRange = endScaleRange;
+    }
+
+    rlf::Range<f32> const& ParticleRenderNode::getStartSpeedRange() const {
+        return mStartSpeedRange;
+    }
+    void ParticleRenderNode::setStartSpeedRange(rlf::Range<f32> const& startSpeedRange) {
+        mStartSpeedRange = startSpeedRange;
+    }
+
+    rlf::Range<f32> const& ParticleRenderNode::getEndSpeedRange() const {
+        return mEndSpeedRange;
+    }
+    void ParticleRenderNode::setEndSpeedRange(rlf::Range<f32> const& endSpeedRange) {
+        mEndSpeedRange = endSpeedRange;
+    }
+
+    rlf::Range<Vector3> const& ParticleRenderNode::getDirectionRange() const {
+        return mDirectionRange;
+    }
+    void ParticleRenderNode::setDirectionRange(rlf::Range<Vector3> const& directionRange) {
+        mDirectionRange = directionRange;
+    }
+
     void ParticleRenderNode::spawnParticle() {
         // Do not spawn particle if it reaches max count
         if (mLiveIndices.size() == mMaxCount) {
@@ -80,18 +131,32 @@ namespace rlf {
         mLiveIndices.push_back(index);
 
         // Set runtime params
-        auto const lifeTime = mLifeTimeRange.getValue();
+        auto const lifeTime = std::max(EPSILON, mLifeTimeRange.getValue());
         mLifeTimes[index]   = lifeTime;
 
-        auto const startScale = mStartScale.getValue();
-        auto const endScale   = mEndScale.getValue();
+        auto const startScale = mStartScaleRange.getValue();
+        auto const endScale   = mEndScaleRange.getValue();
         mScales[index]        = startScale;
         mScaleDeltas[index]   = (endScale - startScale) / lifeTime;
+
+        auto const startSpeed = mStartSpeedRange.getValue();
+        auto const endSpeed   = mEndSpeedRange.getValue();
+        mSpeeds[index]        = startSpeed;
+        mSpeedDeltas[index]   = (endSpeed - startSpeed) / lifeTime;
+
+        auto const direction = mDirectionRange.getValue();
+        mDirections[index]   = direction;
+
+        mPositions[index] = Vector3Zeros;
     }
 
     void ParticleRenderNode::resizeParams() {
         mLifeTimes.resize(mMaxCount);
         mScales.resize(mMaxCount);
         mScaleDeltas.resize(mMaxCount);
+        mSpeeds.resize(mMaxCount);
+        mSpeedDeltas.resize(mMaxCount);
+        mPositions.resize(mMaxCount);
+        mDirections.resize(mMaxCount);
     }
 }

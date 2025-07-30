@@ -19,8 +19,13 @@ namespace rlf {
                 setVelocity(Vector3Normalize(velocity));
 
                 auto pn = this->getRootNode()->addChild<ParticleRenderNode>();
-                pn->setMaxCount(100);
-                pn->setSpawnRate(0.25f);
+                pn->setMaxCount(80);
+                pn->setSpawnRate(0.01f);
+                pn->setLifeTimeRange({0.5f, 1.0f});
+                pn->setStartSpeedRange({200, 300});
+                pn->setEndSpeedRange({0, 100});
+                pn->setStartScaleRange({5, 10});
+                pn->setEndScaleRange({0, 0});
                 pn->setPosition(getGlobalPosition());
             }
         });

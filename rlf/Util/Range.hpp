@@ -57,6 +57,30 @@ namespace rlf {
                 std::mt19937                      gen(rd());
                 std::uniform_real_distribution<T> dist(impl::RangeBase<T>::getMin(), impl::RangeBase<T>::getMax());
                 return dist(gen);
+            } else if constexpr (std::is_same_v<Vector2, T>) {
+                Vector2     value;
+                auto const& minVal = impl::RangeBase<T>::getMin();
+                auto const& maxVal = impl::RangeBase<T>::getMax();
+                value.x            = Range<f32>(minVal.x, maxVal.x).getValue();
+                value.y            = Range<f32>(minVal.y, maxVal.y).getValue();
+                return value;
+            } else if constexpr (std::is_same_v<Vector3, T>) {
+                Vector3     value;
+                auto const& minVal = impl::RangeBase<T>::getMin();
+                auto const& maxVal = impl::RangeBase<T>::getMax();
+                value.x            = Range<f32>(minVal.x, maxVal.x).getValue();
+                value.y            = Range<f32>(minVal.y, maxVal.y).getValue();
+                value.z            = Range<f32>(minVal.z, maxVal.z).getValue();
+                return value;
+            } else if constexpr (std::is_same_v<Vector4, T>) {
+                Vector4     value;
+                auto const& minVal = impl::RangeBase<T>::getMin();
+                auto const& maxVal = impl::RangeBase<T>::getMax();
+                value.x            = Range<f32>(minVal.x, maxVal.x).getValue();
+                value.y            = Range<f32>(minVal.y, maxVal.y).getValue();
+                value.z            = Range<f32>(minVal.z, maxVal.z).getValue();
+                value.w            = Range<f32>(minVal.w, maxVal.w).getValue();
+                return value;
             }
             return T{};
         }

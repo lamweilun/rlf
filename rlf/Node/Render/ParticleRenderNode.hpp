@@ -19,6 +19,24 @@ namespace rlf {
         f32  getSpawnRate() const;
         void setSpawnRate(f32 const spawnRate);
 
+        rlf::Range<f32> const& getLifeTimeRange() const;
+        void                   setLifeTimeRange(rlf::Range<f32> const& lifeTimeRange);
+
+        rlf::Range<f32> const& getStartScaleRange() const;
+        void                   setStartScaleRange(rlf::Range<f32> const& startScaleRange);
+
+        rlf::Range<f32> const& getEndScaleRange() const;
+        void                   setEndScaleRange(rlf::Range<f32> const& endScaleRange);
+
+        rlf::Range<f32> const& getStartSpeedRange() const;
+        void                   setStartSpeedRange(rlf::Range<f32> const& startSpeedRange);
+
+        rlf::Range<f32> const& getEndSpeedRange() const;
+        void                   setEndSpeedRange(rlf::Range<f32> const& endSpeedRange);
+
+        rlf::Range<Vector3> const& getDirectionRange() const;
+        void                       setDirectionRange(rlf::Range<Vector3> const& directionRange);
+
     protected:
         void initImpl() override;
         void updateImpl() override;
@@ -34,17 +52,27 @@ namespace rlf {
         void resizeParams();
 
         // Config params
-        u32             mMaxCount      = 0;
-        f32             mSpawnRate     = 1.0f;
-        rlf::Range<f32> mLifeTimeRange = {0.0f, 1.0f};
-        rlf::Range<f32> mStartScale    = {1.0f, 1.0f};
-        rlf::Range<f32> mEndScale      = {0.0f, 0.0f};
+        u32                 mMaxCount        = 0;
+        f32                 mSpawnRate       = 1.0f;
+        rlf::Range<f32>     mLifeTimeRange   = {0.0f, 1.0f};
+        rlf::Range<f32>     mStartScaleRange = {1.0f, 1.0f};
+        rlf::Range<f32>     mEndScaleRange   = {0.0f, 0.0f};
+        rlf::Range<f32>     mStartSpeedRange = {1.0f, 1.0f};
+        rlf::Range<f32>     mEndSpeedRange   = {0.0f, 0.0f};
+        rlf::Range<Vector3> mDirectionRange  = {
+            Vector3{-1.0f, -1.0f, 0.0f},
+            Vector3{ 1.0f,  1.0f, 0.0f}
+        };
 
         // Runtime params (Resize the vector params in resizeParams)
-        f32              mCurrentSpawnRate = 1.0f;
-        std::vector<f32> mLifeTimes;
-        std::vector<f32> mScales;
-        std::vector<f32> mScaleDeltas;
+        f32                  mCurrentSpawnRate = 1.0f;
+        std::vector<f32>     mLifeTimes;
+        std::vector<f32>     mScales;
+        std::vector<f32>     mScaleDeltas;
+        std::vector<f32>     mSpeeds;
+        std::vector<f32>     mSpeedDeltas;
+        std::vector<Vector3> mPositions;
+        std::vector<Vector3> mDirections;
 
         std::vector<u64> mLiveIndices;
         std::vector<u64> mFreeIndices;
