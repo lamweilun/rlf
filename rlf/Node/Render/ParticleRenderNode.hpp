@@ -13,6 +13,9 @@ namespace rlf {
 
         void renderImpl() override;
 
+        bool getIsBurst() const;
+        void setIsBurst(bool const isBurst);
+
         u32  getMaxCount() const;
         void setMaxCount(u32 const maxCount);
 
@@ -43,8 +46,14 @@ namespace rlf {
 
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(rlf::RenderNode)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Is Burst", getIsBurst, setIsBurst)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Max Count", getMaxCount, setMaxCount)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Spawn Rate", getSpawnRate, setSpawnRate)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Lifetime Range", getLifeTimeRange, setLifeTimeRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Scale Range", getStartScaleRange, setStartScaleRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("End Scale Range", getEndScaleRange, setEndScaleRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Speed Range", getStartSpeedRange, setStartSpeedRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("End Speed Range", getEndSpeedRange, setEndSpeedRange)
         RLF_NODE_ACCESS_END
 
     private:
@@ -52,6 +61,7 @@ namespace rlf {
         void resizeParams();
 
         // Config params
+        bool                mIsBurst         = false;
         u32                 mMaxCount        = 0;
         f32                 mSpawnRate       = 1.0f;
         rlf::Range<f32>     mLifeTimeRange   = {0.0f, 1.0f};

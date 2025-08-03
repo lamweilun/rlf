@@ -90,7 +90,7 @@ namespace rlf {
             j["max"] = t.getMax();
         }
 
-        friend void to_json(rlf::Json const& j, Range<T>& t) {
+        friend void from_json(rlf::Json const& j, Range<T>& t) {
             t.setMin(j["min"]);
             t.setMax(j["max"]);
         }

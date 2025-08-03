@@ -58,6 +58,13 @@ namespace rlf {
         }
     }
 
+    bool ParticleRenderNode::getIsBurst() const {
+        return mIsBurst;
+    }
+    void ParticleRenderNode::setIsBurst(bool const isBurst) {
+        mIsBurst = isBurst;
+    }
+
     u32 ParticleRenderNode::getMaxCount() const {
         return mMaxCount;
     }
