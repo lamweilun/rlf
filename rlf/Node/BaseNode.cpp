@@ -38,11 +38,11 @@ namespace rlf {
         return child.value();
     }
 
-    Vector3 const& BaseNode::getPosition() const {
+    Vector2 const& BaseNode::getPosition() const {
         return mPosition;
     }
-    void BaseNode::setPosition(Vector3 const& position) {
-        if (Vector3Equals(mPosition, position)) {
+    void BaseNode::setPosition(Vector2 const& position) {
+        if (Vector2Equals(mPosition, position)) {
             return;
         }
         mPosition   = position;
@@ -50,11 +50,11 @@ namespace rlf {
         markGlobalDirty();
     }
 
-    Vector3 const& BaseNode::getScale() const {
+    Vector2 const& BaseNode::getScale() const {
         return mScale;
     }
-    void BaseNode::setScale(Vector3 const& scale) {
-        if (Vector3Equals(mScale, scale)) {
+    void BaseNode::setScale(Vector2 const& scale) {
+        if (Vector2Equals(mScale, scale)) {
             return;
         }
         mScale      = scale;
@@ -62,22 +62,22 @@ namespace rlf {
         markGlobalDirty();
     }
 
-    Quaternion const& BaseNode::getRotation() const {
+    f32 const& BaseNode::getRotation() const {
         return mRotation;
     }
-    void BaseNode::setRotation(Quaternion const& rotation) {
-        if (QuaternionEquals(mRotation, rotation)) {
+    void BaseNode::setRotation(f32 const rotation) {
+        if (FloatEquals(mRotation, rotation)) {
             return;
         }
         mRotation   = rotation;
         mLocalDirty = true;
         markGlobalDirty();
     }
-    void BaseNode::setRotationEulerRad(Vector3 const& eulerDeg) {
-        setRotation(QuaternionFromEuler(eulerDeg.x, eulerDeg.y, eulerDeg.z));
+    f32 BaseNode::getRotationDeg() const {
+        return getRotation() * RAD2DEG;
     }
-    void BaseNode::setRotationEulerDeg(Vector3 const& eulerDeg) {
-        setRotationEulerRad(eulerDeg * DEG2RAD);
+    void BaseNode::setRotationDeg(f32 const rotationDeg) {
+        setRotation(rotationDeg * DEG2RAD);
     }
 
     bool BaseNode::getActive() const {
@@ -115,9 +115,9 @@ namespace rlf {
 
     Matrix const& BaseNode::getLocalTransform() const {
         if (mLocalDirty) {
-            auto scaleMat     = MatrixScale(mScale.x, mScale.y, mScale.z);
-            auto translateMat = MatrixTranslate(mPosition.x, mPosition.y, mPosition.z);
-            auto rotMat       = QuaternionToMatrix(mRotation);
+            auto scaleMat     = MatrixScale(mScale.x, mScale.y, 0.0f);
+            auto translateMat = MatrixTranslate(mPosition.x, mPosition.y, 0.0f);
+            auto rotMat       = MatrixRotateZ(mRotation);
             mLocalTransform   = scaleMat * rotMat * translateMat;
             mLocalDirty       = false;
         }
@@ -135,30 +135,34 @@ namespace rlf {
         return mGlobalTransform;
     }
 
-    Vector3 BaseNode::getGlobalRight() const {
+    Vector2 BaseNode::getGlobalRight() const {
         Matrix const& globalMat = getGlobalTransform();
-        return Vector3{globalMat.m0, globalMat.m4, globalMat.m8};
+        return Vector2{globalMat.m0, globalMat.m4};
     }
 
-    Vector3 BaseNode::getGlobalPosition() const {
+    Vector2 BaseNode::getGlobalPosition() const {
         auto const& globalMat = getGlobalTransform();
-        return Vector3{globalMat.m12, globalMat.m13, globalMat.m14};
+        return Vector2{globalMat.m12, globalMat.m13};
     }
 
-    Vector3 BaseNode::getGlobalScale() const {
+    Vector2 BaseNode::getGlobalScale() const {
         auto const& globalMat    = getGlobalTransform();
         auto        globalScaleX = Vector3Length(Vector3{globalMat.m0, globalMat.m1, globalMat.m2});
         auto        globalScaleY = Vector3Length(Vector3{globalMat.m4, globalMat.m5, globalMat.m6});
-        auto        globalScaleZ = Vector3Length(Vector3{globalMat.m7, globalMat.m8, globalMat.m9});
-        return Vector3{globalScaleX, globalScaleY, globalScaleZ};
+        return Vector2{globalScaleX, globalScaleY};
     }
 
     Quaternion BaseNode::getGlobalRotation() const {
         auto globalMat = getGlobalTransform();
-        auto invScale  = Vector3Invert(getGlobalScale());
-        invScale.x     = std::min(invScale.x, 1.0f);
-        invScale.y     = std::min(invScale.y, 1.0f);
-        invScale.z     = std::min(invScale.z, 1.0f);
+
+        auto globalScaleX = Vector3Length(Vector3{globalMat.m0, globalMat.m1, globalMat.m2});
+        auto globalScaleY = Vector3Length(Vector3{globalMat.m4, globalMat.m5, globalMat.m6});
+        auto globalScaleZ = Vector3Length(Vector3{globalMat.m7, globalMat.m8, globalMat.m9});
+
+        auto invScale = Vector3Invert(Vector3{globalScaleX, globalScaleY, globalScaleZ});
+        invScale.x    = std::min(invScale.x, 1.0f);
+        invScale.y    = std::min(invScale.y, 1.0f);
+        invScale.z    = std::min(invScale.z, 1.0f);
 
         globalMat.m12 = 0.0f;
         globalMat.m13 = 0.0f;
@@ -177,13 +181,6 @@ namespace rlf {
         globalMat.m10 *= invScale.z;
 
         return QuaternionFromMatrix(globalMat);
-    }
-
-    Vector3 BaseNode::getGlobalRotationEulerRad() const {
-        return QuaternionToEuler(getGlobalRotation());
-    }
-    Vector3 BaseNode::getGlobalRotationEulerDeg() const {
-        return getGlobalRotationEulerRad() * RAD2DEG;
     }
 
     std::weak_ptr<BaseNode> BaseNode::getParent() const {

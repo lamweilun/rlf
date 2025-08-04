@@ -4,10 +4,10 @@
 
 namespace rlf {
 
-    Vector3 const& LineColliderNode::getStartPoint() const {
+    Vector2 const& LineColliderNode::getStartPoint() const {
         return mStartPoint;
     }
-    void LineColliderNode::setStartPoint(Vector3 const& startPoint) {
+    void LineColliderNode::setStartPoint(Vector2 const& startPoint) {
         mStartPoint = startPoint;
 #ifdef RLF_DEBUG
         if (!mRenderNode) {
@@ -17,10 +17,10 @@ namespace rlf {
 #endif
     }
 
-    Vector3 const& LineColliderNode::getEndPoint() const {
+    Vector2 const& LineColliderNode::getEndPoint() const {
         return mEndPoint;
     }
-    void LineColliderNode::setEndPoint(Vector3 const& endPoint) {
+    void LineColliderNode::setEndPoint(Vector2 const& endPoint) {
         mEndPoint = endPoint;
 #ifdef RLF_DEBUG
         if (!mRenderNode) {

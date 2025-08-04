@@ -7,7 +7,7 @@ namespace rlf::system {
         mLineColliderNodes.insert(lineColliderNode);
     }
 
-    void PhysicsSystem::addColliderNode(std::shared_ptr<SphereColliderNode> sphereColliderNode) {
+    void PhysicsSystem::addColliderNode(std::shared_ptr<CircleColliderNode> sphereColliderNode) {
         mSphereColliderNodes.insert(sphereColliderNode);
     }
 
@@ -15,7 +15,7 @@ namespace rlf::system {
         mLineColliderNodes.erase(lineColliderNode);
     }
 
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<SphereColliderNode> sphereColliderNode) {
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<CircleColliderNode> sphereColliderNode) {
         mSphereColliderNodes.erase(sphereColliderNode);
     }
 
@@ -46,7 +46,10 @@ namespace rlf::system {
             auto const  endPt2           = cn->getEndPoint() * globalTransform2;
 
             // Perform line to line collision here
-            rlf::phys::CheckCollisionLines(startPt1, endPt1, startPt2, endPt2);
+            Vector2 collisionPt = Vector2Zeros;
+            if (CheckCollisionLines(startPt1, endPt1, startPt2, endPt2, &collisionPt)) {
+                collided.push_back(cn);
+            }
         }
 
         // Check against sphere colliders
@@ -59,11 +62,11 @@ namespace rlf::system {
                 continue;
             }
 
-            Vector3 const cnGlobalPos   = cn->getGlobalPosition();
-            Vector3 const cnGlobalScale = cn->getGlobalScale();
-            float const   cnMaxScale    = std::max(cnGlobalScale.x, std::max(cnGlobalScale.y, cnGlobalScale.z));
+            Vector2 const cnGlobalPos   = cn->getGlobalPosition();
+            Vector2 const cnGlobalScale = cn->getGlobalScale();
+            float const   cnMaxScale    = std::max(cnGlobalScale.x, cnGlobalScale.y);
 
-            if (rlf::phys::CheckCollisionLineSphere(startPt1, endPt1, cnGlobalPos, cnMaxScale)) {
+            if (CheckCollisionCircleLine(cnGlobalPos, cnMaxScale, startPt1, endPt1)) {
                 collided.push_back(cn);
             }
         }
@@ -71,13 +74,13 @@ namespace rlf::system {
         return collided;
     }
 
-    std::vector<std::shared_ptr<ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<SphereColliderNode> colliderNode) {
+    std::vector<std::shared_ptr<ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<CircleColliderNode> colliderNode) {
         // Initialize data
         std::vector<std::shared_ptr<ColliderNode>> collided;
 
-        Vector3 colliderGlobalPosition = colliderNode->getGlobalPosition();
-        Vector3 colliderGlobalScale    = colliderNode->getGlobalScale();
-        f32     colliderMaxScale       = std::max(colliderGlobalScale.x, std::max(colliderGlobalScale.y, colliderGlobalScale.z));
+        Vector2 colliderGlobalPosition = colliderNode->getGlobalPosition();
+        Vector2 colliderGlobalScale    = colliderNode->getGlobalScale();
+        f32     colliderMaxScale       = std::max(colliderGlobalScale.x, colliderGlobalScale.y);
 
         // Check against line colliders
         for (auto const& cn : mLineColliderNodes) {
@@ -92,7 +95,7 @@ namespace rlf::system {
             auto const& globalTransform = cn->getGlobalTransform();
             auto const  startPt         = cn->getStartPoint() * globalTransform;
             auto const  endPt           = cn->getEndPoint() * globalTransform;
-            if (rlf::phys::CheckCollisionLineSphere(startPt, endPt, colliderGlobalPosition, colliderMaxScale)) {
+            if (CheckCollisionCircleLine(colliderGlobalPosition, colliderMaxScale, startPt, endPt)) {
                 collided.push_back(cn);
             }
         }
@@ -111,11 +114,11 @@ namespace rlf::system {
                 continue;
             }
 
-            Vector3 const cnGlobalPos   = cn->getGlobalPosition();
-            Vector3 const cnGlobalScale = cn->getGlobalScale();
-            float const   cnMaxScale    = std::max(cnGlobalScale.x, std::max(cnGlobalScale.y, cnGlobalScale.z));
+            Vector2 const cnGlobalPos   = cn->getGlobalPosition();
+            Vector2 const cnGlobalScale = cn->getGlobalScale();
+            float const   cnMaxScale    = std::max(cnGlobalScale.x, cnGlobalScale.y);
 
-            if (CheckCollisionSpheres(colliderGlobalPosition, colliderMaxScale, cnGlobalPos, cnMaxScale)) {
+            if (CheckCollisionCircles(colliderGlobalPosition, colliderMaxScale, cnGlobalPos, cnMaxScale)) {
                 collided.push_back(cn);
             }
         }

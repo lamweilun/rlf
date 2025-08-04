@@ -29,7 +29,7 @@ namespace rlf {
         return mTint;
     }
 
-    void RenderNode::setLayer(int const layer) {
+    void RenderNode::setLayer(i32 const layer) {
         if (mLayer == layer) {
             return;
         }
@@ -37,7 +37,7 @@ namespace rlf {
         mLayer = layer;
         rlf::system::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
-    int RenderNode::getLayer() const {
+    i32 RenderNode::getLayer() const {
         return mLayer;
     }
 }

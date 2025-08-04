@@ -7,8 +7,8 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(RigidbodyNode)
 
-        void           setVelocity(Vector3 const& velocity);
-        Vector3 const& getVelocity() const;
+        void           setVelocity(Vector2 const& velocity);
+        Vector2 const& getVelocity() const;
 
         void setSpeed(f32 const speed);
         f32  getSpeed() const;
@@ -16,7 +16,7 @@ namespace rlf {
     protected:
         void updateImpl() override;
 
-        Vector3 mVelocity = Vector3Zeros;
+        Vector2 mVelocity = Vector2Zeros;
         f32     mSpeed    = 0.0f;
 
         RLF_NODE_ACCESS_START

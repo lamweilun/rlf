@@ -34,14 +34,14 @@ namespace rlf {
         std::shared_ptr<T>        getOrAddFirstChildOfType();
         std::shared_ptr<BaseNode> getOrAddFirstChildOfType(std::string_view typeName);
 
-        Vector3 const&    getPosition() const;
-        void              setPosition(Vector3 const& position);
-        Vector3 const&    getScale() const;
-        void              setScale(Vector3 const& scale);
-        Quaternion const& getRotation() const;
-        void              setRotation(Quaternion const& rotation);
-        void              setRotationEulerRad(Vector3 const& angleRad);
-        void              setRotationEulerDeg(Vector3 const& angleDeg);
+        Vector2 const& getPosition() const;
+        void           setPosition(Vector2 const& position);
+        Vector2 const& getScale() const;
+        void           setScale(Vector2 const& scale);
+        f32 const&     getRotation() const;
+        void           setRotation(f32 const rotation);
+        f32            getRotationDeg() const;
+        void           setRotationDeg(f32 const rotationDeg);
 
         bool getActive() const;
         bool getActiveSelf() const;
@@ -52,12 +52,10 @@ namespace rlf {
         std::shared_ptr<BaseNode> getRootNode();
         Matrix const&             getLocalTransform() const;
         Matrix const&             getGlobalTransform() const;
-        Vector3                   getGlobalRight() const;
-        Vector3                   getGlobalPosition() const;
-        Vector3                   getGlobalScale() const;
+        Vector2                   getGlobalRight() const;
+        Vector2                   getGlobalPosition() const;
+        Vector2                   getGlobalScale() const;
         Quaternion                getGlobalRotation() const;
-        Vector3                   getGlobalRotationEulerRad() const;
-        Vector3                   getGlobalRotationEulerDeg() const;
 
         std::weak_ptr<BaseNode>                       getParent() const;
         std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
@@ -100,9 +98,9 @@ namespace rlf {
 
         mutable Matrix mLocalTransform  = MatrixIdentity();
         mutable Matrix mGlobalTransform = MatrixIdentity();
-        Vector3        mPosition        = Vector3Zeros;
-        Quaternion     mRotation        = QuaternionUnitX;
-        Vector3        mScale           = Vector3Ones;
+        Vector2        mPosition        = Vector2Zeros;
+        Vector2        mScale           = Vector2Ones;
+        f32            mRotation        = 0.0f;
         mutable bool   mLocalDirty      = true;
         mutable bool   mGlobalDirty     = true;
 

@@ -15,13 +15,13 @@ add_library(
 
     Node/Physics/ColliderNode.cpp
     Node/Physics/LineColliderNode.cpp
-    Node/Physics/SphereColliderNode.cpp
+    Node/Physics/CircleColliderNode.cpp
     Node/Physics/RigidbodyNode.cpp
     
     Node/Render/RenderNode.cpp
     Node/Render/LineRenderNode.cpp
     Node/Render/ParticleRenderNode.cpp
-    Node/Render/SphereRenderNode.cpp
+    Node/Render/CircleRenderNode.cpp
     Node/Render/SpriteRenderNode.cpp
     
     Node/BaseNode.cpp
@@ -39,7 +39,7 @@ add_library(
     Util/Math.cpp
 )
 add_warning_flags(${PROJECT_NAME})
-target_precompile_headers(${PROJECT_NAME} PUBLIC precompiled.hpp)
+target_precompile_headers(${PROJECT_NAME} PUBLIC pch.hpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ./)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_26)
 target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json raylib)

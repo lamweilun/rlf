@@ -3,9 +3,9 @@
 #include <Node/Physics/ColliderNode.hpp>
 
 namespace rlf {
-    class SphereColliderNode : public ColliderNode {
+    class CircleColliderNode : public ColliderNode {
     public:
-        RLF_TYPE_REGISTER_QUICK(SphereColliderNode)
+        RLF_TYPE_REGISTER_QUICK(CircleColliderNode)
 
     protected:
         void initImpl() override;

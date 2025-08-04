@@ -48,14 +48,24 @@ namespace rlf {
 
         T getValue() const {
             if constexpr (std::is_integral_v<T>) {
-                std::random_device               rd;
-                std::mt19937                     gen(rd());
-                std::uniform_int_distribution<T> dist(impl::RangeBase<T>::getMin(), impl::RangeBase<T>::getMax());
+                std::random_device rd;
+                std::mt19937       gen(rd());
+                auto               minVal = impl::RangeBase<T>::getMin();
+                auto               maxVal = impl::RangeBase<T>::getMax();
+                if (minVal > maxVal) {
+                    std::swap(minVal, maxVal);
+                }
+                std::uniform_int_distribution<T> dist(minVal, maxVal);
                 return dist(gen);
             } else if constexpr (std::is_floating_point_v<T>) {
-                std::random_device                rd;
-                std::mt19937                      gen(rd());
-                std::uniform_real_distribution<T> dist(impl::RangeBase<T>::getMin(), impl::RangeBase<T>::getMax());
+                std::random_device rd;
+                std::mt19937       gen(rd());
+                auto               minVal = impl::RangeBase<T>::getMin();
+                auto               maxVal = impl::RangeBase<T>::getMax();
+                if (minVal > maxVal) {
+                    std::swap(minVal, maxVal);
+                }
+                std::uniform_real_distribution<T> dist(minVal, maxVal);
                 return dist(gen);
             } else if constexpr (std::is_same_v<Vector2, T>) {
                 Vector2     value;

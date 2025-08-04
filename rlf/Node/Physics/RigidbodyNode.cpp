@@ -2,10 +2,10 @@
 
 namespace rlf {
 
-    void RigidbodyNode::setVelocity(Vector3 const& velocity) {
+    void RigidbodyNode::setVelocity(Vector2 const& velocity) {
         mVelocity = velocity;
     }
-    Vector3 const& RigidbodyNode::getVelocity() const {
+    Vector2 const& RigidbodyNode::getVelocity() const {
         return mVelocity;
     }
 

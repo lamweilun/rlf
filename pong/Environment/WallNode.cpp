@@ -9,7 +9,7 @@ namespace rlf {
 
         auto colliderNode = addChild<rlf::LineColliderNode>();
         colliderNode->addTag("Wall");
-        colliderNode->setStartPoint({0.5f, -0.5f, 0.0f});
-        colliderNode->setEndPoint({0.5f, 0.5f, 0.0f});
+        colliderNode->setStartPoint({0.5f, -0.5f});
+        colliderNode->setEndPoint({0.5f, 0.5f});
     }
 }

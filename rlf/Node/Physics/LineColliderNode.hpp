@@ -11,11 +11,11 @@ namespace rlf {
     public:
         RLF_TYPE_REGISTER_QUICK(LineColliderNode)
 
-        Vector3 const& getStartPoint() const;
-        void           setStartPoint(Vector3 const& startPoint);
+        Vector2 const& getStartPoint() const;
+        void           setStartPoint(Vector2 const& startPoint);
 
-        Vector3 const& getEndPoint() const;
-        void           setEndPoint(Vector3 const& endPoint);
+        Vector2 const& getEndPoint() const;
+        void           setEndPoint(Vector2 const& endPoint);
 
     protected:
         void initImpl() override;
@@ -23,8 +23,8 @@ namespace rlf {
         void updateImpl() override;
 
     private:
-        Vector3 mStartPoint = {0.0f, -0.5f, 0.0f};
-        Vector3 mEndPoint   = {0.0f, 0.5f, 0.0f};
+        Vector2 mStartPoint = {0.0f, -0.5f};
+        Vector2 mEndPoint   = {0.0f, 0.5f};
 
 #ifdef RLF_DEBUG
         std::shared_ptr<LineRenderNode> mRenderNode;

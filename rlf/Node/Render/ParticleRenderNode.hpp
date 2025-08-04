@@ -16,6 +16,9 @@ namespace rlf {
         bool getIsBurst() const;
         void setIsBurst(bool const isBurst);
 
+        bool getToDestroyAfterBurst() const;
+        void setToDestroyAfterBurst(bool const toDestroyAfterBurst);
+
         u32  getMaxCount() const;
         void setMaxCount(u32 const maxCount);
 
@@ -37,8 +40,8 @@ namespace rlf {
         rlf::Range<f32> const& getEndSpeedRange() const;
         void                   setEndSpeedRange(rlf::Range<f32> const& endSpeedRange);
 
-        rlf::Range<Vector3> const& getDirectionRange() const;
-        void                       setDirectionRange(rlf::Range<Vector3> const& directionRange);
+        rlf::Range<Vector2> const& getDirectionRange() const;
+        void                       setDirectionRange(rlf::Range<Vector2> const& directionRange);
 
     protected:
         void initImpl() override;
@@ -57,32 +60,35 @@ namespace rlf {
         RLF_NODE_ACCESS_END
 
     private:
+        bool anyParticleAlive() const;
         void spawnParticle();
         void resizeParams();
 
         // Config params
-        bool                mIsBurst         = false;
-        u32                 mMaxCount        = 0;
-        f32                 mSpawnRate       = 1.0f;
-        rlf::Range<f32>     mLifeTimeRange   = {0.0f, 1.0f};
-        rlf::Range<f32>     mStartScaleRange = {1.0f, 1.0f};
-        rlf::Range<f32>     mEndScaleRange   = {0.0f, 0.0f};
-        rlf::Range<f32>     mStartSpeedRange = {1.0f, 1.0f};
-        rlf::Range<f32>     mEndSpeedRange   = {0.0f, 0.0f};
-        rlf::Range<Vector3> mDirectionRange  = {
-            Vector3{-1.0f, -1.0f, 0.0f},
-            Vector3{ 1.0f,  1.0f, 0.0f}
+        bool                mIsBurst             = false;
+        bool                mToDestroyAfterBurst = false;
+        u32                 mMaxCount            = 0;
+        f32                 mSpawnRate           = 1.0f;
+        rlf::Range<f32>     mLifeTimeRange       = {0.0f, 1.0f};
+        rlf::Range<f32>     mStartScaleRange     = {1.0f, 1.0f};
+        rlf::Range<f32>     mEndScaleRange       = {0.0f, 0.0f};
+        rlf::Range<f32>     mStartSpeedRange     = {1.0f, 1.0f};
+        rlf::Range<f32>     mEndSpeedRange       = {0.0f, 0.0f};
+        rlf::Range<Vector2> mDirectionRange      = {
+            Vector2{-1.0f, -1.0f},
+            Vector2{ 1.0f,  1.0f}
         };
 
         // Runtime params (Resize the vector params in resizeParams)
+        bool                 mHasBurstSpawned  = false;
         f32                  mCurrentSpawnRate = 1.0f;
         std::vector<f32>     mLifeTimes;
         std::vector<f32>     mScales;
         std::vector<f32>     mScaleDeltas;
         std::vector<f32>     mSpeeds;
         std::vector<f32>     mSpeedDeltas;
-        std::vector<Vector3> mPositions;
-        std::vector<Vector3> mDirections;
+        std::vector<Vector2> mPositions;
+        std::vector<Vector2> mDirections;
 
         std::vector<u64> mLiveIndices;
         std::vector<u64> mFreeIndices;

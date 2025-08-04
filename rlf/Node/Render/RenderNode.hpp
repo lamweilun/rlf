@@ -12,8 +12,8 @@ namespace rlf {
         void         setTint(Color const& tint);
         Color const& getTint() const;
 
-        void setLayer(int const layer);
-        int  getLayer() const;
+        void setLayer(i32 const layer);
+        i32  getLayer() const;
 
     protected:
         void setActiveImpl(bool const selfActive) override;
@@ -28,6 +28,6 @@ namespace rlf {
 
     private:
         Color mTint  = WHITE;
-        int   mLayer = 0;
+        i32   mLayer = 0;
     };
 }

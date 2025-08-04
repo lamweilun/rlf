@@ -9,14 +9,14 @@ namespace rlf {
 
         void renderImpl() override;
 
-        Vector3 const& getStartPoint() const;
-        void           setStartPoint(Vector3 const& startPoint);
+        Vector2 const& getStartPoint() const;
+        void           setStartPoint(Vector2 const& startPoint);
 
-        Vector3 const& getEndPoint() const;
-        void           setEndPoint(Vector3 const& endPoint);
+        Vector2 const& getEndPoint() const;
+        void           setEndPoint(Vector2 const& endPoint);
 
     private:
-        Vector3 mStartPoint;
-        Vector3 mEndPoint;
+        Vector2 mStartPoint;
+        Vector2 mEndPoint;
     };
 }

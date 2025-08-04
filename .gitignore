@@ -35,7 +35,11 @@
 .DS_Store
 
 # VSCode
+.vscode
 build
+
+# xmake
+.xmake
 
 # clangd cache
 .cache

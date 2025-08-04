@@ -6,9 +6,9 @@ namespace rlf {
             rlPushMatrix();
 
             auto const& position = mPositions[index];
-            rlTranslatef(position.x, position.y, position.z);
+            rlTranslatef(position.x, position.y, 0.0f);
 
-            DrawCircleV({}, mScales[index], WHITE);
+            DrawRectangleV(Vector2Zeros, {mScales[index], mScales[index]}, getTint());
 
             rlPopMatrix();
         }
@@ -51,10 +51,23 @@ namespace rlf {
         }
 
         // Check if we can spawn a new particle
-        mCurrentSpawnRate -= GetFrameTime();
-        if (mCurrentSpawnRate <= 0.0f) {
-            spawnParticle();
-            mCurrentSpawnRate = mSpawnRate;
+        if (mIsBurst) {
+            if (!mHasBurstSpawned) {
+                for (size_t i = 0; i < mMaxCount; ++i) {
+                    spawnParticle();
+                }
+                mHasBurstSpawned = true;
+            }
+            // Check if it can be destroyed
+            if (mToDestroyAfterBurst && mHasBurstSpawned && !anyParticleAlive()) {
+                setToDestroy(true);
+            }
+        } else {
+            mCurrentSpawnRate -= GetFrameTime();
+            if (mCurrentSpawnRate <= 0.0f) {
+                spawnParticle();
+                mCurrentSpawnRate = mSpawnRate;
+            }
         }
     }
 
@@ -63,6 +76,13 @@ namespace rlf {
     }
     void ParticleRenderNode::setIsBurst(bool const isBurst) {
         mIsBurst = isBurst;
+    }
+
+    bool ParticleRenderNode::getToDestroyAfterBurst() const {
+        return mToDestroyAfterBurst;
+    }
+    void ParticleRenderNode::setToDestroyAfterBurst(bool const toDestroyAfterBurst) {
+        mToDestroyAfterBurst = toDestroyAfterBurst;
     }
 
     u32 ParticleRenderNode::getMaxCount() const {
@@ -119,11 +139,15 @@ namespace rlf {
         mEndSpeedRange = endSpeedRange;
     }
 
-    rlf::Range<Vector3> const& ParticleRenderNode::getDirectionRange() const {
+    rlf::Range<Vector2> const& ParticleRenderNode::getDirectionRange() const {
         return mDirectionRange;
     }
-    void ParticleRenderNode::setDirectionRange(rlf::Range<Vector3> const& directionRange) {
+    void ParticleRenderNode::setDirectionRange(rlf::Range<Vector2> const& directionRange) {
         mDirectionRange = directionRange;
+    }
+
+    bool ParticleRenderNode::anyParticleAlive() const {
+        return !mLiveIndices.empty();
     }
 
     void ParticleRenderNode::spawnParticle() {
@@ -154,7 +178,7 @@ namespace rlf {
         auto const direction = mDirectionRange.getValue();
         mDirections[index]   = direction;
 
-        mPositions[index] = Vector3Zeros;
+        mPositions[index] = Vector2Zeros;
     }
 
     void ParticleRenderNode::resizeParams() {
