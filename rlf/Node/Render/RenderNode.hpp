@@ -2,7 +2,7 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     class RenderNode : public BaseNode {
     public:
         RLF_TYPE_REGISTER_QUICK(RenderNode)

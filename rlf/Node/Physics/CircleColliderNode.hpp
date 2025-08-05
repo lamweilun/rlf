@@ -2,7 +2,7 @@
 
 #include <Node/Physics/ColliderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     class CircleColliderNode : public ColliderNode {
     public:
         RLF_TYPE_REGISTER_QUICK(CircleColliderNode)

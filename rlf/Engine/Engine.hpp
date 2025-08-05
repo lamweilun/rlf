@@ -15,7 +15,7 @@ namespace rlf {
         Engine &operator=(Engine const &) = delete;
         Engine &operator=(Engine &&)      = delete;
 
-        void run(std::function<void(std::shared_ptr<rlf::BaseNode>)> setupFunc = nullptr);
+        void run(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> setupFunc = nullptr);
 
     private:
     };

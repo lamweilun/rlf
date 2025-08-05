@@ -1,6 +1,6 @@
 #include <Node/Render/BurstParticleRenderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
 
     u64 BurstParticleRenderNode::getBurstCount() const {
         return mBurstCount;
@@ -30,7 +30,6 @@ namespace rlf {
 
         if (mHasBurstSpawned && !anyParticleAlive()) {
             if (mToDestroyAfterBurst && (mNumberOfBursts == mBurstCount)) {
-                std::cout << "Destroy Burst Particles" << std::endl;
                 setToDestroy(true);
             }
             else {

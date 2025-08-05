@@ -1,10 +1,10 @@
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::system {
-    void RenderSystem::addRenderNode(std::shared_ptr<RenderNode> renderNode) {
+namespace rlf::System {
+    void RenderSystem::addRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode) {
         mRenderNodes[renderNode->getLayer()].insert(renderNode);
     }
-    void RenderSystem::removeRenderNode(std::shared_ptr<RenderNode> renderNode) {
+    void RenderSystem::removeRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode) {
         mRenderNodes[renderNode->getLayer()].erase(renderNode);
     }
 

@@ -4,11 +4,11 @@
 #include <functional>
 #include <set>
 
-namespace rlf {
+namespace rlf::Node {
     class ColliderNode : public BaseNode {
     public:
         RLF_TYPE_REGISTER_QUICK(ColliderNode)
-        void setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback);
+        void setCollidedCallback(std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> callback);
 
         void                         addTag(std::string const& tag);
         std::set<std::string> const& getTags() const;
@@ -25,7 +25,7 @@ namespace rlf {
         RLF_NODE_ACCESS_END
 
         std::vector<std::shared_ptr<ColliderNode>>              mCollidedNodes;
-        std::function<void(std::shared_ptr<rlf::ColliderNode>)> mCollidedCallback;
+        std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> mCollidedCallback;
 
     private:
         std::set<std::string> mTags;

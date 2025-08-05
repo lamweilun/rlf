@@ -1,6 +1,6 @@
 #include <Node/Render/SpriteRenderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void SpriteRenderNode::renderImpl() {
         DrawTexture(mTexture, 0, 0, getTint());
     }

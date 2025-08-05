@@ -1,6 +1,6 @@
 #include <Node/Render/ParticleRenderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void ParticleRenderNode::renderImpl() {
         for (auto const& index : mLiveIndices) {
             rlPushMatrix();

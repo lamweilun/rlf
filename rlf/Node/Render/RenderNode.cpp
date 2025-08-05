@@ -2,20 +2,20 @@
 
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void RenderNode::setActiveImpl(bool const selfActive) {
         if (selfActive) {
-            rlf::system::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+            rlf::System::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
         } else {
-            rlf::system::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+            rlf::System::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
         }
     }
 
     void RenderNode::initImpl() {
-        rlf::system::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
     void RenderNode::shutdownImpl() {
-        rlf::system::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
 
     void RenderNode::renderImpl() {
@@ -33,9 +33,9 @@ namespace rlf {
         if (mLayer == layer) {
             return;
         }
-        rlf::system::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
         mLayer = layer;
-        rlf::system::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::System::RenderSystem::getInstance().addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
     i32 RenderNode::getLayer() const {
         return mLayer;

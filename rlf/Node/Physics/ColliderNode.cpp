@@ -2,7 +2,7 @@
 
 #include <System/Physics/PhysicsSystem.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void ColliderNode::updateImpl() {
         for (auto& cn : mCollidedNodes) {
             if (mCollidedCallback) {
@@ -15,7 +15,7 @@ namespace rlf {
         mCollidedCallback = nullptr;
     }
 
-    void ColliderNode::setCollidedCallback(std::function<void(std::shared_ptr<rlf::ColliderNode>)> callback) {
+    void ColliderNode::setCollidedCallback(std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> callback) {
         mCollidedCallback = callback;
     }
 

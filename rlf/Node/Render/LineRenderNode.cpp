@@ -1,6 +1,6 @@
 #include <Node/Render/LineRenderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void LineRenderNode::renderImpl() {
         DrawLine3D(Vector3{mStartPoint.x, mStartPoint.y, 0.0f}, Vector3{mEndPoint.x, mEndPoint.y, 0.0f}, getTint());
     }

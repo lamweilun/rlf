@@ -1,6 +1,6 @@
 #include <Node/Audio/SoundNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void SoundNode::play() const {
         if (!getActive()) {
             return;

@@ -2,7 +2,7 @@
 
 #include <System/Physics/PhysicsSystem.hpp>
 
-namespace rlf {
+namespace rlf::Node {
 
     Vector2 const& LineColliderNode::getStartPoint() const {
         return mStartPoint;
@@ -31,7 +31,7 @@ namespace rlf {
     }
 
     void LineColliderNode::initImpl() {
-        rlf::system::PhysicsSystem::getInstance().addColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
+        rlf::System::PhysicsSystem::getInstance().addColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
 
 #ifdef RLF_DEBUG
         if (!mRenderNode) {
@@ -44,7 +44,7 @@ namespace rlf {
 #endif
     }
     void LineColliderNode::shutdownImpl() {
-        rlf::system::PhysicsSystem::getInstance().removeColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
+        rlf::System::PhysicsSystem::getInstance().removeColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
         ColliderNode::shutdownImpl();
     }
 
@@ -52,7 +52,7 @@ namespace rlf {
         if (!mCollidedCallback) {
             return;
         }
-        mCollidedNodes = rlf::system::PhysicsSystem::getInstance().checkCollision(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
+        mCollidedNodes = rlf::System::PhysicsSystem::getInstance().checkCollision(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
         ColliderNode::updateImpl();
     }
 }

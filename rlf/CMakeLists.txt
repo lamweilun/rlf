@@ -42,7 +42,7 @@ add_library(
 add_warning_flags(${PROJECT_NAME})
 target_precompile_headers(${PROJECT_NAME} PUBLIC pch.hpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ./)
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_26)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
 target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json raylib)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PUBLIC RLF_DEBUG)

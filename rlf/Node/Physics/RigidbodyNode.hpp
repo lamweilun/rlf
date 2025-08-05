@@ -2,7 +2,7 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     class RigidbodyNode : public BaseNode {
     public:
         RLF_TYPE_REGISTER_QUICK(RigidbodyNode)

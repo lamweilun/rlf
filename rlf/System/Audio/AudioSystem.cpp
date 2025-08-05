@@ -1,6 +1,6 @@
 #include <System/Audio/AudioSystem.hpp>
 
-namespace rlf::system {
+namespace rlf::System {
     void AudioSystem::init() {
         InitAudioDevice();
     }

@@ -1,6 +1,6 @@
 #include <Node/Render/CircleRenderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void CircleRenderNode::renderImpl() {
         DrawCircleLinesV(Vector2Zeros, 1.0f, getTint());
     }

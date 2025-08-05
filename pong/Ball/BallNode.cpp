@@ -4,16 +4,16 @@
 
 #include <Node/Render/BurstParticleRenderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void BallNode::initImpl() {
         setScale({10.0f, 10.0f});
         setSpeed(500.0f);
 
-        auto renderNode = addChild<rlf::BallRenderNode>();
+        auto renderNode = addChild<rlf::Node::BallRenderNode>();
         renderNode->setTint(RED);
 
-        auto colliderNode = addChild<rlf::CircleColliderNode>();
-        colliderNode->setCollidedCallback([this](std::shared_ptr<rlf::ColliderNode> node) {
+        auto colliderNode = addChild<rlf::Node::CircleColliderNode>();
+        colliderNode->setCollidedCallback([this](std::shared_ptr<rlf::Node::ColliderNode> node) {
             if (node->hasTag("Player") || node->hasTag("Wall")) {
                 auto oldVelocity = getVelocity();
                 auto velocity    = Vector2Reflect(oldVelocity, Vector2Normalize(node->getGlobalRight()));
@@ -21,7 +21,7 @@ namespace rlf {
 
                 auto pn = this->getRootNode()->addChild<BurstParticleRenderNode>();
                 pn->setToDestroyAfterBurst(true);
-                pn->setBurstCount(3);
+                pn->setBurstCount(1);
                 pn->setMaxCount(10);
                 pn->setSpawnRate(0.01f);
                 pn->setLifeTimeRange({0.25f, 0.75f});

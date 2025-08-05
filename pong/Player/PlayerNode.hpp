@@ -2,7 +2,7 @@
 
 #include <Node/Physics/RigidbodyNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     class PlayerNode : public RigidbodyNode {
     public:
         RLF_TYPE_REGISTER_QUICK(PlayerNode)

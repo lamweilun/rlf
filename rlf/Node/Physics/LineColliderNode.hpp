@@ -6,7 +6,7 @@
 #include <Node/Render/LineRenderNode.hpp>
 #endif
 
-namespace rlf {
+namespace rlf::Node {
     class LineColliderNode : public ColliderNode {
     public:
         RLF_TYPE_REGISTER_QUICK(LineColliderNode)

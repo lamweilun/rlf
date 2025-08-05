@@ -2,7 +2,7 @@
 
 #include <Node/Render/RenderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     class WallRenderNode : public RenderNode {
     public:
         RLF_TYPE_REGISTER_QUICK(WallRenderNode)

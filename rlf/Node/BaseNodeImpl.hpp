@@ -2,7 +2,7 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     template <class T>
     std::shared_ptr<T> BaseNode::addChild() {
         return std::static_pointer_cast<T>(addChild(T::getTypeName()));

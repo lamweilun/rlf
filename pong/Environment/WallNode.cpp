@@ -3,11 +3,11 @@
 
 #include <Node/Physics/LineColliderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void WallNode::initImpl() {
         addChild<WallRenderNode>();
 
-        auto colliderNode = addChild<rlf::LineColliderNode>();
+        auto colliderNode = addChild<rlf::Node::LineColliderNode>();
         colliderNode->addTag("Wall");
         colliderNode->setStartPoint({0.5f, -0.5f});
         colliderNode->setEndPoint({0.5f, 0.5f});

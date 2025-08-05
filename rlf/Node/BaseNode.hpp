@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-namespace rlf {
+namespace rlf::Node {
     class BaseNode : public std::enable_shared_from_this<BaseNode> {
     public:
         BaseNode()                           = default;
@@ -20,7 +20,7 @@ namespace rlf {
 
         static inline constexpr std::string_view getTypeName() { return "BaseNode"; }
         inline virtual std::string_view          getTypeNameImpl() const { return getTypeName(); }
-        static inline bool                       typeRegistered = rlf::system::TypeSystem::getInstance().registerType<BaseNode>();
+        static inline bool                       typeRegistered = rlf::System::TypeSystem::getInstance().registerType<BaseNode>();
 
         template <class T>
         std::shared_ptr<T>        addChild();

@@ -2,8 +2,8 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf {
-    class SoundNode : public rlf::BaseNode {
+namespace rlf::Node {
+    class SoundNode : public rlf::Node::BaseNode {
     public:
         RLF_TYPE_REGISTER_QUICK(SoundNode)
 

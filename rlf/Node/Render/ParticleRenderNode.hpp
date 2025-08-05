@@ -6,8 +6,8 @@
 
 #include <vector>
 
-namespace rlf {
-    class ParticleRenderNode : public rlf::RenderNode {
+namespace rlf::Node {
+    class ParticleRenderNode : public rlf::Node::RenderNode {
     public:
         RLF_TYPE_REGISTER_QUICK(ParticleRenderNode)
 
@@ -46,7 +46,7 @@ namespace rlf {
         void updateImpl() override;
 
         RLF_NODE_ACCESS_START
-        RLF_NODE_ACCESS_PARENT(rlf::RenderNode)
+        RLF_NODE_ACCESS_PARENT(rlf::Node::RenderNode)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Max Count", getMaxCount, setMaxCount)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Spawn Rate", getSpawnRate, setSpawnRate)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Lifetime Range", getLifeTimeRange, setLifeTimeRange)

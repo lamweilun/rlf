@@ -2,26 +2,26 @@
 
 #include <Util/Physics/CollisionDetection.hpp>
 
-namespace rlf::system {
-    void PhysicsSystem::addColliderNode(std::shared_ptr<LineColliderNode> lineColliderNode) {
+namespace rlf::System {
+    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode) {
         mLineColliderNodes.insert(lineColliderNode);
     }
 
-    void PhysicsSystem::addColliderNode(std::shared_ptr<CircleColliderNode> sphereColliderNode) {
+    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
         mSphereColliderNodes.insert(sphereColliderNode);
     }
 
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<LineColliderNode> lineColliderNode) {
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode) {
         mLineColliderNodes.erase(lineColliderNode);
     }
 
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<CircleColliderNode> sphereColliderNode) {
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
         mSphereColliderNodes.erase(sphereColliderNode);
     }
 
-    std::vector<std::shared_ptr<ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<LineColliderNode> colliderNode) {
+    std::vector<std::shared_ptr<rlf::Node::ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<rlf::Node::LineColliderNode> colliderNode) {
         // Initialize data
-        std::vector<std::shared_ptr<ColliderNode>> collided;
+        std::vector<std::shared_ptr<rlf::Node::ColliderNode>> collided;
 
         auto const& globalTransform1 = colliderNode->getGlobalTransform();
         auto const  startPt1         = colliderNode->getStartPoint() * globalTransform1;
@@ -74,9 +74,9 @@ namespace rlf::system {
         return collided;
     }
 
-    std::vector<std::shared_ptr<ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<CircleColliderNode> colliderNode) {
+    std::vector<std::shared_ptr<rlf::Node::ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<rlf::Node::CircleColliderNode> colliderNode) {
         // Initialize data
-        std::vector<std::shared_ptr<ColliderNode>> collided;
+        std::vector<std::shared_ptr<rlf::Node::ColliderNode>> collided;
 
         Vector2 colliderGlobalPosition = colliderNode->getGlobalPosition();
         Vector2 colliderGlobalScale    = colliderNode->getGlobalScale();

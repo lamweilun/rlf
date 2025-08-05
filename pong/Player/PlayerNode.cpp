@@ -3,15 +3,15 @@
 
 #include <Node/Physics/LineColliderNode.hpp>
 
-namespace rlf {
+namespace rlf::Node {
     void PlayerNode::initImpl() {
         setSpeed(300.0f);
 
         Vector2 const scale = {10.0f, 100.0f};
 
-        addChild<rlf::PlayerRenderNode>()->setScale(scale);
+        addChild<rlf::Node::PlayerRenderNode>()->setScale(scale);
 
-        auto colliderNode = addChild<rlf::LineColliderNode>();
+        auto colliderNode = addChild<rlf::Node::LineColliderNode>();
         colliderNode->setScale(scale);
         colliderNode->addTag("Player");
         colliderNode->setStartPoint({0.5f, -0.5f});
