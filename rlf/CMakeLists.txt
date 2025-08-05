@@ -20,9 +20,10 @@ add_library(
     
     Node/Render/RenderNode.cpp
     Node/Render/LineRenderNode.cpp
-    Node/Render/ParticleRenderNode.cpp
     Node/Render/CircleRenderNode.cpp
     Node/Render/SpriteRenderNode.cpp
+    Node/Render/ParticleRenderNode.cpp
+    Node/Render/BurstParticleRenderNode.cpp
     
     Node/BaseNode.cpp
 

@@ -14,19 +14,7 @@ namespace rlf {
         }
     }
 
-    void ParticleRenderNode::initImpl() {
-        RenderNode::initImpl();
-
-        mFreeIndices.resize(mMaxCount);
-        for (u64 i = 0; i < mMaxCount; ++i) {
-            mFreeIndices[i] = mMaxCount - i - 1;
-        }
-
-        mLiveIndices.clear();
-        mLiveIndices.reserve(mMaxCount);
-    }
-
-    void ParticleRenderNode::updateImpl() {
+    void ParticleRenderNode::updateLiveParticles() {
         // Check if any particle needs to despawn
         u64 newSize = mLiveIndices.size();
         for (u64 i = 0; i < newSize;) {
@@ -49,46 +37,35 @@ namespace rlf {
             mSpeeds[index] += mSpeedDeltas[index] * GetFrameTime();
             mPositions[index] += mDirections[index] * mSpeeds[index] * GetFrameTime();
         }
+    }
+
+    void ParticleRenderNode::initImpl() {
+        RenderNode::initImpl();
+
+        mFreeIndices.resize(mMaxCount);
+        for (u64 i = 0; i < mMaxCount; ++i) {
+            mFreeIndices[i] = mMaxCount - i - 1;
+        }
+
+        mLiveIndices.clear();
+        mLiveIndices.reserve(mMaxCount);
+    }
+
+    void ParticleRenderNode::updateImpl() {
+        updateLiveParticles();
 
         // Check if we can spawn a new particle
-        if (mIsBurst) {
-            if (!mHasBurstSpawned) {
-                for (size_t i = 0; i < mMaxCount; ++i) {
-                    spawnParticle();
-                }
-                mHasBurstSpawned = true;
-            }
-            // Check if it can be destroyed
-            if (mToDestroyAfterBurst && mHasBurstSpawned && !anyParticleAlive()) {
-                setToDestroy(true);
-            }
-        } else {
-            mCurrentSpawnRate -= GetFrameTime();
-            if (mCurrentSpawnRate <= 0.0f) {
-                spawnParticle();
-                mCurrentSpawnRate = mSpawnRate;
-            }
+        mCurrentSpawnRate -= GetFrameTime();
+        if (mCurrentSpawnRate <= 0.0f) {
+            spawnParticle();
+            mCurrentSpawnRate = mSpawnRate;
         }
     }
 
-    bool ParticleRenderNode::getIsBurst() const {
-        return mIsBurst;
-    }
-    void ParticleRenderNode::setIsBurst(bool const isBurst) {
-        mIsBurst = isBurst;
-    }
-
-    bool ParticleRenderNode::getToDestroyAfterBurst() const {
-        return mToDestroyAfterBurst;
-    }
-    void ParticleRenderNode::setToDestroyAfterBurst(bool const toDestroyAfterBurst) {
-        mToDestroyAfterBurst = toDestroyAfterBurst;
-    }
-
-    u32 ParticleRenderNode::getMaxCount() const {
+    u64 ParticleRenderNode::getMaxCount() const {
         return mMaxCount;
     }
-    void ParticleRenderNode::setMaxCount(u32 const maxCount) {
+    void ParticleRenderNode::setMaxCount(u64 const maxCount) {
         if (maxCount == mMaxCount) {
             return;
         }

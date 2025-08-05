@@ -2,7 +2,7 @@
 #include <Ball/BallRenderNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
 
-#include <Node/Render/ParticleRenderNode.hpp>
+#include <Node/Render/BurstParticleRenderNode.hpp>
 
 namespace rlf {
     void BallNode::initImpl() {
@@ -19,9 +19,9 @@ namespace rlf {
                 auto velocity    = Vector2Reflect(oldVelocity, Vector2Normalize(node->getGlobalRight()));
                 setVelocity(Vector2Normalize(velocity));
 
-                auto pn = this->getRootNode()->addChild<ParticleRenderNode>();
-                pn->setIsBurst(true);
+                auto pn = this->getRootNode()->addChild<BurstParticleRenderNode>();
                 pn->setToDestroyAfterBurst(true);
+                pn->setBurstCount(3);
                 pn->setMaxCount(10);
                 pn->setSpawnRate(0.01f);
                 pn->setLifeTimeRange({0.25f, 0.75f});

@@ -13,14 +13,8 @@ namespace rlf {
 
         void renderImpl() override;
 
-        bool getIsBurst() const;
-        void setIsBurst(bool const isBurst);
-
-        bool getToDestroyAfterBurst() const;
-        void setToDestroyAfterBurst(bool const toDestroyAfterBurst);
-
-        u32  getMaxCount() const;
-        void setMaxCount(u32 const maxCount);
+        u64  getMaxCount() const;
+        void setMaxCount(u64 const maxCount);
 
         f32  getSpawnRate() const;
         void setSpawnRate(f32 const spawnRate);
@@ -44,12 +38,15 @@ namespace rlf {
         void                       setDirectionRange(rlf::Range<Vector2> const& directionRange);
 
     protected:
+        void updateLiveParticles();
+        bool anyParticleAlive() const;
+        void spawnParticle();
+
         void initImpl() override;
         void updateImpl() override;
 
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(rlf::RenderNode)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Is Burst", getIsBurst, setIsBurst)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Max Count", getMaxCount, setMaxCount)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Spawn Rate", getSpawnRate, setSpawnRate)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Lifetime Range", getLifeTimeRange, setLifeTimeRange)
@@ -60,14 +57,10 @@ namespace rlf {
         RLF_NODE_ACCESS_END
 
     private:
-        bool anyParticleAlive() const;
-        void spawnParticle();
         void resizeParams();
 
         // Config params
-        bool                mIsBurst             = false;
-        bool                mToDestroyAfterBurst = false;
-        u32                 mMaxCount            = 0;
+        u64                 mMaxCount            = 0;
         f32                 mSpawnRate           = 1.0f;
         rlf::Range<f32>     mLifeTimeRange       = {0.0f, 1.0f};
         rlf::Range<f32>     mStartScaleRange     = {1.0f, 1.0f};
@@ -80,7 +73,6 @@ namespace rlf {
         };
 
         // Runtime params (Resize the vector params in resizeParams)
-        bool                 mHasBurstSpawned  = false;
         f32                  mCurrentSpawnRate = 1.0f;
         std::vector<f32>     mLifeTimes;
         std::vector<f32>     mScales;
