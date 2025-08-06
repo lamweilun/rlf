@@ -29,5 +29,9 @@ int main() {
 
         auto ballNode = rootNode->addChild<rlf::Node::BallNode>();
         ballNode->setPosition({640.0f, 360.0f});
+
+#ifdef RLF_EDITOR
+        std::cout << "Built with editor" << std::endl;
+#endif
     });
 }
