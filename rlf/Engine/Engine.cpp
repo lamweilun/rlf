@@ -9,7 +9,7 @@ namespace rlf {
     Engine::Engine(u32 const width, u32 const height, char const* title) {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
         InitWindow(static_cast<int>(width), static_cast<int>(height), title);
-        // SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
+        SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 
         rlf::System::TypeSystem::getInstance();
         auto& audioSystem = rlf::System::AudioSystem::getInstance();
@@ -45,7 +45,7 @@ namespace rlf {
 
             DrawFPS(10, 10);
 #ifdef RLF_DEBUG
-            DrawTextEx(GetFontDefault(), TextFormat("Mouse Pos: %d, %d", GetMouseX(), GetMouseY()), {10, 40}, 20, 0, WHITE);
+            DrawTextEx(GetFontDefault(), TextFormat("Mouse Pos: %d, %d", GetMouseX(), GetMouseY()), {10, 40}, 20, 1, WHITE);
 #endif
             EndDrawing();
         }

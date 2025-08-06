@@ -217,6 +217,11 @@ namespace rlf::Node {
     }
 
     void BaseNode::update() {
+        // Update self then updateImpl all other mChildren
+        for (auto& child : mChildren) {
+            child->update();
+        }
+
         // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
         {
             size_t newSize = mChildren.size();
@@ -250,11 +255,7 @@ namespace rlf::Node {
             return;
         }
 
-        // Update self then updateImpl all other mChildren
         updateImpl();
-        for (auto& child : mChildren) {
-            child->update();
-        }
     }
 
     rlf::Json BaseNode::serialize() {
