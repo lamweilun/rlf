@@ -36,7 +36,7 @@ function(add_warning_flags TARGET)
             # -Wnoexcept
             -Wnon-virtual-dtor
             -Wnull-dereference
-            -Wold-style-cast
+            # -Wold-style-cast
             -Woverloaded-virtual
             -Wpointer-arith
             -Wredundant-decls

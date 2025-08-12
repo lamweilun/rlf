@@ -1,5 +1,7 @@
 #include <Node/BaseNode.hpp>
 
+#include <System/Type/TypeSystem.hpp>
+
 #include <algorithm>
 
 namespace rlf::Node {

@@ -1,55 +1,78 @@
 #include <Engine/Engine.hpp>
 
-#include <System/Audio/AudioSystem.hpp>
 #include <System/Physics/PhysicsSystem.hpp>
+#include <System/Audio/AudioSystem.hpp>
 #include <System/Render/RenderSystem.hpp>
-#include <System/Type/TypeSystem.hpp>
+
+#ifdef RLF_EDITOR
+#include <System/Editor/EditorSystem.hpp>
+#endif
 
 namespace rlf {
+    Engine& Engine::getInstance() {
+        static Engine engine;
+        return engine;
+    }
+
     Engine::Engine(u32 const width, u32 const height, char const* title) {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
         InitWindow(static_cast<int>(width), static_cast<int>(height), title);
-        SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
+        SetWindowMonitor(0);
+        SetTargetFPS(GetMonitorRefreshRate(0));
 
-        rlf::System::TypeSystem::getInstance();
-        auto& audioSystem = rlf::System::AudioSystem::getInstance();
-        rlf::System::RenderSystem::getInstance();
-        rlf::System::PhysicsSystem::getInstance();
+        addSystem<rlf::System::PhysicsSystem>();
+        addSystem<rlf::System::AudioSystem>();
+        addSystem<rlf::System::RenderSystem>();
 
-        audioSystem.init();
+#ifdef RLF_EDITOR
+        addSystem<rlf::System::EditorSystem>();
+#endif
+
+        for (auto& system : mSystems) {
+            system->init();
+        }
+
+        mRootNode = std::make_shared<rlf::Node::BaseNode>();
     }
 
     Engine::~Engine() {
-        rlf::System::AudioSystem::getInstance().shutdown();
+        mRootNode->shutdown();
+        mRootNode.reset();
 
+        std::reverse(std::begin(mSystems), std::end(mSystems));
+        for (auto& system : mSystems) {
+            system->shutdown();
+        }
         CloseWindow();
     }
 
     void Engine::run(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> setupFunc) {
-        auto rootNode = std::make_shared<rlf::Node::BaseNode>();
-        rootNode->init();
+        mRootNode->init();
 
         if (setupFunc) {
-            setupFunc(rootNode);
+            setupFunc(mRootNode);
         }
 
-        auto& rendererSystem = rlf::System::RenderSystem::getInstance();
-
         while (!WindowShouldClose()) {
-            rootNode->update();
+            mRootNode->update();
+
+            for (auto& system : mSystems) {
+                system->update();
+            }
 
             BeginDrawing();
             ClearBackground(BLACK);
 
-            rendererSystem.render();
+            for (auto& system : mSystems) {
+                system->render();
+            }
 
             DrawFPS(10, 10);
-#ifdef RLF_DEBUG
-            DrawTextEx(GetFontDefault(), TextFormat("Mouse Pos: %d, %d", GetMouseX(), GetMouseY()), {10, 40}, 20, 1, WHITE);
-#endif
             EndDrawing();
         }
+    }
 
-        rootNode->shutdown();
+    std::shared_ptr<Node::BaseNode> Engine::getRootNode() const {
+        return mRootNode;
     }
 }

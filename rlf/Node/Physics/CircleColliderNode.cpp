@@ -1,5 +1,6 @@
 #include <Node/Physics/CircleColliderNode.hpp>
 
+#include <Engine/Engine.hpp>
 #include <System/Physics/PhysicsSystem.hpp>
 
 #ifdef RLF_DEBUG
@@ -8,7 +9,7 @@
 
 namespace rlf::Node {
     void CircleColliderNode::initImpl() {
-        rlf::System::PhysicsSystem::getInstance().addColliderNode(std::static_pointer_cast<CircleColliderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(std::static_pointer_cast<CircleColliderNode>(shared_from_this()));
 
 #ifdef RLF_DEBUG
         auto childNode = addChild<CircleRenderNode>();
@@ -17,7 +18,7 @@ namespace rlf::Node {
 #endif
     }
     void CircleColliderNode::shutdownImpl() {
-        rlf::System::PhysicsSystem::getInstance().removeColliderNode(std::static_pointer_cast<CircleColliderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(std::static_pointer_cast<CircleColliderNode>(shared_from_this()));
         ColliderNode::shutdownImpl();
     }
 
@@ -25,7 +26,7 @@ namespace rlf::Node {
         if (!mCollidedCallback) {
             return;
         }
-        mCollidedNodes = rlf::System::PhysicsSystem::getInstance().checkCollision(std::static_pointer_cast<CircleColliderNode>(shared_from_this()));
+        mCollidedNodes = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->checkCollision(std::static_pointer_cast<CircleColliderNode>(shared_from_this()));
         ColliderNode::updateImpl();
     }
 }

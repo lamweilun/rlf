@@ -5,7 +5,7 @@
 #include <Ball/BallNode.hpp>
 
 int main() {
-    rlf::Engine engine;
+    auto& engine = rlf::Engine::getInstance();
 
     engine.run([](std::shared_ptr<rlf::Node::BaseNode> rootNode) {
         // Add new children here
@@ -29,9 +29,5 @@ int main() {
 
         auto ballNode = rootNode->addChild<rlf::Node::BallNode>();
         ballNode->setPosition({640.0f, 360.0f});
-
-#ifdef RLF_EDITOR
-        std::cout << "Built with editor" << std::endl;
-#endif
     });
 }

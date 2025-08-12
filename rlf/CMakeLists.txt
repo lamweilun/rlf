@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 3.31.0)
 
 project(rlf)
 
-# Define a build-time option to enable the editor mode
-option(RLF_EDITOR_MODE "Build the rlf library with editor support" OFF)
+# rlf dependencies
+CPMAddPackage("gh:nlohmann/json@3.12.0") # nlohmann_json
+CPMAddPackage("gh:raysan5/raylib#5.5") # raylib
 
-# Build imgui
-if (RLF_EDITOR_MODE)
+set(RLF_EDITOR True)
+if (RLF_EDITOR)
+    # imgui
     CPMAddPackage("gh:ocornut/imgui@1.92.1-docking")
     add_library(
         imgui
@@ -17,16 +19,23 @@ if (RLF_EDITOR_MODE)
         ${imgui_SOURCE_DIR}/imgui_widgets.cpp
     )
     target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
-endif()
 
-# rlf dependencies
-CPMAddPackage("gh:nlohmann/json@3.12.0")
-CPMAddPackage("gh:raysan5/raylib#5.5")
+    # rlImGui
+    CPMAddPackage("gh:raylib-extras/rlImGui#main")
+    add_library(
+        rlImGui
+        ${rlImGui_SOURCE_DIR}/rlImGui.cpp
+    )
+    target_include_directories(rlImGui PUBLIC ${rlImGui_SOURCE_DIR})
+    target_link_libraries(rlImGui PUBLIC imgui raylib)
+endif()
 
 add_library(
     ${PROJECT_NAME}
 
     Engine/Engine.cpp
+
+    Event/EventManager.cpp
 
     Node/Audio/SoundNode.cpp
 
@@ -44,6 +53,7 @@ add_library(
     
     Node/BaseNode.cpp
 
+    System/ISystem.cpp
     System/Audio/AudioSystem.cpp
     System/Physics/PhysicsSystem.cpp
     System/Render/RenderSystem.cpp
@@ -56,15 +66,20 @@ add_library(
     Util/Color.cpp
     Util/Math.cpp
 )
+
+if (RLF_EDITOR)
+    target_sources(${PROJECT_NAME} PRIVATE System/Editor/EditorSystem.cpp)
+endif()
+
 add_warning_flags(${PROJECT_NAME})
 target_precompile_headers(${PROJECT_NAME} PUBLIC pch.hpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ./)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
 target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json raylib)
+if (RLF_EDITOR)
+    target_link_libraries(${PROJECT_NAME} PUBLIC imgui rlImGui)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC RLF_EDITOR)
+endif()
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PUBLIC RLF_DEBUG)
-endif()
-if (RLF_EDITOR_MODE)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC RLF_EDITOR)
-    target_link_libraries(${PROJECT_NAME} PUBLIC imgui)
 endif()

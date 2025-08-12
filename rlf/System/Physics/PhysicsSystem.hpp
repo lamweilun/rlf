@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Util/Singleton.hpp>
+#include <System/ISystem.hpp>
 #include <Node/Physics/LineColliderNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
 
 #include <unordered_set>
 
 namespace rlf::System {
-    class PhysicsSystem : public Singleton<PhysicsSystem> {
+    class PhysicsSystem : public ISystem {
     public:
         void addColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode);
         void addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode);

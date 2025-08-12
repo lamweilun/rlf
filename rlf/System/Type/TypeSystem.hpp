@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Util/Singleton.hpp>
-
 #include <unordered_map>
 #include <functional>
 #include <optional>
@@ -12,9 +10,13 @@ namespace rlf::Node {
 }
 
 namespace rlf::System {
-
-    class TypeSystem : public Singleton<TypeSystem> {
+    class TypeSystem {
     public:
+        static TypeSystem& getInstance() {
+            static TypeSystem instance;
+            return instance;
+        }
+
         template <class T>
         bool registerType() {
             mCreator.insert({T::getTypeName(), []() {
@@ -34,10 +36,13 @@ namespace rlf::System {
     };
 }
 
+#define RLF_TYPE_NAME(NAME)                                  \
+    inline static constexpr std::string_view getTypeName() { \
+        return NAME;                                         \
+    }
+
 #define RLF_TYPE_REGISTER(TYPE, NAME)                                  \
-    inline static constexpr std::string_view getTypeName() {           \
-        return NAME;                                                   \
-    }                                                                  \
+    RLF_TYPE_NAME(NAME)                                                \
     inline virtual std::string_view getTypeNameImpl() const override { \
         return getTypeName();                                          \
     }                                                                  \
