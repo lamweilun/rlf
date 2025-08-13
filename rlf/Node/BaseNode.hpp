@@ -31,8 +31,8 @@ namespace rlf::Node {
         std::optional<std::shared_ptr<BaseNode>> getFirstChildOfType(std::string_view typeName) const;
 
         template <class T>
-        std::shared_ptr<T>        getOrAddFirstChildOfType();
-        std::shared_ptr<BaseNode> getOrAddFirstChildOfType(std::string_view typeName);
+        std::shared_ptr<T>        addOrGetFirstChildOfType();
+        std::shared_ptr<BaseNode> addOrGetFirstChildOfType(std::string_view typeName);
 
         Vector2 const& getPosition() const;
         void           setPosition(Vector2 const& position);
@@ -42,6 +42,9 @@ namespace rlf::Node {
         void           setRotation(f32 const rotation);
         f32            getRotationDeg() const;
         void           setRotationDeg(f32 const rotationDeg);
+
+        std::string const& getName() const;
+        void               setName(std::string const& name);
 
         bool getActive() const;
         bool getActiveSelf() const;
@@ -66,6 +69,8 @@ namespace rlf::Node {
         rlf::Json serialize();
         void      deserialize(rlf::Json const& j);
 
+        void deserializeFromFile(std::string const& filePath);
+
     protected:
         virtual void setActiveImpl(bool const selfActive);
         virtual void initImpl();
@@ -73,6 +78,7 @@ namespace rlf::Node {
         virtual void updateImpl();
 
         inline void access(auto& acc) {
+            acc("name", mName);
             acc("active", mActive);
             acc("position", mPosition);
             acc("rotation", mRotation);
@@ -91,6 +97,8 @@ namespace rlf::Node {
 
     private:
         void markGlobalDirty();
+
+        std::string mName;
 
         bool mActive    = true;
         bool mToDestroy = false;

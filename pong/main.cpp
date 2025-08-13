@@ -4,30 +4,44 @@
 #include <Environment/WallNode.hpp>
 #include <Ball/BallNode.hpp>
 
+#ifdef RLF_EDITOR
+#include <source_location>
+#endif
+
+static inline constexpr std::string_view assetsPathName = "assets";
+
 int main() {
     auto& engine = rlf::Engine::getInstance();
 
-    engine.run([](std::shared_ptr<rlf::Node::BaseNode> rootNode) {
-        // Add new children here
-        auto playerNode = rootNode->addChild<rlf::Node::PlayerNode>();
-        playerNode->setPosition({50.0f, 360.0f});
+#ifdef RLF_EDITOR
+    // Set assets path to be this internal project folder
+    std::filesystem::path p(std::source_location::current().file_name());
+    auto                  assetsPath = p.parent_path().append(assetsPathName);
+    engine.setAssetsDirectory(assetsPath);
 
-        auto topWallNode = rootNode->addChild<rlf::Node::WallNode>();
-        topWallNode->setPosition({640.0f, 20.0f});
-        topWallNode->setScale({10.0f, 1200.0f});
-        topWallNode->setRotationDeg(90.0f);
+    // Set shutdown function such that it will copy assets over to application directory
+    engine.setShutdownFunc([](...) {
+        std::filesystem::path currentPath     = GetWorkingDirectory();
+        std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory()).append(assetsPathName);
+        std::filesystem::remove_all(destinationPath);
+        auto const copyOptions = std::filesystem::copy_options::update_existing |
+                                 std::filesystem::copy_options::recursive;
+        std::filesystem::copy(currentPath, destinationPath, copyOptions);
 
-        auto bottomWallNode = rootNode->addChild<rlf::Node::WallNode>();
-        bottomWallNode->setPosition({640.0f, 700.0f});
-        bottomWallNode->setScale({10.0f, 1200.0f});
-        bottomWallNode->setRotationDeg(-90.0f);
-
-        auto backWallNode = rootNode->addChild<rlf::Node::WallNode>();
-        backWallNode->setPosition({1200.0f, 360.0f});
-        backWallNode->setScale({10.0f, 700.0f});
-        backWallNode->setRotationDeg(180.0f);
-
-        auto ballNode = rootNode->addChild<rlf::Node::BallNode>();
-        ballNode->setPosition({640.0f, 360.0f});
+        // imgui.ini remove
+        auto imguiConfigFile = destinationPath.append("imgui.ini");
+        std::filesystem::remove(imguiConfigFile);
     });
+#else
+    // Set assets path to application directory
+    std::filesystem::path p(GetApplicationDirectory());
+    auto                  assetsPath = p.append(assetsPathName);
+    engine.setAssetsDirectory(assetsPath);
+
+    // Set initial world to load
+    engine.setInitialWorldToLoad("world/pong.json");
+#endif
+
+    // Run the engine
+    engine.run();
 }

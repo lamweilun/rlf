@@ -5,9 +5,9 @@
 
 namespace rlf::Node {
     void WallNode::initImpl() {
-        addChild<WallRenderNode>();
+        addOrGetFirstChildOfType<WallRenderNode>();
 
-        auto colliderNode = addChild<rlf::Node::LineColliderNode>();
+        auto colliderNode = addOrGetFirstChildOfType<rlf::Node::LineColliderNode>();
         colliderNode->addTag("Wall");
         colliderNode->setStartPoint({0.5f, -0.5f});
         colliderNode->setEndPoint({0.5f, 0.5f});

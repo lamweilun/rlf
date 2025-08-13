@@ -18,7 +18,7 @@ namespace rlf::Node {
     }
 
     template <class T>
-    std::shared_ptr<T> BaseNode::getOrAddFirstChildOfType() {
-        return std::static_pointer_cast<T>(getOrAddFirstChildOfType(T::getTypeName()));
+    std::shared_ptr<T> BaseNode::addOrGetFirstChildOfType() {
+        return std::static_pointer_cast<T>(addOrGetFirstChildOfType(T::getTypeName()));
     }
 }

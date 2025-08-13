@@ -10,12 +10,6 @@ namespace rlf::Node {
     }
     void LineColliderNode::setStartPoint(Vector2 const& startPoint) {
         mStartPoint = startPoint;
-#ifdef RLF_DEBUG
-        if (!mRenderNode) {
-            mRenderNode = getOrAddFirstChildOfType<LineRenderNode>();
-        }
-        mRenderNode->setStartPoint(startPoint);
-#endif
     }
 
     Vector2 const& LineColliderNode::getEndPoint() const {
@@ -23,26 +17,10 @@ namespace rlf::Node {
     }
     void LineColliderNode::setEndPoint(Vector2 const& endPoint) {
         mEndPoint = endPoint;
-#ifdef RLF_DEBUG
-        if (!mRenderNode) {
-            mRenderNode = getOrAddFirstChildOfType<LineRenderNode>();
-        }
-        mRenderNode->setEndPoint(endPoint);
-#endif
     }
 
     void LineColliderNode::initImpl() {
         rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
-
-#ifdef RLF_DEBUG
-        if (!mRenderNode) {
-            mRenderNode = getOrAddFirstChildOfType<LineRenderNode>();
-        }
-        mRenderNode->setStartPoint(getStartPoint());
-        mRenderNode->setEndPoint(getEndPoint());
-        mRenderNode->setLayer(1);
-        mRenderNode->setTint(GREEN);
-#endif
     }
     void LineColliderNode::shutdownImpl() {
         rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));

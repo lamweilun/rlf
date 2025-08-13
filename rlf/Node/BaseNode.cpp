@@ -3,6 +3,7 @@
 #include <System/Type/TypeSystem.hpp>
 
 #include <algorithm>
+#include <fstream>
 
 namespace rlf::Node {
 
@@ -31,7 +32,7 @@ namespace rlf::Node {
         return std::nullopt;
     }
 
-    std::shared_ptr<BaseNode> BaseNode::getOrAddFirstChildOfType(std::string_view typeName) {
+    std::shared_ptr<BaseNode> BaseNode::addOrGetFirstChildOfType(std::string_view typeName) {
         auto child = getFirstChildOfType(typeName);
         if (child.has_value()) {
             return child.value();
@@ -80,6 +81,13 @@ namespace rlf::Node {
     }
     void BaseNode::setRotationDeg(f32 const rotationDeg) {
         setRotation(rotationDeg * DEG2RAD);
+    }
+
+    std::string const& BaseNode::getName() const {
+        return mName;
+    }
+    void BaseNode::setName(std::string const& name) {
+        mName = name;
     }
 
     bool BaseNode::getActive() const {
@@ -257,7 +265,9 @@ namespace rlf::Node {
             return;
         }
 
+#ifndef RLF_EDITOR
         updateImpl();
+#endif
     }
 
     rlf::Json BaseNode::serialize() {
@@ -294,6 +304,17 @@ namespace rlf::Node {
         mHasInited   = false;
         mLocalDirty  = true;
         mGlobalDirty = true;
+    }
+
+    void BaseNode::deserializeFromFile(std::string const& filePath) {
+        std::ifstream ifs(filePath);
+        if (!ifs.is_open()) {
+            return;
+        }
+        std::stringstream ss;
+        ss << ifs.rdbuf();
+        rlf::Json j = rlf::Json::parse(ss.str());
+        deserialize(j);
     }
 
     void BaseNode::initImpl() {

@@ -8,6 +8,8 @@
 #include <System/Editor/EditorSystem.hpp>
 #endif
 
+#include <fstream>
+
 namespace rlf {
     Engine& Engine::getInstance() {
         static Engine engine;
@@ -27,18 +29,9 @@ namespace rlf {
 #ifdef RLF_EDITOR
         addSystem<rlf::System::EditorSystem>();
 #endif
-
-        for (auto& system : mSystems) {
-            system->init();
-        }
-
-        mRootNode = std::make_shared<rlf::Node::BaseNode>();
     }
 
     Engine::~Engine() {
-        mRootNode->shutdown();
-        mRootNode.reset();
-
         std::reverse(std::begin(mSystems), std::end(mSystems));
         for (auto& system : mSystems) {
             system->shutdown();
@@ -46,14 +39,31 @@ namespace rlf {
         CloseWindow();
     }
 
-    void Engine::run(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> setupFunc) {
-        mRootNode->init();
-
-        if (setupFunc) {
-            setupFunc(mRootNode);
+    void Engine::run() {
+        // Initialize all systems
+        for (auto& system : mSystems) {
+            system->init();
         }
 
+        // Create root node
+        mRootNode = std::make_shared<rlf::Node::BaseNode>();
+
+        // Attempt to load initial world if there's one set
+        if (!mInitialWorldToLoad.empty()) {
+            mRootNode->deserializeFromFile(mInitialWorldToLoad);
+        }
+
+        // Run init
+        if (mInitFunc) {
+            mInitFunc(mRootNode);
+        }
+        mRootNode->init();
+
         while (!WindowShouldClose()) {
+            if (mUpdateFunc) {
+                mUpdateFunc(mRootNode);
+            }
+
             mRootNode->update();
 
             for (auto& system : mSystems) {
@@ -70,6 +80,33 @@ namespace rlf {
             DrawFPS(10, 10);
             EndDrawing();
         }
+
+        if (mShutdownFunc) {
+            mShutdownFunc(mRootNode);
+        }
+
+        mRootNode->shutdown();
+        mRootNode.reset();
+    }
+
+    void Engine::setInitialWorldToLoad(std::string const& filename) {
+        mInitialWorldToLoad = filename;
+    }
+
+    void Engine::setAssetsDirectory(std::filesystem::path const& assetsPath) {
+        std::filesystem::current_path(assetsPath);
+    }
+
+    void Engine::setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc) {
+        mInitFunc = initFunc;
+    }
+
+    void Engine::setUpdateFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> updateFunc) {
+        mUpdateFunc = updateFunc;
+    }
+
+    void Engine::setShutdownFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> shutdownFunc) {
+        mShutdownFunc = shutdownFunc;
     }
 
     std::shared_ptr<Node::BaseNode> Engine::getRootNode() const {

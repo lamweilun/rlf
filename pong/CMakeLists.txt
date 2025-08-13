@@ -20,4 +20,3 @@ add_executable(
 add_warning_flags(${PROJECT_NAME})
 target_include_directories(${PROJECT_NAME} PUBLIC ./)
 target_link_libraries(${PROJECT_NAME} PUBLIC rlf)
-

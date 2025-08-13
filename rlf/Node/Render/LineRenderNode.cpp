@@ -2,7 +2,8 @@
 
 namespace rlf::Node {
     void LineRenderNode::renderImpl() {
-        DrawLine3D(Vector3{mStartPoint.x, mStartPoint.y, 0.0f}, Vector3{mEndPoint.x, mEndPoint.y, 0.0f}, getTint());
+        DrawLineEx(mStartPoint, mEndPoint, 1.0f, getTint());
+        // DrawLine3D(Vector3{mStartPoint.x, mStartPoint.y, 0.0f}, Vector3{mEndPoint.x, mEndPoint.y, 0.0f}, getTint());
     }
 
     Vector2 const& LineRenderNode::getStartPoint() const {

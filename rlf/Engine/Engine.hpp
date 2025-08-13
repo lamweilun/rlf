@@ -21,7 +21,15 @@ namespace rlf {
         Engine &operator=(Engine const &) = delete;
         Engine &operator=(Engine &&)      = delete;
 
-        void run(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> setupFunc = nullptr);
+        void run();
+
+        void               setAssetsDirectory(std::filesystem::path const &assetsPath);
+        std::string const &getAssetsDirectory() const;
+        void               setInitialWorldToLoad(std::string const &filename);
+
+        void setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc);
+        void setUpdateFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> updateFunc);
+        void setShutdownFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> shutdownFunc);
 
         std::shared_ptr<Node::BaseNode> getRootNode() const;
 
@@ -32,7 +40,11 @@ namespace rlf {
         std::shared_ptr<T> getSystem() const;
 
     private:
-        std::shared_ptr<Node::BaseNode> mRootNode;
+        std::string                                               mInitialWorldToLoad;
+        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mInitFunc;
+        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mUpdateFunc;
+        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mShutdownFunc;
+        std::shared_ptr<Node::BaseNode>                           mRootNode;
 
         std::vector<std::shared_ptr<System::ISystem>> mSystems;
         std::unordered_map<std::string, u64>          mSystemLUT;

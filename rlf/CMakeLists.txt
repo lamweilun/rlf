@@ -6,7 +6,6 @@ project(rlf)
 CPMAddPackage("gh:nlohmann/json@3.12.0") # nlohmann_json
 CPMAddPackage("gh:raysan5/raylib#5.5") # raylib
 
-set(RLF_EDITOR True)
 if (RLF_EDITOR)
     # imgui
     CPMAddPackage("gh:ocornut/imgui@1.92.1-docking")
@@ -28,6 +27,9 @@ if (RLF_EDITOR)
     )
     target_include_directories(rlImGui PUBLIC ${rlImGui_SOURCE_DIR})
     target_link_libraries(rlImGui PUBLIC imgui raylib)
+
+    # imgui-filebrowser
+    CPMAddPackage("gh:AirGuanZ/imgui-filebrowser#dockable")
 endif()
 
 add_library(
@@ -77,6 +79,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ./)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
 target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json raylib)
 if (RLF_EDITOR)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${imgui-filebrowser_SOURCE_DIR})
     target_link_libraries(${PROJECT_NAME} PUBLIC imgui rlImGui)
     target_compile_definitions(${PROJECT_NAME} PUBLIC RLF_EDITOR)
 endif()

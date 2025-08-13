@@ -9,9 +9,9 @@ namespace rlf::Node {
 
         Vector2 const scale = {10.0f, 100.0f};
 
-        addChild<rlf::Node::PlayerRenderNode>()->setScale(scale);
+        addOrGetFirstChildOfType<rlf::Node::PlayerRenderNode>()->setScale(scale);
 
-        auto colliderNode = addChild<rlf::Node::LineColliderNode>();
+        auto colliderNode = addOrGetFirstChildOfType<rlf::Node::LineColliderNode>();
         colliderNode->setScale(scale);
         colliderNode->addTag("Player");
         colliderNode->setStartPoint({0.5f, -0.5f});

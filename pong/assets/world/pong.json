@@ -1,0 +1,430 @@
+{
+  "type": "BaseNode",
+  "data": {
+    "active": true,
+    "position": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "rotation": 0.0,
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "children": [
+      {
+        "type": "PlayerNode",
+        "data": {
+          "active": true,
+          "position": {
+            "x": 50.0,
+            "y": 360.0
+          },
+          "rotation": 0.0,
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "velocity": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "speed": 300.0,
+          "children": [
+            {
+              "type": "PlayerRenderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 10.0,
+                  "y": 100.0
+                },
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            },
+            {
+              "type": "LineColliderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 10.0,
+                  "y": 100.0
+                },
+                "tags": [
+                  "Player"
+                ],
+                "children": [
+                  {
+                    "type": "LineRenderNode",
+                    "data": {
+                      "active": true,
+                      "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                      },
+                      "rotation": 0.0,
+                      "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                      },
+                      "tint": {
+                        "r": 0,
+                        "g": 228,
+                        "b": 48,
+                        "a": 255
+                      },
+                      "layer": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "WallNode",
+        "data": {
+          "active": true,
+          "position": {
+            "x": 640.0,
+            "y": 20.0
+          },
+          "rotation": 1.5707963705062866,
+          "scale": {
+            "x": 10.0,
+            "y": 1200.0
+          },
+          "children": [
+            {
+              "type": "WallRenderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            },
+            {
+              "type": "LineColliderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tags": [
+                  "Wall"
+                ],
+                "children": [
+                  {
+                    "type": "LineRenderNode",
+                    "data": {
+                      "active": true,
+                      "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                      },
+                      "rotation": 0.0,
+                      "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                      },
+                      "tint": {
+                        "r": 0,
+                        "g": 228,
+                        "b": 48,
+                        "a": 255
+                      },
+                      "layer": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "WallNode",
+        "data": {
+          "active": true,
+          "position": {
+            "x": 640.0,
+            "y": 700.0
+          },
+          "rotation": -1.5707963705062866,
+          "scale": {
+            "x": 10.0,
+            "y": 1200.0
+          },
+          "children": [
+            {
+              "type": "WallRenderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            },
+            {
+              "type": "LineColliderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tags": [
+                  "Wall"
+                ],
+                "children": [
+                  {
+                    "type": "LineRenderNode",
+                    "data": {
+                      "active": true,
+                      "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                      },
+                      "rotation": 0.0,
+                      "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                      },
+                      "tint": {
+                        "r": 0,
+                        "g": 228,
+                        "b": 48,
+                        "a": 255
+                      },
+                      "layer": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "WallNode",
+        "data": {
+          "active": true,
+          "position": {
+            "x": 1200.0,
+            "y": 360.0
+          },
+          "rotation": 3.1415927410125732,
+          "scale": {
+            "x": 10.0,
+            "y": 700.0
+          },
+          "children": [
+            {
+              "type": "WallRenderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            },
+            {
+              "type": "LineColliderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tags": [
+                  "Wall"
+                ],
+                "children": [
+                  {
+                    "type": "LineRenderNode",
+                    "data": {
+                      "active": true,
+                      "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                      },
+                      "rotation": 0.0,
+                      "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                      },
+                      "tint": {
+                        "r": 0,
+                        "g": 228,
+                        "b": 48,
+                        "a": 255
+                      },
+                      "layer": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "BallNode",
+        "data": {
+          "active": true,
+          "position": {
+            "x": 436.072021484375,
+            "y": 351.84246826171875
+          },
+          "rotation": 0.0,
+          "scale": {
+            "x": 10.0,
+            "y": 10.0
+          },
+          "velocity": {
+            "x": -0.9992009997367859,
+            "y": -0.03996803238987923
+          },
+          "speed": 500.0,
+          "children": [
+            {
+              "type": "BallRenderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tint": {
+                  "r": 230,
+                  "g": 41,
+                  "b": 55,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            },
+            {
+              "type": "CircleColliderNode",
+              "data": {
+                "active": true,
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "tags": [],
+                "children": [
+                  {
+                    "type": "CircleRenderNode",
+                    "data": {
+                      "active": true,
+                      "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                      },
+                      "rotation": 0.0,
+                      "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                      },
+                      "tint": {
+                        "r": 0,
+                        "g": 228,
+                        "b": 48,
+                        "a": 255
+                      },
+                      "layer": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

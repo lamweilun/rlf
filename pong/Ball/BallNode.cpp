@@ -9,10 +9,10 @@ namespace rlf::Node {
         setScale({10.0f, 10.0f});
         setSpeed(500.0f);
 
-        auto renderNode = addChild<rlf::Node::BallRenderNode>();
+        auto renderNode = addOrGetFirstChildOfType<rlf::Node::BallRenderNode>();
         renderNode->setTint(RED);
 
-        auto colliderNode = addChild<rlf::Node::CircleColliderNode>();
+        auto colliderNode = addOrGetFirstChildOfType<rlf::Node::CircleColliderNode>();
         colliderNode->setCollidedCallback([this](std::shared_ptr<rlf::Node::ColliderNode> node) {
             if (node->hasTag("Player") || node->hasTag("Wall")) {
                 auto oldVelocity = getVelocity();

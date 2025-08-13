@@ -8,7 +8,7 @@ namespace rlf::System {
     }
 
     void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
-        mSphereColliderNodes.insert(sphereColliderNode);
+        mCircleColliderNodes.insert(sphereColliderNode);
     }
 
     void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode) {
@@ -16,7 +16,7 @@ namespace rlf::System {
     }
 
     void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
-        mSphereColliderNodes.erase(sphereColliderNode);
+        mCircleColliderNodes.erase(sphereColliderNode);
     }
 
     std::vector<std::shared_ptr<rlf::Node::ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<rlf::Node::LineColliderNode> colliderNode) {
@@ -53,7 +53,7 @@ namespace rlf::System {
         }
 
         // Check against sphere colliders
-        for (auto const& cn : mSphereColliderNodes) {
+        for (auto const& cn : mCircleColliderNodes) {
             if (cn->hasAnyOfTags(colliderNode->getTags())) {
                 continue;
             }
@@ -101,7 +101,7 @@ namespace rlf::System {
         }
 
         // Check against sphere colliders
-        for (auto const& cn : mSphereColliderNodes) {
+        for (auto const& cn : mCircleColliderNodes) {
             if (cn->hasAnyOfTags(colliderNode->getTags())) {
                 continue;
             }
@@ -125,4 +125,36 @@ namespace rlf::System {
 
         return collided;
     }
+
+#ifdef RLF_EDITOR
+    void PhysicsSystem::render() {
+        for (auto const& node : mLineColliderNodes) {
+            if (!node->getActive()) {
+                continue;
+            }
+
+            auto matF = MatrixToFloatV(node->getGlobalTransform());
+            rlPushMatrix();
+            rlMultMatrixf(matF.v);
+
+            DrawLineEx(node->getStartPoint(), node->getEndPoint(), 1.0f, GREEN);
+
+            rlPopMatrix();
+        }
+
+        for (auto const& node : mCircleColliderNodes) {
+            if (!node->getActive()) {
+                continue;
+            }
+
+            auto matF = MatrixToFloatV(node->getGlobalTransform());
+            rlPushMatrix();
+            rlMultMatrixf(matF.v);
+
+            DrawCircleV(Vector2Zeros, 1.0f, GREEN);
+
+            rlPopMatrix();
+        }
+    }
+#endif
 }
