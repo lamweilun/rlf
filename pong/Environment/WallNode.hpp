@@ -8,8 +8,6 @@ namespace rlf::Node {
         RLF_TYPE_REGISTER_QUICK(WallNode)
 
     protected:
-        void initImpl() override;
-
     private:
     };
 }

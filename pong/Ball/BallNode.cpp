@@ -6,12 +6,6 @@
 
 namespace rlf::Node {
     void BallNode::initImpl() {
-        setScale({10.0f, 10.0f});
-        setSpeed(500.0f);
-
-        auto renderNode = addOrGetFirstChildOfType<rlf::Node::BallRenderNode>();
-        renderNode->setTint(RED);
-
         auto colliderNode = addOrGetFirstChildOfType<rlf::Node::CircleColliderNode>();
         colliderNode->setCollidedCallback([this](std::shared_ptr<rlf::Node::ColliderNode> node) {
             if (node->hasTag("Player") || node->hasTag("Wall")) {
@@ -41,7 +35,7 @@ namespace rlf::Node {
 
         Vector2 velocity = Vector2Zeros;
         velocity.x       = -1.0f;
-        velocity.y       = static_cast<f32>(GetRandomValue(-100, 100)) / 100.0f - 0.5f;
+        velocity.y       = mVelocityRange.getValue() / 100.0f - 0.5f;
         setVelocity(Vector2Normalize(velocity));
     }
 }

@@ -18,7 +18,8 @@ namespace rlf::System {
         void displayInspectorWindow();
         void displayFileBrowserWindow();
 
-        std::filesystem::path                mLoadedWorld;
-        std::shared_ptr<rlf::Node::BaseNode> mSelectedNode;
+        std::filesystem::path                                     mLoadedWorld;
+        std::shared_ptr<rlf::Node::BaseNode>                      mSelectedNode;
+        std::unordered_map<std::shared_ptr<Node::BaseNode>, bool> mShowChildrenTable;
     };
 }

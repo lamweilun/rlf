@@ -151,7 +151,7 @@ namespace rlf::System {
             rlPushMatrix();
             rlMultMatrixf(matF.v);
 
-            DrawCircleV(Vector2Zeros, 1.0f, GREEN);
+            DrawCircleLinesV(Vector2Zeros, 1.0f, GREEN);
 
             rlPopMatrix();
         }

@@ -21,5 +21,11 @@ namespace rlf::Node {
     private:
         Vector2 mStartPoint = {0.0f, -0.5f};
         Vector2 mEndPoint   = {0.0f, 0.5f};
+
+        RLF_NODE_ACCESS_START
+        RLF_NODE_ACCESS_PARENT(ColliderNode)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Point", getStartPoint, setStartPoint)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("End Point", getEndPoint, setEndPoint)
+        RLF_NODE_ACCESS_END
     };
 }

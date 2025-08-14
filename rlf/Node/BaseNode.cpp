@@ -19,12 +19,7 @@ namespace rlf::Node {
     }
 
     std::optional<std::shared_ptr<BaseNode>> BaseNode::getFirstChildOfType(std::string_view typeName) const {
-        for (auto const& child : mChildren) {
-            if (child->getTypeNameImpl() == typeName) {
-                return child;
-            }
-        }
-        for (auto const& child : mNewChildren) {
+        for (auto const& child : getChildren()) {
             if (child->getTypeNameImpl() == typeName) {
                 return child;
             }
@@ -94,7 +89,7 @@ namespace rlf::Node {
         bool active = getActiveSelf();
         if (active) {
             if (auto parent = mParent.lock()) {
-                active |= parent->getActive();
+                active = active && parent->getActive();
             }
         }
         return active;
@@ -103,8 +98,15 @@ namespace rlf::Node {
         return mActive;
     }
     void BaseNode::setActive(bool const active) {
-        mActive = active;
-        setActiveImpl(active);
+        if (mActive != active) {
+            mActive = active;
+            setActiveImpl(active);
+        }
+
+        // Call it for all children as well
+        for (auto& child : getChildren()) {
+            child->setActiveImpl(child->getActiveSelf());
+        }
     }
 
     void BaseNode::setToDestroy(bool const toDestroy) {
@@ -197,41 +199,7 @@ namespace rlf::Node {
         return mParent;
     }
 
-    std::vector<std::shared_ptr<BaseNode>> const& BaseNode::getChildren() const {
-        return mChildren;
-    }
-
-    void BaseNode::setActiveImpl([[maybe_unused]] bool const active) {
-    }
-
-    void BaseNode::init() {
-        if (!mHasInited) {
-            initImpl();
-            mHasInited = true;
-        }
-
-        for (auto& child : mChildren) {
-            child->init();
-        }
-    }
-
-    void BaseNode::shutdown() {
-        // Shutdown all children first
-        for (auto& child : mChildren) {
-            child->shutdown();
-        }
-        mChildren.clear();
-
-        // Calls shutdown on self
-        shutdownImpl();
-    }
-
-    void BaseNode::update() {
-        // Update self then updateImpl all other mChildren
-        for (auto& child : mChildren) {
-            child->update();
-        }
-
+    std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren() {
         // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
         {
             size_t newSize = mChildren.size();
@@ -260,6 +228,44 @@ namespace rlf::Node {
             }
         }
 
+        return mChildren;
+    }
+
+    std::vector<std::shared_ptr<BaseNode>> const& BaseNode::getChildren() const {
+        return const_cast<BaseNode&>(*this).getChildren();
+    }
+
+    void BaseNode::setActiveImpl([[maybe_unused]] bool const active) {
+    }
+
+    void BaseNode::init() {
+        if (!mHasInited) {
+            initImpl();
+            mHasInited = true;
+        }
+
+        for (auto& child : getChildren()) {
+            child->init();
+        }
+    }
+
+    void BaseNode::shutdown() {
+        // Shutdown all children first
+        for (auto& child : getChildren()) {
+            child->shutdown();
+        }
+        mChildren.clear();
+
+        // Calls shutdown on self
+        shutdownImpl();
+    }
+
+    void BaseNode::update() {
+        //
+        for (auto& child : getChildren()) {
+            child->update();
+        }
+
         // If inactive just return
         if (!mActive) {
             return;
@@ -274,7 +280,7 @@ namespace rlf::Node {
         rlf::Json j;
         j["type"] = getTypeNameImpl();
         j["data"] = serializeImpl();
-        for (auto const& child : mChildren) {
+        for (auto const& child : getChildren()) {
             j["data"]["children"].push_back(child->serialize());
         }
         return j;
@@ -296,7 +302,7 @@ namespace rlf::Node {
             }
         }
 
-        for (auto& child : mChildren) {
+        for (auto& child : getChildren()) {
             child->setToDestroy(true);
         }
         mNewChildren = std::move(newChildren);
@@ -328,7 +334,7 @@ namespace rlf::Node {
 
     void BaseNode::markGlobalDirty() {
         mGlobalDirty = true;
-        for (auto& child : mChildren) {
+        for (auto& child : getChildren()) {
             child->markGlobalDirty();
         }
     }

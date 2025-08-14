@@ -19,6 +19,7 @@ namespace rlf::Node {
         Vector2 mVelocity = Vector2Zeros;
         f32     mSpeed    = 0.0f;
 
+    public:
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)
         RLF_NODE_ACCESS_MEMBER_GET_SET("velocity", getVelocity, setVelocity)

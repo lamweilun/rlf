@@ -19,15 +19,16 @@ namespace rlf::Node {
         void updateImpl() override;
         void shutdownImpl() override;
 
-        RLF_NODE_ACCESS_START
-        RLF_NODE_ACCESS_PARENT(BaseNode)
-        RLF_NODE_ACCESS_MEMBER("tags", mTags)
-        RLF_NODE_ACCESS_END
-
-        std::vector<std::shared_ptr<ColliderNode>>              mCollidedNodes;
+        std::vector<std::shared_ptr<ColliderNode>>                    mCollidedNodes;
         std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> mCollidedCallback;
 
     private:
         std::set<std::string> mTags;
+
+    public:
+        RLF_NODE_ACCESS_START
+        RLF_NODE_ACCESS_PARENT(BaseNode)
+        RLF_NODE_ACCESS_MEMBER("tags", mTags)
+        RLF_NODE_ACCESS_END
     };
 }

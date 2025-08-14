@@ -4,8 +4,8 @@
 #include <System/Render/RenderSystem.hpp>
 
 namespace rlf::Node {
-    void RenderNode::setActiveImpl(bool const selfActive) {
-        if (selfActive) {
+    void RenderNode::setActiveImpl([[maybe_unused]] bool const selfActive) {
+        if (getActive()) {
             rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
         } else {
             rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));

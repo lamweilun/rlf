@@ -47,6 +47,7 @@ namespace rlf {
 
         // Create root node
         mRootNode = std::make_shared<rlf::Node::BaseNode>();
+        mRootNode->setName(mRootNode->getTypeNameImpl().data());
 
         // Attempt to load initial world if there's one set
         if (!mInitialWorldToLoad.empty()) {

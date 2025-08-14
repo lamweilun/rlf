@@ -2,6 +2,8 @@
 
 #include <Node/Physics/RigidbodyNode.hpp>
 
+#include <Util/Range.hpp>
+
 namespace rlf::Node {
     class BallNode : public RigidbodyNode {
     public:
@@ -10,5 +12,12 @@ namespace rlf::Node {
         void initImpl() override;
 
     private:
+        rlf::Range<f32> mVelocityRange = {-100.0f, 100.0f};
+
+    public:
+        RLF_NODE_ACCESS_START
+        RLF_NODE_ACCESS_PARENT(RigidbodyNode)
+        RLF_NODE_ACCESS_MEMBER("Velocity Range", mVelocityRange)
+        RLF_NODE_ACCESS_END
     };
 }

@@ -11,9 +11,10 @@ namespace rlf::System {
     void RenderSystem::render() {
         for (auto& [layer, nodes] : mRenderNodes) {
             for (auto& node : nodes) {
-                if (!node->getActive()) {
-                    continue;
-                }
+                // Not required, check RenderNode::setActiveImpl
+                // if (!node->getActive()) {
+                //     continue;
+                // }
 
                 auto matF = MatrixToFloatV(node->getGlobalTransform());
                 rlPushMatrix();

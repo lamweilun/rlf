@@ -4,20 +4,6 @@
 #include <Node/Physics/LineColliderNode.hpp>
 
 namespace rlf::Node {
-    void PlayerNode::initImpl() {
-        setSpeed(300.0f);
-
-        Vector2 const scale = {10.0f, 100.0f};
-
-        addOrGetFirstChildOfType<rlf::Node::PlayerRenderNode>()->setScale(scale);
-
-        auto colliderNode = addOrGetFirstChildOfType<rlf::Node::LineColliderNode>();
-        colliderNode->setScale(scale);
-        colliderNode->addTag("Player");
-        colliderNode->setStartPoint({0.5f, -0.5f});
-        colliderNode->setEndPoint({0.5f, 0.5f});
-    }
-
     void PlayerNode::updateImpl() {
         auto velocity = Vector2Zeros;
         if (IsKeyDown(KEY_W)) {
