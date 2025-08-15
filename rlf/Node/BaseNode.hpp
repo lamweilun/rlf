@@ -112,6 +112,7 @@ namespace rlf::Node {
         std::weak_ptr<BaseNode>                       getParent() const;
         std::vector<std::shared_ptr<BaseNode>>&       getChildren();
         std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
+        std::vector<std::shared_ptr<BaseNode>>        getAllChildren();
 
         void      init();
         void      shutdown();

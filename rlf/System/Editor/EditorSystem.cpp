@@ -9,6 +9,7 @@
 #include <Node/BaseNode.hpp>
 
 #include <fstream>
+#include <sstream>
 
 static inline ImGui::FileBrowser mFileBrowser;
 

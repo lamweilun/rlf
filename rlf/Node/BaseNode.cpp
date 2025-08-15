@@ -4,6 +4,8 @@
 
 #include <algorithm>
 #include <fstream>
+#include <sstream>
+#include <queue>
 
 namespace rlf::Node {
 
@@ -104,7 +106,7 @@ namespace rlf::Node {
         }
 
         // Call it for all children as well
-        for (auto& child : getChildren()) {
+        for (auto& child : getAllChildren()) {
             child->setActiveImpl(child->getActiveSelf());
         }
     }
@@ -233,6 +235,23 @@ namespace rlf::Node {
 
     std::vector<std::shared_ptr<BaseNode>> const& BaseNode::getChildren() const {
         return const_cast<BaseNode&>(*this).getChildren();
+    }
+
+    std::vector<std::shared_ptr<BaseNode>> BaseNode::getAllChildren() {
+        std::vector<std::shared_ptr<BaseNode>> allChildren;
+        std::queue<std::shared_ptr<BaseNode>>  childQueue;
+        for (auto const& child : getChildren()) {
+            childQueue.push(child);
+        }
+        while (!childQueue.empty()) {
+            auto child = childQueue.front();
+            allChildren.push_back(child);
+            childQueue.pop();
+            for (auto grandChild : child->getChildren()) {
+                childQueue.push(grandChild);
+            }
+        }
+        return allChildren;
     }
 
     void BaseNode::setActiveImpl([[maybe_unused]] bool const active) {
