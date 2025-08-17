@@ -6,6 +6,7 @@
 #include <Util/Accessor/JsonDeserializer.hpp>
 #ifdef RLF_EDITOR
 #include <System/Editor/ImGuiAccessor.hpp>
+#include <System/Editor/EditorSystem.hpp>
 #endif
 
 #include <memory>
@@ -101,6 +102,7 @@ namespace rlf::Node {
 
         void setToDestroy(bool const toDestroy);
 
+        bool                      isRootNode() const;
         std::shared_ptr<BaseNode> getRootNode();
         Matrix const&             getLocalTransform() const;
         Matrix const&             getGlobalTransform() const;
@@ -109,7 +111,9 @@ namespace rlf::Node {
         Vector2                   getGlobalScale() const;
         Quaternion                getGlobalRotation() const;
 
+        bool                                          hasParent() const;
         std::weak_ptr<BaseNode>                       getParent() const;
+        void                                          setParent(std::shared_ptr<BaseNode> newParent);
         std::vector<std::shared_ptr<BaseNode>>&       getChildren();
         std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
         std::vector<std::shared_ptr<BaseNode>>        getAllChildren();
@@ -150,7 +154,7 @@ namespace rlf::Node {
         std::vector<std::shared_ptr<BaseNode>> mChildren;
         std::vector<std::shared_ptr<BaseNode>> mNewChildren;
 
-    public:
+    protected:
         inline void access(auto& acc) {
             RLF_NODE_ACCESS_MEMBER_GET_SET("active", getActiveSelf, setActive);
             RLF_NODE_ACCESS_MEMBER_GET_SET("name", getName, setName);
@@ -159,7 +163,6 @@ namespace rlf::Node {
             RLF_NODE_ACCESS_MEMBER_GET_SET("rotation", getRotationDeg, setRotationDeg);
         }
 
-    protected:
         inline virtual rlf::Json serializeImpl() {
             rlf::acc::JsonSerializer js;
             access(js);
@@ -171,11 +174,13 @@ namespace rlf::Node {
             access(jd);
         }
 #ifdef RLF_EDITOR
-    public:
+        friend class rlf::System::EditorSystem;
         inline virtual void imguiAccessImpl() {
             rlf::acc::ImGuiAccessor imguiAcc;
             access(imguiAcc);
         }
+        bool mToShiftDown = false;
+        bool mToShiftUp   = false;
 #endif
     };
 }

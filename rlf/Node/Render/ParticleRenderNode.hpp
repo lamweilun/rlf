@@ -45,6 +45,17 @@ namespace rlf::Node {
         void initImpl() override;
         void updateImpl() override;
 
+        RLF_NODE_ACCESS_START
+        RLF_NODE_ACCESS_PARENT(rlf::Node::RenderNode)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Max Count", getMaxCount, setMaxCount)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Spawn Rate", getSpawnRate, setSpawnRate)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Lifetime Range", getLifeTimeRange, setLifeTimeRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Scale Range", getStartScaleRange, setStartScaleRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("End Scale Range", getEndScaleRange, setEndScaleRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Speed Range", getStartSpeedRange, setStartSpeedRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("End Speed Range", getEndSpeedRange, setEndSpeedRange)
+        RLF_NODE_ACCESS_END
+
     private:
         void resizeParams();
 
@@ -73,17 +84,5 @@ namespace rlf::Node {
 
         std::vector<u64> mLiveIndices;
         std::vector<u64> mFreeIndices;
-
-    public:
-        RLF_NODE_ACCESS_START
-        RLF_NODE_ACCESS_PARENT(rlf::Node::RenderNode)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Max Count", getMaxCount, setMaxCount)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Spawn Rate", getSpawnRate, setSpawnRate)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Lifetime Range", getLifeTimeRange, setLifeTimeRange)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Scale Range", getStartScaleRange, setStartScaleRange)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("End Scale Range", getEndScaleRange, setEndScaleRange)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Speed Range", getStartSpeedRange, setStartSpeedRange)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("End Speed Range", getEndSpeedRange, setEndSpeedRange)
-        RLF_NODE_ACCESS_END
     };
 }

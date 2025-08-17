@@ -115,6 +115,10 @@ namespace rlf::Node {
         mToDestroy = toDestroy;
     }
 
+    bool BaseNode::isRootNode() const {
+        return !hasParent();
+    }
+
     std::shared_ptr<BaseNode> BaseNode::getRootNode() {
         if (auto rootNode = mRootNode.lock()) {
             return rootNode;
@@ -197,8 +201,51 @@ namespace rlf::Node {
         return QuaternionFromMatrix(globalMat);
     }
 
+    bool BaseNode::hasParent() const {
+        return getParent().lock() != nullptr;
+    }
+
     std::weak_ptr<BaseNode> BaseNode::getParent() const {
         return mParent;
+    }
+
+    void BaseNode::setParent(std::shared_ptr<BaseNode> newParent) {
+        // Return if im the root node
+        if (isRootNode()) {
+            return;
+        }
+        // Return if the new parent is myself
+        if (newParent == shared_from_this()) {
+            return;
+        }
+
+        // Return if the new parent is the same as the current parent
+        {
+            auto currParent = mParent.lock();
+            if (currParent == newParent) {
+                return;
+            }
+        }
+
+        // Add this node to the new parent
+        newParent->mNewChildren.push_back(shared_from_this());
+
+        // Remove this node from the old parent
+        {
+            auto  currParent         = mParent.lock();
+            auto& currParentChildren = currParent->getChildren();
+            for (size_t i = 0; i < currParentChildren.size(); ++i) {
+                if (currParentChildren[i] == shared_from_this()) {
+                    currParentChildren.erase(std::begin(currParentChildren) + static_cast<i32>(i));
+                    break;
+                }
+            }
+        }
+
+        // Set new parent
+        mParent = newParent;
+
+        markGlobalDirty();
     }
 
     std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren() {
@@ -229,6 +276,21 @@ namespace rlf::Node {
                 mChildren[i]->init();
             }
         }
+
+#ifdef RLF_EDITOR
+        // Check if any children needs to be shifted
+        {
+            for (size_t i = 0; i < mChildren.size(); ++i) {
+                if (mChildren[i]->mToShiftDown && i < mChildren.size() - 1) {
+                    mChildren[i]->mToShiftDown = false;
+                    std::swap(mChildren[i], mChildren[i + 1]);
+                } else if (mChildren[i]->mToShiftUp && i > 0) {
+                    mChildren[i]->mToShiftUp = false;
+                    std::swap(mChildren[i], mChildren[i - 1]);
+                }
+            }
+        }
+#endif
 
         return mChildren;
     }

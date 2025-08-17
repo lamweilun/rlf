@@ -2,6 +2,10 @@
 
 #include <System/ISystem.hpp>
 
+namespace ImGui {
+    class FileBrowser;
+}
+
 namespace rlf::Node {
     class BaseNode;
 }
@@ -20,6 +24,9 @@ namespace rlf::System {
 
         std::filesystem::path                                     mLoadedWorld;
         std::shared_ptr<rlf::Node::BaseNode>                      mSelectedNode;
+        std::shared_ptr<rlf::Node::BaseNode>                      mDraggedNode;
         std::unordered_map<std::shared_ptr<Node::BaseNode>, bool> mShowChildrenTable;
+
+        ImGui::FileBrowser* mLoadFileBrowser;
     };
 }

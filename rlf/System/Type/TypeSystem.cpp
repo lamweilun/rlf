@@ -10,4 +10,14 @@ namespace rlf::System {
         }
         return itr->second();
     }
+
+#ifdef RLF_EDITOR
+    std::map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> TypeSystem::getCreatorFuncs() const {
+        std::map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> sortedCreators;
+        for (auto const& [name, func] : mCreator) {
+            sortedCreators[name] = func;
+        }
+        return sortedCreators;
+    }
+#endif
 }

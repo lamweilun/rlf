@@ -10,6 +10,5 @@ include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
 
 # Add the subdirectories of what we want to build
-set(RLF_EDITOR True)
 add_subdirectory(rlf)
 add_subdirectory(pong)

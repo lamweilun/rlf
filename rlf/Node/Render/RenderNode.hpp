@@ -20,15 +20,14 @@ namespace rlf::Node {
         void initImpl() override;
         void shutdownImpl() override;
 
-    private:
-        Color mTint  = WHITE;
-        i32   mLayer = 0;
-
-    public:
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)
         RLF_NODE_ACCESS_MEMBER_GET_SET("tint", getTint, setTint)
         RLF_NODE_ACCESS_MEMBER_GET_SET("layer", getLayer, setLayer)
         RLF_NODE_ACCESS_END
+
+    private:
+        Color mTint  = WHITE;
+        i32   mLayer = 0;
     };
 }

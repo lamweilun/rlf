@@ -31,6 +31,10 @@ namespace rlf::System {
         }
         std::optional<std::shared_ptr<rlf::Node::BaseNode>> createNode(std::string_view typeName);
 
+#ifdef RLF_EDITOR
+        std::map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> getCreatorFuncs() const;
+#endif
+
     private:
         std::unordered_map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> mCreator;
     };
