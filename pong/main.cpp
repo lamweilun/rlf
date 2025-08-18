@@ -20,7 +20,7 @@ int main() {
     engine.setAssetsDirectory(assetsPath);
 
     // Set shutdown function such that it will copy assets over to application directory
-    engine.setShutdownFunc([](...) {
+    engine.setShutdownFunc([](std::shared_ptr<rlf::Node::BaseNode>) {
         std::filesystem::path currentPath     = GetWorkingDirectory();
         std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory()).append(assetsPathName);
         std::filesystem::remove_all(destinationPath);

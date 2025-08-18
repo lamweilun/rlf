@@ -16,7 +16,6 @@ namespace rlf::Editor {
     static inline constexpr char const* id_ShiftDownButton      = "ShiftDownButton";
     static inline constexpr char const* id_ShiftUpButton        = "ShiftUpButton";
     static inline constexpr char const* id_DeleteButton         = "DeleteButton";
-    static inline constexpr char const* id_RightClickPopUp      = "RightClickPopUp";
 }
 
 namespace rlf::System {
