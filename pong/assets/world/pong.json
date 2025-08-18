@@ -17,7 +17,7 @@
         "type": "PlayerNode",
         "data": {
           "active": true,
-          "name": "Player",
+          "name": "Player 1",
           "position": {
             "x": 50.0,
             "y": 360.0
@@ -28,6 +28,7 @@
           },
           "rotation": 0.0,
           "speed": 300.0,
+          "Is Player One": true,
           "children": [
             {
               "type": "PlayerRenderNode",
@@ -44,9 +45,9 @@
                 },
                 "rotation": 0.0,
                 "tint": {
-                  "r": 255,
-                  "g": 255,
-                  "b": 240,
+                  "r": 0,
+                  "g": 0,
+                  "b": 255,
                   "a": 255
                 },
                 "layer": 0
@@ -69,6 +70,74 @@
                 "tags": [
                   "Player"
                 ],
+                "Start Point": {
+                  "x": 5.0,
+                  "y": -50.0
+                },
+                "End Point": {
+                  "x": 5.0,
+                  "y": 50.0
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "PlayerNode",
+        "data": {
+          "active": true,
+          "name": "Player 2",
+          "position": {
+            "x": 1230.0,
+            "y": 360.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "speed": 0.0,
+          "Is Player One": false,
+          "children": [
+            {
+              "type": "PlayerRenderNode",
+              "data": {
+                "active": true,
+                "name": "Player2Render",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 10.0,
+                  "y": 100.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 0,
+                  "b": 0,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            },
+            {
+              "type": "LineColliderNode",
+              "data": {
+                "active": true,
+                "name": "Player2Collider",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 180.0,
+                "tags": [],
                 "Start Point": {
                   "x": 5.0,
                   "y": -50.0
@@ -219,74 +288,6 @@
         }
       },
       {
-        "type": "WallNode",
-        "data": {
-          "active": true,
-          "name": "BackWall",
-          "position": {
-            "x": 1200.0,
-            "y": 360.0
-          },
-          "scale": {
-            "x": 10.0,
-            "y": 700.0
-          },
-          "rotation": 180.0,
-          "children": [
-            {
-              "type": "WallRenderNode",
-              "data": {
-                "active": true,
-                "name": "BackWallRender",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1.0,
-                  "y": 1.0
-                },
-                "rotation": 0.0,
-                "tint": {
-                  "r": 255,
-                  "g": 255,
-                  "b": 255,
-                  "a": 255
-                },
-                "layer": 0
-              }
-            },
-            {
-              "type": "LineColliderNode",
-              "data": {
-                "active": true,
-                "name": "BackWallCollider",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1.0,
-                  "y": 1.0
-                },
-                "rotation": 0.0,
-                "tags": [
-                  "Wall"
-                ],
-                "Start Point": {
-                  "x": 0.5,
-                  "y": -0.5
-                },
-                "End Point": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
         "type": "BallNode",
         "data": {
           "active": true,
@@ -322,8 +323,8 @@
                 "rotation": 0.0,
                 "tint": {
                   "r": 255,
-                  "g": 0,
-                  "b": 0,
+                  "g": 255,
+                  "b": 255,
                   "a": 255
                 },
                 "layer": 0

@@ -30,6 +30,10 @@ namespace rlf::Node {
 
                 pn->setDirectionRange({minDir, maxDir});
                 pn->setPosition(getGlobalPosition());
+
+                if (node->hasTag("Player")) {
+                    setSpeed(getSpeed() * 1.05f);
+                }
             }
         });
 
@@ -37,5 +41,18 @@ namespace rlf::Node {
         velocity.x       = -1.0f;
         velocity.y       = mVelocityRange.getValue() / 100.0f - 0.5f;
         setVelocity(Vector2Normalize(velocity));
+    }
+
+    void BallNode::updateImpl() {
+        if (getPosition().x < 0.0f || getPosition().x > 1280.0f) {
+            setPosition({640.0f, 360.0f});
+            setSpeed(500.0f);
+            Vector2 velocity = Vector2Zeros;
+            velocity.x       = -1.0f;
+            velocity.y       = mVelocityRange.getValue() / 100.0f - 0.5f;
+            setVelocity(Vector2Normalize(velocity));
+        }
+
+        RigidbodyNode::updateImpl();
     }
 }

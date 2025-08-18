@@ -7,7 +7,7 @@
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
                 "CMAKE_CXX_STANDARD": "23",
-                "CPM_SOURCE_CACHE": "/Users/weilun/.cache/CPM",
+                "CPM_SOURCE_CACHE": "/home/weilun/.cache/CPM",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "RLF_EDITOR": "False"
             }

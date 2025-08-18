@@ -10,6 +10,7 @@ namespace rlf::Node {
         RLF_TYPE_REGISTER_QUICK(BallNode)
 
         void initImpl() override;
+        void updateImpl() override;
 
     protected:
         RLF_NODE_ACCESS_START
