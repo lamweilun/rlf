@@ -41,4 +41,11 @@ namespace rlf::Node {
     i32 RenderNode::getLayer() const {
         return mLayer;
     }
+
+    void RenderNode::setDrawInWireframe(bool const drawInWireframe) {
+        mDrawInWireframe = drawInWireframe;
+    }
+    bool RenderNode::getDrawInWireframe() const {
+        return mDrawInWireframe;
+    }
 }

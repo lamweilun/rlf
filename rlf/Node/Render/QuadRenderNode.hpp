@@ -3,9 +3,9 @@
 #include <Node/Render/RenderNode.hpp>
 
 namespace rlf::Node {
-    class CircleRenderNode : public RenderNode {
+    class QuadRenderNode : public RenderNode {
     public:
-        RLF_TYPE_REGISTER_QUICK(CircleRenderNode)
+        RLF_TYPE_REGISTER_QUICK(QuadRenderNode)
 
         void renderImpl() override;
 

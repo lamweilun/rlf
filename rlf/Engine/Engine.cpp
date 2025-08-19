@@ -4,6 +4,24 @@
 #include <System/Audio/AudioSystem.hpp>
 #include <System/Render/RenderSystem.hpp>
 
+// All Node Types here
+#include <Node/Audio/SoundNode.cpp>
+
+#include <Node/Physics/ColliderNode.cpp>
+#include <Node/Physics/LineColliderNode.cpp>
+#include <Node/Physics/CircleColliderNode.cpp>
+#include <Node/Physics/RigidbodyNode.cpp>
+
+#include <Node/Render/RenderNode.cpp>
+#include <Node/Render/LineRenderNode.cpp>
+#include <Node/Render/CircleRenderNode.cpp>
+#include <Node/Render/QuadRenderNode.cpp>
+#include <Node/Render/SpriteRenderNode.cpp>
+#include <Node/Render/ParticleRenderNode.cpp>
+#include <Node/Render/BurstParticleRenderNode.cpp>
+
+#include <Node/BaseNode.cpp>
+
 #ifdef RLF_EDITOR
 #include <System/Editor/EditorSystem.hpp>
 #endif
@@ -40,6 +58,24 @@ namespace rlf {
     }
 
     void Engine::run() {
+        // Register Types here
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::BaseNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::SoundNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::ColliderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::LineColliderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CircleColliderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::RigidbodyNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::RenderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::LineRenderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CircleRenderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::QuadRenderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::SpriteRenderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::ParticleRenderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::BurstParticleRenderNode>();
+        if (mSetupFunc) {
+            mSetupFunc();
+        }
+
         // Initialize all systems
         for (auto& system : mSystems) {
             system->init();
@@ -96,6 +132,10 @@ namespace rlf {
 
     void Engine::setAssetsDirectory(std::filesystem::path const& assetsPath) {
         std::filesystem::current_path(assetsPath);
+    }
+
+    void Engine::setSetupFunc(std::function<void()> setupFunc) {
+        mSetupFunc = setupFunc;
     }
 
     void Engine::setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc) {

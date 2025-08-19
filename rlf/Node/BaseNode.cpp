@@ -274,6 +274,7 @@ namespace rlf::Node {
             mNewChildren.clear();
             for (size_t i = oldSize; i < newSize; ++i) {
                 mChildren[i]->init();
+                mChildren[i]->setActiveImpl(mChildren[i]->getActiveSelf());
             }
         }
 
@@ -342,7 +343,6 @@ namespace rlf::Node {
     }
 
     void BaseNode::update() {
-        //
         for (auto& child : getChildren()) {
             child->update();
         }
@@ -372,9 +372,11 @@ namespace rlf::Node {
         std::vector<std::shared_ptr<BaseNode>> newChildren;
         if (j["data"].contains("children")) {
             for (auto const& entry : j["data"]["children"]) {
+                // Try to create a node of type
                 auto childNodeOpt = rlf::System::TypeSystem::getInstance().createNode(entry["type"].get<std::string_view>());
                 if (!childNodeOpt.has_value()) {
-                    continue;
+                    // If for whatever reason the node type is not registered, replace it with a base node
+                    childNodeOpt = rlf::System::TypeSystem::getInstance().createNode(rlf::Node::BaseNode::getTypeName());
                 }
                 std::shared_ptr<BaseNode> childNode = childNodeOpt.value();
                 childNode->deserialize(entry);

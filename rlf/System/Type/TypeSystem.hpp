@@ -49,7 +49,6 @@ namespace rlf::System {
     RLF_TYPE_NAME(NAME)                                                \
     inline virtual std::string_view getTypeNameImpl() const override { \
         return getTypeName();                                          \
-    }                                                                  \
-    inline static bool typeRegistered = rlf::System::TypeSystem::getInstance().registerType<TYPE>();
+    }
 
 #define RLF_TYPE_REGISTER_QUICK(TYPE) RLF_TYPE_REGISTER(TYPE, #TYPE)

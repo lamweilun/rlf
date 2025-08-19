@@ -49,6 +49,7 @@ add_library(
     Node/Render/RenderNode.cpp
     Node/Render/LineRenderNode.cpp
     Node/Render/CircleRenderNode.cpp
+    Node/Render/QuadRenderNode.cpp
     Node/Render/SpriteRenderNode.cpp
     Node/Render/ParticleRenderNode.cpp
     Node/Render/BurstParticleRenderNode.cpp

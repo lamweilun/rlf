@@ -13,6 +13,12 @@ static inline constexpr std::string_view assetsPathName = "assets";
 int main() {
     auto& engine = rlf::Engine::getInstance();
 
+    engine.setSetupFunc([]() {
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::PlayerNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::WallNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::BallNode>();
+    });
+
 #ifdef RLF_EDITOR
     // Set assets path to be this internal project folder
     std::filesystem::path p(std::source_location::current().file_name());

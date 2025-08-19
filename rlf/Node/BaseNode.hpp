@@ -70,7 +70,6 @@ namespace rlf::Node {
         inline virtual std::string_view getTypeNameImpl() const {
             return getTypeName();
         }
-        static inline bool typeRegistered = rlf::System::TypeSystem::getInstance().registerType<BaseNode>();
 
         template <class T>
         std::shared_ptr<T>        addChild();

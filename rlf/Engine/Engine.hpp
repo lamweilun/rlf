@@ -27,6 +27,7 @@ namespace rlf {
         std::string const &getAssetsDirectory() const;
         void               setInitialWorldToLoad(std::string const &filename);
 
+        void setSetupFunc(std::function<void()> setupFunc);
         void setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc);
         void setUpdateFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> updateFunc);
         void setShutdownFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> shutdownFunc);
@@ -41,6 +42,7 @@ namespace rlf {
 
     private:
         std::string                                               mInitialWorldToLoad;
+        std::function<void()>                                     mSetupFunc;
         std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mInitFunc;
         std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mUpdateFunc;
         std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mShutdownFunc;

@@ -13,8 +13,26 @@ namespace rlf::acc {
             T temp = t;
             if constexpr (std::is_same_v<T, bool>) {
                 ImGui::Checkbox(name.data(), &temp);
+            } else if constexpr (std::is_same_v<T, i8>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_S8, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, i16>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_S16, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, i32>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_S32, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, i64>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_S64, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, u8>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_U8, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, u16>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_U16, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, u32>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_U32, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, u64>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_U64, &temp, 1.0f);
             } else if constexpr (std::is_same_v<T, f32>) {
-                ImGui::DragFloat(name.data(), &temp);
+                ImGui::DragScalar(name.data(), ImGuiDataType_Float, &temp, 1.0f);
+            } else if constexpr (std::is_same_v<T, f64>) {
+                ImGui::DragScalar(name.data(), ImGuiDataType_Double, &temp, 1.0f);
             } else if constexpr (std::is_same_v<T, Vector2>) {
                 ImGui::DragFloat2(name.data(), &temp.x);
             } else if constexpr (std::is_same_v<T, Vector3>) {

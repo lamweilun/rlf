@@ -2,6 +2,10 @@
 
 namespace rlf::Node {
     void CircleRenderNode::renderImpl() {
-        DrawCircleLinesV(Vector2Zeros, 1.0f, getTint());
+        if (getDrawInWireframe()) {
+            DrawCircleLinesV(Vector2Zeros, 1.0f, getTint());
+        } else {
+            DrawCircleV(Vector2Zeros, 1.0f, getTint());
+        }
     }
 }

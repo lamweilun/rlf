@@ -1,5 +1,4 @@
 #include <Ball/BallNode.hpp>
-#include <Ball/BallRenderNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
 
 #include <Node/Render/BurstParticleRenderNode.hpp>

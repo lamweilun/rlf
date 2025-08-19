@@ -31,29 +31,6 @@
           "Is Player One": true,
           "children": [
             {
-              "type": "PlayerRenderNode",
-              "data": {
-                "active": true,
-                "name": "PlayerRender",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 10.0,
-                  "y": 100.0
-                },
-                "rotation": 0.0,
-                "tint": {
-                  "r": 0,
-                  "g": 0,
-                  "b": 255,
-                  "a": 255
-                },
-                "layer": 0
-              }
-            },
-            {
               "type": "LineColliderNode",
               "data": {
                 "active": true,
@@ -79,6 +56,30 @@
                   "y": 50.0
                 }
               }
+            },
+            {
+              "type": "QuadRenderNode",
+              "data": {
+                "active": true,
+                "name": "PlayerRender",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 10.0,
+                  "y": 100.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 0,
+                  "g": 0,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0,
+                "Draw In Wireframe": false
+              }
             }
           ]
         }
@@ -101,7 +102,34 @@
           "Is Player One": false,
           "children": [
             {
-              "type": "PlayerRenderNode",
+              "type": "LineColliderNode",
+              "data": {
+                "active": true,
+                "name": "Player2Collider",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 180.0,
+                "tags": [
+                  "Player"
+                ],
+                "Start Point": {
+                  "x": 5.0,
+                  "y": -50.0
+                },
+                "End Point": {
+                  "x": 5.0,
+                  "y": 50.0
+                }
+              }
+            },
+            {
+              "type": "QuadRenderNode",
               "data": {
                 "active": true,
                 "name": "Player2Render",
@@ -120,32 +148,8 @@
                   "b": 0,
                   "a": 255
                 },
-                "layer": 0
-              }
-            },
-            {
-              "type": "LineColliderNode",
-              "data": {
-                "active": true,
-                "name": "Player2Collider",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1.0,
-                  "y": 1.0
-                },
-                "rotation": 180.0,
-                "tags": [],
-                "Start Point": {
-                  "x": 5.0,
-                  "y": -50.0
-                },
-                "End Point": {
-                  "x": 5.0,
-                  "y": 50.0
-                }
+                "layer": 0,
+                "Draw In Wireframe": false
               }
             }
           ]
@@ -166,29 +170,6 @@
           },
           "rotation": 0.0,
           "children": [
-            {
-              "type": "WallRenderNode",
-              "data": {
-                "active": true,
-                "name": "TopWallRender",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1200.0,
-                  "y": 10.0
-                },
-                "rotation": 0.0,
-                "tint": {
-                  "r": 255,
-                  "g": 255,
-                  "b": 255,
-                  "a": 255
-                },
-                "layer": 0
-              }
-            },
             {
               "type": "LineColliderNode",
               "data": {
@@ -215,6 +196,30 @@
                   "y": -600.0
                 }
               }
+            },
+            {
+              "type": "QuadRenderNode",
+              "data": {
+                "active": true,
+                "name": "TopWallRender",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 10.0,
+                  "y": 1200.0
+                },
+                "rotation": 90.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0,
+                "Draw In Wireframe": false
+              }
             }
           ]
         }
@@ -229,13 +234,40 @@
             "y": 700.0
           },
           "scale": {
-            "x": 10.0,
-            "y": 1200.0
+            "x": 1.0,
+            "y": 1.0
           },
-          "rotation": -90.0,
+          "rotation": 0.0,
           "children": [
             {
-              "type": "WallRenderNode",
+              "type": "LineColliderNode",
+              "data": {
+                "active": true,
+                "name": "BottomWallCollider",
+                "position": {
+                  "x": 0.0,
+                  "y": -5.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": -90.0,
+                "tags": [
+                  "Wall"
+                ],
+                "Start Point": {
+                  "x": 0.0,
+                  "y": -600.0
+                },
+                "End Point": {
+                  "x": 0.0,
+                  "y": 600.0
+                }
+              }
+            },
+            {
+              "type": "QuadRenderNode",
               "data": {
                 "active": true,
                 "name": "BottomWallRender",
@@ -244,44 +276,18 @@
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 1.0,
-                  "y": 1.0
+                  "x": 10.0,
+                  "y": 1200.0
                 },
-                "rotation": 0.0,
+                "rotation": 90.0,
                 "tint": {
                   "r": 255,
                   "g": 255,
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0
-              }
-            },
-            {
-              "type": "LineColliderNode",
-              "data": {
-                "active": true,
-                "name": "BottomWallCollider",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1.0,
-                  "y": 1.0
-                },
-                "rotation": 0.0,
-                "tags": [
-                  "Wall"
-                ],
-                "Start Point": {
-                  "x": 0.5,
-                  "y": -0.5
-                },
-                "End Point": {
-                  "x": 0.5,
-                  "y": 0.5
-                }
+                "layer": 0,
+                "Draw In Wireframe": true
               }
             }
           ]
@@ -308,7 +314,24 @@
           },
           "children": [
             {
-              "type": "BallRenderNode",
+              "type": "CircleColliderNode",
+              "data": {
+                "active": true,
+                "name": "BallCollider",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "tags": []
+              }
+            },
+            {
+              "type": "CircleRenderNode",
               "data": {
                 "active": true,
                 "name": "BallRender",
@@ -327,24 +350,8 @@
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0
-              }
-            },
-            {
-              "type": "CircleColliderNode",
-              "data": {
-                "active": true,
-                "name": "BallCollider",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1.0,
-                  "y": 1.0
-                },
-                "rotation": 0.0,
-                "tags": []
+                "layer": 0,
+                "Draw In Wireframe": false
               }
             }
           ]
