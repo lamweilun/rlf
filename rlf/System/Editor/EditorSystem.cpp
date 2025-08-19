@@ -154,10 +154,13 @@ namespace rlf::System {
                 if (node->isRootNode()) {
                     for (auto& child : node->getChildren()) {
                         child->setToDestroy(true);
+                        mShowChildrenTable.erase(child);
                     }
                 } else {
                     node->setToDestroy(true);
+                    mShowChildrenTable.erase(node);
                 }
+                mSelectedNode = nullptr;
             }
             ImGui::PopStyleColor();
             ImGui::PopStyleColor();
