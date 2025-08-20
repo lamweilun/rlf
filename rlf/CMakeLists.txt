@@ -47,6 +47,7 @@ add_library(
     Node/Physics/RigidbodyNode.cpp
     
     Node/Render/RenderNode.cpp
+    Node/Render/CameraNode.cpp
     Node/Render/LineRenderNode.cpp
     Node/Render/CircleRenderNode.cpp
     Node/Render/QuadRenderNode.cpp

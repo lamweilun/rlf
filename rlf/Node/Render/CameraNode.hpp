@@ -1,0 +1,25 @@
+#pragma once
+
+#include <Node/BaseNode.hpp>
+
+namespace rlf::Node {
+    class CameraNode : public BaseNode {
+    public:
+        RLF_TYPE_REGISTER_QUICK(CameraNode)
+
+        bool getIsActiveCamera() const;
+        void setIsActiveCamera(bool const isActiveCamera);
+
+    protected:
+        void initImpl() override;
+        void shutdownImpl() override;
+
+        RLF_NODE_ACCESS_START
+        RLF_NODE_ACCESS_PARENT(BaseNode)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Is Active Camera", getIsActiveCamera, setIsActiveCamera)
+        RLF_NODE_ACCESS_END
+
+    private:
+        bool mIsActiveCamera = false;
+    };
+}

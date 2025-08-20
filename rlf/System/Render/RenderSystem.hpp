@@ -2,6 +2,7 @@
 
 #include <System/ISystem.hpp>
 #include <Node/Render/RenderNode.hpp>
+#include <Node/Render/CameraNode.hpp>
 
 #include <map>
 #include <memory>
@@ -13,9 +14,15 @@ namespace rlf::System {
         void addRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode);
         void removeRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode);
 
+        void addCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
+        void eraseCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
+        void setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
+
         void render() override;
 
     private:
         std::map<int, std::unordered_set<std::shared_ptr<rlf::Node::RenderNode>>> mRenderNodes;
+        std::unordered_set<std::shared_ptr<rlf::Node::CameraNode>>                mCameraNodes;
+        std::shared_ptr<rlf::Node::CameraNode>                                    mActiveCameraNode;
     };
 }

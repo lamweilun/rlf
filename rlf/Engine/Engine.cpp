@@ -13,6 +13,7 @@
 #include <Node/Physics/RigidbodyNode.cpp>
 
 #include <Node/Render/RenderNode.cpp>
+#include <Node/Render/CameraNode.hpp>
 #include <Node/Render/LineRenderNode.cpp>
 #include <Node/Render/CircleRenderNode.cpp>
 #include <Node/Render/QuadRenderNode.cpp>
@@ -66,6 +67,7 @@ namespace rlf {
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CircleColliderNode>();
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::RigidbodyNode>();
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::RenderNode>();
+        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CameraNode>();
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::LineRenderNode>();
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CircleRenderNode>();
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::QuadRenderNode>();

@@ -19,7 +19,7 @@ namespace rlf::System {
         std::vector<std::shared_ptr<rlf::Node::ColliderNode>> checkCollision(std::shared_ptr<rlf::Node::CircleColliderNode> colliderNode);
 
 #ifdef RLF_EDITOR
-        void render() override;
+        void editorRender();
 #endif
 
     private:

@@ -127,7 +127,7 @@ namespace rlf::System {
     }
 
 #ifdef RLF_EDITOR
-    void PhysicsSystem::render() {
+    void PhysicsSystem::editorRender() {
         for (auto const& node : mLineColliderNodes) {
             if (!node->getActive()) {
                 continue;
