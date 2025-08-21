@@ -36,8 +36,8 @@
           "active": true,
           "name": "Player 1",
           "position": {
-            "x": 50.0,
-            "y": 360.0
+            "x": -590.0,
+            "y": 0.0
           },
           "scale": {
             "x": 1.0,
@@ -107,15 +107,15 @@
           "active": true,
           "name": "Player 2",
           "position": {
-            "x": 1230.0,
-            "y": 360.0
+            "x": 590.0,
+            "y": 0.0
           },
           "scale": {
             "x": 1.0,
             "y": 1.0
           },
           "rotation": 0.0,
-          "speed": 0.0,
+          "speed": 300.0,
           "Is Player One": false,
           "children": [
             {
@@ -178,8 +178,8 @@
           "active": true,
           "name": "TopWall",
           "position": {
-            "x": 640.0,
-            "y": 20.0
+            "x": 0.0,
+            "y": -300.0
           },
           "scale": {
             "x": 1.0,
@@ -247,8 +247,8 @@
           "active": true,
           "name": "BottomWall",
           "position": {
-            "x": 640.0,
-            "y": 700.0
+            "x": 0.0,
+            "y": 300.0
           },
           "scale": {
             "x": 1.0,
@@ -316,8 +316,8 @@
           "active": true,
           "name": "Ball",
           "position": {
-            "x": 640.0,
-            "y": 360.0
+            "x": 0.0,
+            "y": 0.0
           },
           "scale": {
             "x": 10.0,

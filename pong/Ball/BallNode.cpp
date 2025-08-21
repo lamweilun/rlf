@@ -43,8 +43,8 @@ namespace rlf::Node {
     }
 
     void BallNode::updateImpl() {
-        if (getPosition().x < 0.0f || getPosition().x > 1280.0f) {
-            setPosition({640.0f, 360.0f});
+        if (getPosition().x < static_cast<f32>(-GetScreenWidth()) * 0.5f || getPosition().x > static_cast<f32>(GetScreenWidth()) * 0.5f) {
+            setPosition(Vector2Zeros);
             setSpeed(500.0f);
             Vector2 velocity = Vector2Zeros;
             velocity.x       = -1.0f;
