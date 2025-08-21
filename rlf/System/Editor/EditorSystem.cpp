@@ -60,7 +60,7 @@ namespace rlf::System {
         // Add new child node button
         if (mSelectedNode) {
             if (ImGui::BeginCombo("Add Child Node", "")) {
-                for (auto const& [typeName, creatorFunc] : rlf::System::TypeSystem::getInstance().getCreatorFuncs()) {
+                for (auto const& [typeName, creatorFunc] : rlf::TypeManager::getInstance().getCreatorFuncs()) {
                     if (ImGui::Selectable(typeName.data())) {
                         auto newChildNode = mSelectedNode->addChild(typeName);
                         newChildNode->setName(std::string("New ") + typeName.data());

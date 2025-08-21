@@ -9,11 +9,11 @@ namespace rlf::Node {
     class BaseNode;
 }
 
-namespace rlf::System {
-    class TypeSystem {
+namespace rlf {
+    class TypeManager {
     public:
-        static TypeSystem& getInstance() {
-            static TypeSystem instance;
+        static TypeManager& getInstance() {
+            static TypeManager instance;
             return instance;
         }
 

@@ -1,6 +1,6 @@
 #include <Node/BaseNode.hpp>
 
-#include <System/Type/TypeSystem.hpp>
+#include <Manager/TypeManager.hpp>
 
 #include <algorithm>
 #include <fstream>
@@ -10,7 +10,7 @@
 namespace rlf::Node {
 
     std::shared_ptr<BaseNode> BaseNode::addChild(std::string_view typeName) {
-        auto newChild = rlf::System::TypeSystem::getInstance().createNode(typeName);
+        auto newChild = rlf::TypeManager::getInstance().createNode(typeName);
         if (!newChild.has_value()) {
             return nullptr;
         }
@@ -373,10 +373,10 @@ namespace rlf::Node {
         if (j["data"].contains("children")) {
             for (auto const& entry : j["data"]["children"]) {
                 // Try to create a node of type
-                auto childNodeOpt = rlf::System::TypeSystem::getInstance().createNode(entry["type"].get<std::string_view>());
+                auto childNodeOpt = rlf::TypeManager::getInstance().createNode(entry["type"].get<std::string_view>());
                 if (!childNodeOpt.has_value()) {
                     // If for whatever reason the node type is not registered, replace it with a base node
-                    childNodeOpt = rlf::System::TypeSystem::getInstance().createNode(rlf::Node::BaseNode::getTypeName());
+                    childNodeOpt = rlf::TypeManager::getInstance().createNode(rlf::Node::BaseNode::getTypeName());
                 }
                 std::shared_ptr<BaseNode> childNode = childNodeOpt.value();
                 childNode->deserialize(entry);

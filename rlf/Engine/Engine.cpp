@@ -27,8 +27,6 @@
 #include <System/Editor/EditorSystem.hpp>
 #endif
 
-#include <fstream>
-
 namespace rlf {
     Engine& Engine::getInstance() {
         static Engine engine;
@@ -60,20 +58,20 @@ namespace rlf {
 
     void Engine::run() {
         // Register Types here
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::BaseNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::SoundNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::ColliderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::LineColliderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CircleColliderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::RigidbodyNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::RenderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CameraNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::LineRenderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::CircleRenderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::QuadRenderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::SpriteRenderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::ParticleRenderNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::BurstParticleRenderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::BaseNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::SoundNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::ColliderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::LineColliderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::CircleColliderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::RigidbodyNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::RenderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::CameraNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::LineRenderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::CircleRenderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::QuadRenderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::SpriteRenderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::ParticleRenderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::BurstParticleRenderNode>();
         if (mSetupFunc) {
             mSetupFunc();
         }

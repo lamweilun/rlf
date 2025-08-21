@@ -37,7 +37,7 @@ add_library(
 
     Engine/Engine.cpp
 
-    Event/EventManager.cpp
+    Manager/TypeManager.cpp
 
     Node/Audio/SoundNode.cpp
 
@@ -61,7 +61,6 @@ add_library(
     System/Audio/AudioSystem.cpp
     System/Physics/PhysicsSystem.cpp
     System/Render/RenderSystem.cpp
-    System/Type/TypeSystem.cpp
 
     Util/Accessor/JsonDeserializer.cpp
     Util/Accessor/JsonSerializer.cpp
