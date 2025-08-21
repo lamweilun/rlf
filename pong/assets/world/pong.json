@@ -173,10 +173,10 @@
         }
       },
       {
-        "type": "WallNode",
+        "type": "BaseNode",
         "data": {
           "active": true,
-          "name": "TopWall",
+          "name": "Top Wall",
           "position": {
             "x": 0.0,
             "y": -300.0
@@ -242,10 +242,10 @@
         }
       },
       {
-        "type": "WallNode",
+        "type": "BaseNode",
         "data": {
           "active": true,
-          "name": "BottomWall",
+          "name": "Bottom Wall",
           "position": {
             "x": 0.0,
             "y": 300.0

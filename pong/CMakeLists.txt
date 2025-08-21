@@ -8,8 +8,6 @@ add_executable(
     # Game Related Stuffs
     Player/PlayerNode.cpp
     
-    Environment/WallNode.cpp
-    
     Ball/BallNode.cpp
 
     main.cpp

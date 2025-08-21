@@ -181,8 +181,9 @@ namespace rlf::System {
 
     void EditorSystem::displayInspectorWindow() {
         ImGui::Begin("Inspector");
-
         if (mSelectedNode) {
+            ImGui::Text("Node Type: %s", mSelectedNode->getTypeNameImpl().data());
+            ImGui::Separator();
             mSelectedNode->imguiAccessImpl();
         }
 

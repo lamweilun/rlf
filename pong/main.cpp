@@ -1,7 +1,6 @@
 #include <Engine/Engine.hpp>
 
 #include <Player/PlayerNode.hpp>
-#include <Environment/WallNode.hpp>
 #include <Ball/BallNode.hpp>
 
 #ifdef RLF_EDITOR
@@ -15,7 +14,6 @@ int main() {
 
     engine.setSetupFunc([]() {
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::PlayerNode>();
-        rlf::System::TypeSystem::getInstance().registerType<rlf::Node::WallNode>();
         rlf::System::TypeSystem::getInstance().registerType<rlf::Node::BallNode>();
     });
 
