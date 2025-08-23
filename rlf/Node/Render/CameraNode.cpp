@@ -23,4 +23,11 @@ namespace rlf::Node {
             renderSys->setActiveCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
         }
     }
+
+    f32 CameraNode::getZoom() const {
+        return mZoom;
+    }
+    void CameraNode::setZoom(f32 const zoom) {
+        mZoom = zoom;
+    }
 }

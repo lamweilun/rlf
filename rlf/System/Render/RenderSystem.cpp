@@ -37,7 +37,15 @@ namespace rlf::System {
             camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f} + mActiveCameraNode->getGlobalPosition();
             camera.target   = Vector2Zeros;
             camera.rotation = QuaternionToEuler(mActiveCameraNode->getGlobalRotation()).z * RAD2DEG;
-            camera.zoom     = 1.0f;
+            camera.zoom     = mActiveCameraNode->getZoom();
+
+            // auto const renderAspectRatio  = static_cast<f32>(GetRenderWidth()) / static_cast<f32>(GetRenderHeight());
+            // auto const initialAspectRatio = static_cast<f32>(rlf::Engine::getInstance().getInitialWidth()) / static_cast<f32>(rlf::Engine::getInstance().getInitialHeight());
+            // if (renderAspectRatio > initialAspectRatio) {
+            //     camera.zoom = renderAspectRatio / initialAspectRatio;
+            // } else {
+            //     camera.zoom = initialAspectRatio / renderAspectRatio;
+            // }
 
             BeginMode2D(camera);
         }

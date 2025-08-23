@@ -21,6 +21,7 @@ namespace rlf::Editor {
 namespace rlf::System {
     void EditorSystem::init() {
         rlImGuiSetup(true);
+        ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
         mLoadFileBrowser = new ImGui::FileBrowser();
         mLoadFileBrowser->SetTitle("File Browser");
@@ -33,7 +34,7 @@ namespace rlf::System {
         displayHierarchyWindow();
         displayInspectorWindow();
         displayFileBrowserWindow();
-        ImGui::ShowDemoWindow();
+        // ImGui::ShowDemoWindow();
         rlImGuiEnd();
     }
 
@@ -146,24 +147,26 @@ namespace rlf::System {
             }
 
             // Delete Button
-            ImGui::SameLine();
-            std::string const deleteID = std::string("X") + nodeUniqueID + rlf::Editor::id_DeleteButton;
-            ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.25f, 0.25f, 1.0f)));
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.5f, 0.5f, 1.0f)));
-            if (ImGui::Button(deleteID.c_str())) {
-                if (node->isRootNode()) {
-                    for (auto& child : node->getChildren()) {
-                        child->setToDestroy(true);
-                        mShowChildrenTable.erase(child);
+            if (node == mSelectedNode) {
+                ImGui::SameLine();
+                std::string const deleteID = std::string("X") + nodeUniqueID + rlf::Editor::id_DeleteButton;
+                ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.25f, 0.25f, 1.0f)));
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.5f, 0.5f, 1.0f)));
+                if (ImGui::Button(deleteID.c_str())) {
+                    if (node->isRootNode()) {
+                        for (auto& child : node->getChildren()) {
+                            child->setToDestroy(true);
+                            mShowChildrenTable.erase(child);
+                        }
+                    } else {
+                        node->setToDestroy(true);
+                        mShowChildrenTable.erase(node);
                     }
-                } else {
-                    node->setToDestroy(true);
-                    mShowChildrenTable.erase(node);
+                    mSelectedNode = nullptr;
                 }
-                mSelectedNode = nullptr;
+                ImGui::PopStyleColor();
+                ImGui::PopStyleColor();
             }
-            ImGui::PopStyleColor();
-            ImGui::PopStyleColor();
 
             // Draw children if drop down arrow is toggled
             if (mShowChildrenTable.contains(node) && mShowChildrenTable.at(node)) {
