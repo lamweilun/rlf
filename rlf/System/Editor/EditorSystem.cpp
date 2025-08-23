@@ -88,7 +88,7 @@ namespace rlf::System {
             std::string const& nodeName     = node->getName();
 
             // Display arrow button if there's children
-            if (node->getChildren().size()) {
+            if (!node->getChildren().empty()) {
                 // Change arrow direction based on whether its showing children
                 ImGuiDir arrowDir = ImGuiDir_Right;
                 if (mShowChildrenTable.contains(node)) {

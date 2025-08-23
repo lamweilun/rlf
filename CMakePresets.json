@@ -4,10 +4,10 @@
         {
             "name": "configure-base",
             "hidden": true,
-            "generator": "Ninja Multi-Config",
+            "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_CXX_STANDARD": "23",
-                "CPM_SOURCE_CACHE": "/home/weilun/.cache/CPM",
+                "CPM_SOURCE_CACHE": "$env{HOME}/.cache/CPM",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "RLF_EDITOR": "False"
             }
@@ -25,7 +25,7 @@
         {
             "name": "configure-debug",
             "displayName": "Configure Debug",
-            "binaryDir": "${sourceDir}/build",
+            "binaryDir": "${sourceDir}/build/Debug",
             "inherits": [
                 "configure-base"
             ],
@@ -37,7 +37,7 @@
         {
             "name": "configure-release",
             "displayName": "Configure Release",
-            "binaryDir": "${sourceDir}/build",
+            "binaryDir": "${sourceDir}/build/Release",
             "inherits": [
                 "configure-base"
             ],
