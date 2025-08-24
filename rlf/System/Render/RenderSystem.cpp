@@ -22,6 +22,11 @@ namespace rlf::System {
     }
 
     void RenderSystem::setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode) {
+        if (cameraNode == nullptr) {
+            mActiveCameraNode = nullptr;
+            return;
+        }
+
         for (auto camNode : mCameraNodes) {
             if (camNode == cameraNode) {
                 continue;

@@ -13,7 +13,7 @@ namespace rlf::System {
         void render() override;
         void shutdown() override;
 
-        std::filesystem::path const& getFilePath() const;
+        std::filesystem::path const& getDraggedFilePath() const;
 
     private:
         void displayHierarchyWindow();

@@ -18,9 +18,11 @@ namespace rlf::Node {
     }
     void CameraNode::setIsActiveCamera(bool const isActiveCamera) {
         mIsActiveCamera = isActiveCamera;
+        auto renderSys  = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
         if (mIsActiveCamera) {
-            auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
             renderSys->setActiveCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
+        } else {
+            renderSys->setActiveCameraNode(nullptr);
         }
     }
 

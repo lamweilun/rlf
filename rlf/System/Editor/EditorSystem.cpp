@@ -36,7 +36,7 @@ namespace rlf::System {
         rlImGuiShutdown();
     }
 
-    std::filesystem::path const& EditorSystem::getFilePath() const {
+    std::filesystem::path const& EditorSystem::getDraggedFilePath() const {
         return mDraggedPath;
     }
 
@@ -212,7 +212,7 @@ namespace rlf::System {
                     mLoadedWorld = entry.path();
                 }
                 if (ImGui::BeginDragDropSource()) {
-                    mDraggedPath = entry.path();
+                    mDraggedPath = std::filesystem::relative(entry.path(), std::filesystem::current_path());
                     ImGui::SetDragDropPayload("SetTextureFromPath", nullptr, 0);
                     ImGui::EndDragDropSource();
                 }

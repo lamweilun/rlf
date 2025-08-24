@@ -61,7 +61,7 @@ namespace rlf::acc {
                 ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
                 if (ImGui::BeginDragDropTarget()) {
                     if (ImGui::AcceptDragDropPayload("SetTextureFromPath")) {
-                        auto const filepath = rlf::Engine::getInstance().getSystem<System::EditorSystem>()->getFilePath();
+                        auto const filepath = rlf::Engine::getInstance().getSystem<System::EditorSystem>()->getDraggedFilePath();
                         temp                = rlf::Engine::getInstance().getSystem<System::ResourceSystem>()->getTextureResource(filepath);
                         temp.setFilePath(filepath);
                     }
