@@ -5,6 +5,12 @@
 
 #include <Util/Range.hpp>
 
+#include <Resource/TextureResource.hpp>
+
+#include <Engine/Engine.hpp>
+#include <System/Resource/ResourceSystem.hpp>
+#include <System/Editor/EditorSystem.hpp>
+
 namespace rlf::acc {
     class ImGuiAccessor {
     public:
@@ -51,6 +57,16 @@ namespace rlf::acc {
                 strcpy(buffer, temp.data());
                 ImGui::InputText(name.data(), buffer, std::size(buffer));
                 temp = buffer;
+            } else if constexpr (std::is_same_v<T, TextureResource>) {
+                ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
+                if (ImGui::BeginDragDropTarget()) {
+                    if (ImGui::AcceptDragDropPayload("SetTextureFromPath")) {
+                        auto const filepath = rlf::Engine::getInstance().getSystem<System::EditorSystem>()->getFilePath();
+                        temp                = rlf::Engine::getInstance().getSystem<System::ResourceSystem>()->getTextureResource(filepath);
+                        temp.setFilePath(filepath);
+                    }
+                    ImGui::EndDragDropTarget();
+                }
             }
             t = temp;
         }

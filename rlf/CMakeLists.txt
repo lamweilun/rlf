@@ -27,9 +27,6 @@ if (RLF_EDITOR)
     )
     target_include_directories(rlImGui PUBLIC ${rlImGui_SOURCE_DIR})
     target_link_libraries(rlImGui PUBLIC imgui raylib)
-
-    # imgui-filebrowser
-    CPMAddPackage("gh:AirGuanZ/imgui-filebrowser#dockable")
 endif()
 
 add_library(
@@ -57,10 +54,14 @@ add_library(
     
     Node/BaseNode.cpp
 
+    Resource/IResource.cpp
+    Resource/TextureResource.cpp
+
     System/ISystem.cpp
     System/Audio/AudioSystem.cpp
     System/Physics/PhysicsSystem.cpp
     System/Render/RenderSystem.cpp
+    System/Resource/ResourceSystem.cpp
 
     Util/Accessor/JsonDeserializer.cpp
     Util/Accessor/JsonSerializer.cpp
@@ -81,7 +82,6 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC pch.hpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ./)
 target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json raylib)
 if (RLF_EDITOR)
-    target_include_directories(${PROJECT_NAME} PUBLIC ${imgui-filebrowser_SOURCE_DIR})
     target_link_libraries(${PROJECT_NAME} PUBLIC imgui rlImGui)
     target_compile_definitions(${PROJECT_NAME} PUBLIC RLF_EDITOR)
 endif()

@@ -2,10 +2,6 @@
 
 #include <System/ISystem.hpp>
 
-namespace ImGui {
-    class FileBrowser;
-}
-
 namespace rlf::Node {
     class BaseNode;
 }
@@ -17,6 +13,8 @@ namespace rlf::System {
         void render() override;
         void shutdown() override;
 
+        std::filesystem::path const& getFilePath() const;
+
     private:
         void displayHierarchyWindow();
         void displayInspectorWindow();
@@ -25,8 +23,8 @@ namespace rlf::System {
         std::filesystem::path                                     mLoadedWorld;
         std::shared_ptr<rlf::Node::BaseNode>                      mSelectedNode;
         std::shared_ptr<rlf::Node::BaseNode>                      mDraggedNode;
+        std::filesystem::path                                     mDraggedPath;
         std::unordered_map<std::shared_ptr<Node::BaseNode>, bool> mShowChildrenTable;
-
-        ImGui::FileBrowser* mLoadFileBrowser;
+        std::unordered_map<std::filesystem::path, bool>           mShowPathTable;
     };
 }

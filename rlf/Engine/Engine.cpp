@@ -3,6 +3,7 @@
 #include <System/Physics/PhysicsSystem.hpp>
 #include <System/Audio/AudioSystem.hpp>
 #include <System/Render/RenderSystem.hpp>
+#include <System/Resource/ResourceSystem.hpp>
 
 // All Node Types here
 #include <Node/Audio/SoundNode.cpp>
@@ -42,6 +43,7 @@ namespace rlf {
         addSystem<rlf::System::PhysicsSystem>();
         addSystem<rlf::System::AudioSystem>();
         addSystem<rlf::System::RenderSystem>();
+        addSystem<rlf::System::ResourceSystem>();
 
 #ifdef RLF_EDITOR
         addSystem<rlf::System::EditorSystem>();

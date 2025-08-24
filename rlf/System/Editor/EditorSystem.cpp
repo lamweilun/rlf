@@ -4,7 +4,6 @@
 
 #include <rlImGui.h>
 #include <imgui.h>
-#include <imfilebrowser.h>
 
 #include <Node/BaseNode.hpp>
 
@@ -22,11 +21,6 @@ namespace rlf::System {
     void EditorSystem::init() {
         rlImGuiSetup(true);
         ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-        mLoadFileBrowser = new ImGui::FileBrowser();
-        mLoadFileBrowser->SetTitle("File Browser");
-        mLoadFileBrowser->SetTypeFilters({".json"});
-        mLoadFileBrowser->SetPwd();
     }
 
     void EditorSystem::render() {
@@ -39,14 +33,20 @@ namespace rlf::System {
     }
 
     void EditorSystem::shutdown() {
-        delete mLoadFileBrowser;
         rlImGuiShutdown();
+    }
+
+    std::filesystem::path const& EditorSystem::getFilePath() const {
+        return mDraggedPath;
     }
 
     void EditorSystem::displayHierarchyWindow() {
         ImGui::Begin("Hierarchy");
         if (ImGui::Button("Open World")) {
-            mLoadFileBrowser->Open();
+            if (mLoadedWorld.extension() == ".json") {
+                auto rootNode = rlf::Engine::getInstance().getRootNode();
+                rootNode->deserializeFromFile(mLoadedWorld);
+            }
         }
         ImGui::SameLine();
         if (ImGui::Button("Save World")) {
@@ -189,24 +189,44 @@ namespace rlf::System {
             ImGui::Separator();
             mSelectedNode->imguiAccessImpl();
         }
-
         ImGui::End();
     }
 
     void EditorSystem::displayFileBrowserWindow() {
-        mLoadFileBrowser->Display();
+        ImGui::Begin("Explorer");
 
-        // Load new world
-        if (mLoadFileBrowser->HasSelected()) {
-            mSelectedNode = nullptr;
-            mShowChildrenTable.clear();
+        std::function<void(std::filesystem::path const&)> drawChildPathFunc = [&](std::filesystem::path const& p) {
+            for (auto entry : std::filesystem::directory_iterator(p)) {
+                // Show drop down arrow to show children in this path
+                if (entry.is_directory()) {
+                    auto     dropdownArrowID = std::string("##") + entry.path().string();
+                    ImGuiDir arrowDir        = mShowPathTable[entry.path()] ? ImGuiDir_Down : ImGuiDir_Right;
+                    if (ImGui::ArrowButton(dropdownArrowID.c_str(), arrowDir)) {
+                        mShowPathTable[entry.path()] = !mShowPathTable[entry.path()];
+                    }
+                    ImGui::SameLine();
+                }
 
-            if (mLoadFileBrowser->GetSelected().extension() == ".json") {
-                auto rootNode = rlf::Engine::getInstance().getRootNode();
-                rootNode->deserializeFromFile(mLoadFileBrowser->GetSelected());
-                mLoadedWorld = mLoadFileBrowser->GetSelected();
-                mLoadFileBrowser->ClearSelected();
+                // Draw the path as a selectable
+                if (ImGui::Selectable(entry.path().filename().c_str(), mLoadedWorld == entry.path())) {
+                    mLoadedWorld = entry.path();
+                }
+                if (ImGui::BeginDragDropSource()) {
+                    mDraggedPath = entry.path();
+                    ImGui::SetDragDropPayload("SetTextureFromPath", nullptr, 0);
+                    ImGui::EndDragDropSource();
+                }
+
+                // Draw the children in this selectable
+                if (entry.is_directory() && mShowPathTable.at(entry.path())) {
+                    ImGui::TreePush(entry.path().c_str());
+                    drawChildPathFunc(entry.path());
+                    ImGui::TreePop();
+                }
             }
-        }
+        };
+        drawChildPathFunc(std::filesystem::current_path());
+
+        ImGui::End();
     }
 }

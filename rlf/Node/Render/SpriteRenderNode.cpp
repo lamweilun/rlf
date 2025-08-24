@@ -2,33 +2,18 @@
 
 namespace rlf::Node {
     void SpriteRenderNode::renderImpl() {
-        DrawTexture(mTexture, 0, 0, getTint());
+        if (auto texture = mTexture.getTexture().lock()) {
+            rlPushMatrix();
+            rlTranslatef(static_cast<f32>(-texture->width) * 0.5f, static_cast<f32>(-texture->height) * 0.5f, 0.0f);
+            DrawTexture(*texture, 0, 0, getTint());
+            rlPopMatrix();
+        }
     }
 
-    void SpriteRenderNode::shutdownImpl() {
-        if (IsTextureValid(mTexture)) {
-            UnloadTexture(mTexture);
-        }
-        mTexture = {};
-        RenderNode::shutdownImpl();
+    void SpriteRenderNode::setTexture(rlf::TextureResource const& textureRsc) {
+        mTexture = textureRsc;
     }
-
-    void SpriteRenderNode::setTextureFromMemory(std::vector<u8> const& data, std::string_view filetype) {
-        // Attempts to load texture
-        Image image = LoadImageFromMemory(filetype.data(), data.data(), static_cast<int>(data.size()));
-        if (!IsImageValid(image)) {
-            return;
-        }
-        auto newTexture = LoadTextureFromImage(image);
-        UnloadImage(image);
-        if (!IsTextureValid(newTexture)) {
-            return;
-        }
-
-        // Unload old texture if there's any and set new texture
-        if (IsTextureValid(mTexture)) {
-            UnloadTexture(mTexture);
-        }
-        mTexture = newTexture;
+    rlf::TextureResource const& SpriteRenderNode::getTexture() const {
+        return mTexture;
     }
 }
