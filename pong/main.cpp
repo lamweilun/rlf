@@ -28,8 +28,7 @@ int main() {
         std::filesystem::path currentPath     = GetWorkingDirectory();
         std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory()).append(assetsPathName);
         std::filesystem::remove_all(destinationPath);
-        auto const copyOptions = std::filesystem::copy_options::update_existing |
-                                 std::filesystem::copy_options::recursive;
+        auto const copyOptions = std::filesystem::copy_options::recursive;
         std::filesystem::copy(currentPath, destinationPath, copyOptions);
 
         // imgui.ini remove
