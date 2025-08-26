@@ -4,11 +4,18 @@
 #include <System/Resource/ResourceSystem.hpp>
 
 namespace rlf {
-    void TextureResource::setTexture(std::weak_ptr<::Texture> texture) {
+    TextureResource::~TextureResource() {
+        if (mTexture && mTexture.use_count() == 1) {
+            UnloadTexture(*mTexture);
+            mTexture = nullptr;
+        }
+    }
+
+    void TextureResource::setTexture(std::shared_ptr<::Texture> texture) {
         mTexture = texture;
     }
 
-    std::weak_ptr<::Texture> TextureResource::getTexture() const {
+    std::shared_ptr<::Texture> TextureResource::getTexture() const {
         return mTexture;
     }
 

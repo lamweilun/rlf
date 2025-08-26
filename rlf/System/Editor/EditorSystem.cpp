@@ -23,6 +23,10 @@ namespace rlf::System {
     }
 
     void EditorSystem::shutdown() {
+        mSelectedNode = nullptr;
+        mDraggedNode  = nullptr;
+        mShowChildrenTable.clear();
+        mShowPathTable.clear();
         rlImGuiShutdown();
     }
 

@@ -51,10 +51,6 @@ namespace rlf {
     }
 
     Engine::~Engine() {
-        std::reverse(std::begin(mSystems), std::end(mSystems));
-        for (auto& system : mSystems) {
-            system->shutdown();
-        }
         CloseWindow();
     }
 
@@ -126,6 +122,11 @@ namespace rlf {
 
         mRootNode->shutdown();
         mRootNode.reset();
+
+        std::reverse(std::begin(mSystems), std::end(mSystems));
+        for (auto& system : mSystems) {
+            system->shutdown();
+        }
     }
 
     void Engine::setInitialWorldToLoad(std::string const& filename) {
