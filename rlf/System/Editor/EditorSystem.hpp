@@ -13,9 +13,9 @@ namespace rlf::System {
         void render() override;
         void shutdown() override;
 
-        void setDraggedFilePath(std::filesystem::path const& p);
+        void                         setDraggedFilePath(std::filesystem::path const& p);
         std::filesystem::path const& getDraggedFilePath() const;
-        void clearDraggedFilePath();
+        void                         clearDraggedFilePath();
 
     private:
         void displayHierarchyWindow();
@@ -23,10 +23,10 @@ namespace rlf::System {
         void displayFileBrowserWindow();
 
         // File Browser
-        std::filesystem::path                                     mSelectedPath;
-        std::filesystem::path                                     mDraggedPath;
-        std::filesystem::path                                     mLoadedWorld;
-        std::unordered_map<std::filesystem::path, bool>           mShowPathTable;
+        std::filesystem::path                           mSelectedPath;
+        std::filesystem::path                           mDraggedPath;
+        std::filesystem::path                           mLoadedWorld;
+        std::unordered_map<std::filesystem::path, bool> mShowPathTable;
 
         // Hierarchy
         std::shared_ptr<rlf::Node::BaseNode>                      mSelectedNode;

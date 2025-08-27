@@ -5,7 +5,6 @@
 namespace rlf {
     class SoundResource : public IResource {
     public:
-        ~SoundResource();
         void                     setSound(std::shared_ptr<::Sound> sound);
         std::shared_ptr<::Sound> getSound() const;
 

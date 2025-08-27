@@ -4,13 +4,6 @@
 #include <System/Resource/ResourceSystem.hpp>
 
 namespace rlf {
-    TextureResource::~TextureResource() {
-        if (mTexture && mTexture.use_count() == 1) {
-            UnloadTexture(*mTexture);
-            mTexture = nullptr;
-        }
-    }
-
     void TextureResource::setTexture(std::shared_ptr<::Texture> texture) {
         mTexture = texture;
     }

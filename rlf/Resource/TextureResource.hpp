@@ -5,7 +5,6 @@
 namespace rlf {
     class TextureResource : public IResource {
     public:
-        ~TextureResource();
         void                       setTexture(std::shared_ptr<::Texture> texture);
         std::shared_ptr<::Texture> getTexture() const;
 

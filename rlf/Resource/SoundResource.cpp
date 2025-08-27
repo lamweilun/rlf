@@ -4,13 +4,6 @@
 #include <System/Resource/ResourceSystem.hpp>
 
 namespace rlf {
-    SoundResource::~SoundResource() {
-        if (mSound && mSound.use_count() == 1) {
-            UnloadSound(*mSound);
-            mSound = nullptr;
-        }
-    }
-
     void SoundResource::setSound(std::shared_ptr<::Sound> sound) {
         mSound = sound;
     }

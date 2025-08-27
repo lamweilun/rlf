@@ -8,9 +8,10 @@ namespace rlf::System {
 
         // If texture cannot be found, create and load it in
         if (!mLoadedTextures.contains(filePath)) {
-            texture  = std::make_shared<Texture>();
-            *texture = LoadTexture(filePath.c_str());
-            if (IsTextureValid(*texture)) {
+            auto newTexture = LoadTexture(filePath.c_str());
+            if (IsTextureValid(newTexture)) {
+                texture                   = std::shared_ptr<Texture>(new Texture{}, [](Texture* t) { UnloadTexture(*t); delete t; });
+                *texture                  = newTexture;
                 mLoadedTextures[filePath] = texture;
             }
         } else {
@@ -26,15 +27,35 @@ namespace rlf::System {
 
         // If sound cannot be found, create and load it in
         if (!mLoadedSounds.contains(filePath)) {
-            sound  = std::make_shared<Sound>();
-            *sound = LoadSound(filePath.c_str());
-            if (IsSoundValid(*sound)) {
+            auto newSound = LoadSound(filePath.c_str());
+            if (IsSoundValid(newSound)) {
+                sound                   = std::shared_ptr<Sound>(new Sound{}, [](Sound* s) { UnloadSound(*s); delete s; });
+                *sound                  = newSound;
                 mLoadedSounds[filePath] = sound;
             }
         } else {
             sound = mLoadedSounds.at(filePath).lock();
         }
         rsc.setSound(sound);
+        return rsc;
+    }
+
+    FontResource ResourceSystem::getFontResource(std::string const& filePath) {
+        FontResource          rsc;
+        std::shared_ptr<Font> font;
+
+        // If sound cannot be found, create and load it in
+        if (!mLoadedFonts.contains(filePath)) {
+            auto newFont = LoadFont(filePath.c_str());
+            if (IsFontValid(newFont)) {
+                font                   = std::shared_ptr<Font>(new Font{}, [](Font* f) { UnloadFont(*f); delete f; });
+                *font                  = newFont;
+                mLoadedFonts[filePath] = font;
+            }
+        } else {
+            font = mLoadedFonts.at(filePath).lock();
+        }
+        rsc.setFont(font);
         return rsc;
     }
 
@@ -50,10 +71,12 @@ namespace rlf::System {
         };
         garbageCollectFunc(mLoadedTextures);
         garbageCollectFunc(mLoadedSounds);
+        garbageCollectFunc(mLoadedFonts);
     }
 
     void ResourceSystem::shutdown() {
         mLoadedTextures.clear();
         mLoadedSounds.clear();
+        mLoadedFonts.clear();
     }
 }

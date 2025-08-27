@@ -7,6 +7,7 @@
 
 #include <Resource/TextureResource.hpp>
 #include <Resource/SoundResource.hpp>
+#include <Resource/FontResource.hpp>
 
 #include <Engine/Engine.hpp>
 #include <System/Resource/ResourceSystem.hpp>
@@ -61,7 +62,7 @@ namespace rlf::acc {
             } else if constexpr (std::is_same_v<T, TextureResource>) {
                 ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
                 if (ImGui::BeginDragDropTarget()) {
-                    if (ImGui::AcceptDragDropPayload("SetTextureFromPath")) {
+                    if (ImGui::AcceptDragDropPayload("DragFromFileBrowser")) {
                         auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
                         auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
                         auto const filepath    = editorSys->getDraggedFilePath();
@@ -71,10 +72,18 @@ namespace rlf::acc {
                     }
                     ImGui::EndDragDropTarget();
                 }
+                ImGui::SameLine();
+                std::stringstream ss;
+                ss << &temp;
+                std::string closeBtn = std::string("X##") + ss.str();
+                if (ImGui::Button(closeBtn.c_str())) {
+                    T newTemp;
+                    std::swap(temp, newTemp);
+                }
             } else if constexpr (std::is_same_v<T, SoundResource>) {
                 ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
                 if (ImGui::BeginDragDropTarget()) {
-                    if (ImGui::AcceptDragDropPayload("SetTextureFromPath")) {
+                    if (ImGui::AcceptDragDropPayload("DragFromFileBrowser")) {
                         auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
                         auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
                         auto const filepath    = editorSys->getDraggedFilePath();
@@ -82,7 +91,36 @@ namespace rlf::acc {
                         temp.mFilePath         = filepath;
                         editorSys->clearDraggedFilePath();
                     }
+                }
+                ImGui::SameLine();
+                std::stringstream ss;
+                ss << &temp;
+                std::string closeBtn = std::string("X##") + ss.str();
+                if (ImGui::Button(closeBtn.c_str())) {
+                    T newTemp;
+                    std::swap(temp, newTemp);
+                }
+                ImGui::EndDragDropTarget();
+            } else if constexpr (std::is_same_v<T, FontResource>) {
+                ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
+                if (ImGui::BeginDragDropTarget()) {
+                    if (ImGui::AcceptDragDropPayload("DragFromFileBrowser")) {
+                        auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
+                        auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
+                        auto const filepath    = editorSys->getDraggedFilePath();
+                        temp                   = resourceSys->getFontResource(filepath);
+                        temp.mFilePath         = filepath;
+                        editorSys->clearDraggedFilePath();
+                    }
                     ImGui::EndDragDropTarget();
+                }
+                ImGui::SameLine();
+                std::stringstream ss;
+                ss << &temp;
+                std::string closeBtn = std::string("X##") + ss.str();
+                if (ImGui::Button(closeBtn.c_str())) {
+                    T newTemp;
+                    std::swap(temp, newTemp);
                 }
             }
             t = temp;

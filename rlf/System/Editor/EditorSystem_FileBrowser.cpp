@@ -42,7 +42,7 @@ namespace rlf::System {
                 // Drag drop for resources
                 if (ImGui::BeginDragDropSource()) {
                     setDraggedFilePath(std::filesystem::relative(entry.path(), std::filesystem::current_path()));
-                    ImGui::SetDragDropPayload("SetTextureFromPath", nullptr, 0);
+                    ImGui::SetDragDropPayload("DragFromFileBrowser", nullptr, 0);
                     ImGui::EndDragDropSource();
                 }
 

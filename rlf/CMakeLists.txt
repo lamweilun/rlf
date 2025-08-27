@@ -60,6 +60,7 @@ add_library(
     Resource/IResource.cpp
     Resource/TextureResource.cpp
     Resource/SoundResource.cpp
+    Resource/FontResource.cpp
 
     System/ISystem.cpp
     System/Audio/AudioSystem.cpp
