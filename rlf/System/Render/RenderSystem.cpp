@@ -11,6 +11,13 @@ namespace rlf::System {
         mRenderNodes[renderNode->getLayer()].erase(renderNode);
     }
 
+    void RenderSystem::addUINode(std::shared_ptr<rlf::Node::UINode> uiNode) {
+        mUINodes[uiNode->getLayer()].insert(uiNode);
+    }
+    void RenderSystem::removeUINode(std::shared_ptr<rlf::Node::UINode> uiNode) {
+        mUINodes[uiNode->getLayer()].erase(uiNode);
+    }
+
     void RenderSystem::addCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode) {
         mCameraNodes.insert(cameraNode);
     }
@@ -79,6 +86,24 @@ namespace rlf::System {
 
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {
             EndMode2D();
+        }
+
+        // Render UI
+        for (auto& [layer, nodes] : mUINodes) {
+            for (auto& node : nodes) {
+                // Not required, check UINode::setActiveImpl
+                // if (!node->getActive()) {
+                //     continue;
+                // }
+
+                auto matF = MatrixToFloatV(node->getGlobalTransform());
+                rlPushMatrix();
+                rlMultMatrixf(matF.v);
+
+                node->renderImpl();
+
+                rlPopMatrix();
+            }
         }
     }
 }

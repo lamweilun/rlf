@@ -22,6 +22,9 @@
 #include <Node/Render/ParticleRenderNode.cpp>
 #include <Node/Render/BurstParticleRenderNode.cpp>
 
+#include <Node/UI/UINode.hpp>
+#include <Node/UI/UITextNode.hpp>
+
 #include <Node/BaseNode.cpp>
 
 #ifdef RLF_EDITOR
@@ -62,6 +65,8 @@ namespace rlf {
         rlf::TypeManager::getInstance().registerType<rlf::Node::LineColliderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::CircleColliderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::RigidbodyNode>();
+
+        // Render Nodes
         rlf::TypeManager::getInstance().registerType<rlf::Node::RenderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::CameraNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::LineRenderNode>();
@@ -70,6 +75,11 @@ namespace rlf {
         rlf::TypeManager::getInstance().registerType<rlf::Node::SpriteRenderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::ParticleRenderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::BurstParticleRenderNode>();
+
+        // UI Nodes
+        rlf::TypeManager::getInstance().registerType<rlf::Node::UINode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::UITextNode>();
+
         if (mSetupFunc) {
             mSetupFunc();
         }
@@ -112,7 +122,6 @@ namespace rlf {
                 system->render();
             }
 
-            DrawFPS(10, 10);
             EndDrawing();
         }
 

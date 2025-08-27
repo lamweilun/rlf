@@ -12,11 +12,8 @@ namespace rlf::Node {
         void         setTint(Color const& tint);
         Color const& getTint() const;
 
-        void setLayer(i32 const layer);
-        i32  getLayer() const;
-
-        void setDrawInWireframe(bool const drawInWireframe);
-        bool getDrawInWireframe() const;
+        virtual void setLayer(i32 const layer);
+        i32          getLayer() const;
 
     protected:
         void setActiveImpl(bool const selfActive) override;
@@ -27,12 +24,12 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_PARENT(BaseNode)
         RLF_NODE_ACCESS_MEMBER_GET_SET("tint", getTint, setTint)
         RLF_NODE_ACCESS_MEMBER_GET_SET("layer", getLayer, setLayer)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Draw In Wireframe", getDrawInWireframe, setDrawInWireframe)
         RLF_NODE_ACCESS_END
 
     private:
-        Color mTint            = WHITE;
-        i32   mLayer           = 0;
-        bool  mDrawInWireframe = false;
+        Color mTint = WHITE;
+
+    protected:
+        i32 mLayer = 0;
     };
 }
