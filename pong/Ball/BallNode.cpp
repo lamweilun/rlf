@@ -1,6 +1,7 @@
 #include <Ball/BallNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
 
+#include <Node/Audio/SoundNode.hpp>
 #include <Node/Render/BurstParticleRenderNode.hpp>
 
 namespace rlf::Node {
@@ -8,10 +9,18 @@ namespace rlf::Node {
         auto colliderNode = addOrGetFirstChildOfType<rlf::Node::CircleColliderNode>();
         colliderNode->setCollidedCallback([this](std::shared_ptr<rlf::Node::ColliderNode> node) {
             if (node->hasTag("Player") || node->hasTag("Wall")) {
+                // Play sound
+                auto hitSoundNode = getRootNode()->getFirstChildOfType<SoundNode>();
+                if (hitSoundNode) {
+                    hitSoundNode.value()->play();
+                }
+
+                // Reflect and change direction
                 auto oldVelocity = getVelocity();
                 auto velocity    = Vector2Reflect(oldVelocity, Vector2Normalize(node->getGlobalRight()));
                 setVelocity(Vector2Normalize(velocity));
 
+                // Spawn a particle
                 auto pn = this->getRootNode()->addChild<BurstParticleRenderNode>();
                 pn->setToDestroyAfterBurst(true);
                 pn->setBurstCount(1);
@@ -30,6 +39,7 @@ namespace rlf::Node {
                 pn->setDirectionRange({minDir, maxDir});
                 pn->setPosition(getGlobalPosition());
 
+                // Increase speed if it hits a player
                 if (node->hasTag("Player")) {
                     setSpeed(getSpeed() * 1.05f);
                 }

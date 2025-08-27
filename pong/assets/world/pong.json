@@ -2,7 +2,7 @@
   "type": "BaseNode",
   "data": {
     "active": true,
-    "name": "BaseNode",
+    "name": "pong",
     "position": {
       "x": 0.0,
       "y": 0.0

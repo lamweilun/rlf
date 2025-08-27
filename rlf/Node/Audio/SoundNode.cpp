@@ -5,73 +5,75 @@ namespace rlf::Node {
         if (!getActive()) {
             return;
         }
-        PlaySound(mSound);
+        if (auto sound = mSound.getSound()) {
+            PlaySound(*sound);
+        }
     }
 
     void SoundNode::resume() const {
         if (!getActive()) {
             return;
         }
-        ResumeSound(mSound);
+        if (auto sound = mSound.getSound()) {
+            ResumeSound(*sound);
+        }
     }
 
     void SoundNode::pause() const {
         if (!getActive()) {
             return;
         }
-        PauseSound(mSound);
+        if (auto sound = mSound.getSound()) {
+            PauseSound(*sound);
+        }
     }
 
     void SoundNode::stop() const {
         if (!getActive()) {
             return;
         }
-        StopSound(mSound);
+        if (auto sound = mSound.getSound()) {
+            StopSound(*sound);
+        }
     }
 
     bool SoundNode::isPlaying() const {
-        return IsSoundPlaying(mSound);
+        if (auto sound = mSound.getSound()) {
+            return IsSoundPlaying(*sound);
+        }
+        return false;
     }
 
-    void SoundNode::setSoundFromMemory(std::vector<u8> const &data, std::string_view filetype) {
-        // Attempt to load new music
-        auto newWave = LoadWaveFromMemory(filetype.data(), data.data(), static_cast<int>(data.size()));
-        if (!IsWaveValid(newWave)) {
-            return;
-        }
-        auto newSound = LoadSoundFromWave(newWave);
-        UnloadWave(newWave);
-        if (!IsSoundValid(newSound)) {
-            return;
-        }
+    void SoundNode::setSound(rlf::SoundResource const& soundRsc) {
+        mSound = soundRsc;
+    }
+    rlf::SoundResource const& SoundNode::getSound() const {
+        return mSound;
+    }
 
-        // Set new music
-        if (IsSoundValid(mSound)) {
-            UnloadSound(mSound);
+    void SoundNode::initImpl() {
+        if (mPlayOnInit) {
+            play();
         }
-        mSound = newSound;
+    }
+
+    void SoundNode::shutdownImpl() {
+        stop();
     }
 
     void SoundNode::setActiveImpl(bool const active) {
         if (!active) {
-            if (mPauseWhenInactive) {
+            if (mPauseOnInactive) {
                 pause();
             } else {
                 stop();
             }
         } else {
-            if (mPauseWhenInactive) {
+            if (mPauseOnInactive) {
                 resume();
             } else {
                 play();
             }
         }
-    }
-
-    void SoundNode::shutdownImpl() {
-        if (IsSoundValid(mSound)) {
-            UnloadSound(mSound);
-        }
-        mSound = {};
     }
 }

@@ -6,7 +6,7 @@
 #include <imgui.h>
 
 namespace rlf::System {
-        void EditorSystem::displayFileBrowserWindow() {
+    void EditorSystem::displayFileBrowserWindow() {
         ImGui::Begin("Explorer");
 
         std::function<void(std::filesystem::path const&)> drawChildPathFunc = [&](std::filesystem::path const& p) {
@@ -31,6 +31,7 @@ namespace rlf::System {
                     // Load the world if its json
                     if (mSelectedPath.extension() == ".json") {
                         if (mLoadedWorld != mSelectedPath) {
+                            mSelectedNode = nullptr;
                             auto rootNode = rlf::Engine::getInstance().getRootNode();
                             rootNode->deserializeFromFile(mSelectedPath);
                             mLoadedWorld = mSelectedPath;

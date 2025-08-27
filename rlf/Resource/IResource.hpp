@@ -14,6 +14,9 @@ namespace rlf {
     public:
         std::string const& getFilePath() const;
 
+    protected:
+        void setFilePath(std::string const& filePath);
+
     private:
         std::string mFilePath;
         friend class rlf::System::ResourceSystem;

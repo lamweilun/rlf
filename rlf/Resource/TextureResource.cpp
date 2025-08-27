@@ -26,5 +26,6 @@ namespace rlf {
     void from_json(rlf::Json const& j, rlf::TextureResource& rsc) {
         std::string filePath = j.get<std::string>();
         rsc                  = rlf::Engine::getInstance().getSystem<rlf::System::ResourceSystem>()->getTextureResource(filePath);
+        rsc.setFilePath(filePath);
     }
 }

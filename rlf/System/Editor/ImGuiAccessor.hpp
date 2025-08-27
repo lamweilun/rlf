@@ -6,6 +6,7 @@
 #include <Util/Range.hpp>
 
 #include <Resource/TextureResource.hpp>
+#include <Resource/SoundResource.hpp>
 
 #include <Engine/Engine.hpp>
 #include <System/Resource/ResourceSystem.hpp>
@@ -65,6 +66,19 @@ namespace rlf::acc {
                         auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
                         auto const filepath    = editorSys->getDraggedFilePath();
                         temp                   = resourceSys->getTextureResource(filepath);
+                        temp.mFilePath         = filepath;
+                        editorSys->clearDraggedFilePath();
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+            } else if constexpr (std::is_same_v<T, SoundResource>) {
+                ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
+                if (ImGui::BeginDragDropTarget()) {
+                    if (ImGui::AcceptDragDropPayload("SetTextureFromPath")) {
+                        auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
+                        auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
+                        auto const filepath    = editorSys->getDraggedFilePath();
+                        temp                   = resourceSys->getSoundResource(filepath);
                         temp.mFilePath         = filepath;
                         editorSys->clearDraggedFilePath();
                     }

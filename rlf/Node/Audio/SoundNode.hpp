@@ -2,6 +2,8 @@
 
 #include <Node/BaseNode.hpp>
 
+#include <Resource/SoundResource.hpp>
+
 namespace rlf::Node {
     class SoundNode : public rlf::Node::BaseNode {
     public:
@@ -13,14 +15,24 @@ namespace rlf::Node {
         void stop() const;
         bool isPlaying() const;
 
-        void setSoundFromMemory(std::vector<u8> const& data, std::string_view filetype);
+        void                      setSound(rlf::SoundResource const& soundRsc);
+        rlf::SoundResource const& getSound() const;
 
     protected:
-        void setActiveImpl(bool const active) override;
+        void initImpl() override;
         void shutdownImpl() override;
+        void setActiveImpl(bool const active) override;
+
+        RLF_NODE_ACCESS_START
+        RLF_NODE_ACCESS_PARENT(BaseNode)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Sound", getSound, setSound)
+        RLF_NODE_ACCESS_MEMBER("Play On Init", mPlayOnInit)
+        RLF_NODE_ACCESS_MEMBER("Pause On Inactive", mPauseOnInactive)
+        RLF_NODE_ACCESS_END
 
     private:
-        Sound mSound             = {};
-        bool  mPauseWhenInactive = false;
+        rlf::SoundResource mSound;
+        bool               mPlayOnInit      = true;
+        bool               mPauseOnInactive = true;
     };
 }

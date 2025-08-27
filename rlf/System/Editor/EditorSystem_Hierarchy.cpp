@@ -18,13 +18,26 @@ namespace rlf::Editor {
 namespace rlf::System {
     void EditorSystem::displayHierarchyWindow() {
         ImGui::Begin("Hierarchy");
-        ImGui::SameLine();
+
+        if (ImGui::Button("New World")) {
+            mLoadedWorld.clear();
+            auto rootNode = rlf::Engine::getInstance().getRootNode();
+            rootNode->shutdown();
+        }
+
         if (ImGui::Button("Save World")) {
             if (!mLoadedWorld.empty()) {
                 auto          rootNode = rlf::Engine::getInstance().getRootNode();
                 rlf::Json     j        = rootNode->serialize();
                 std::ofstream ofs(mLoadedWorld, std::ios::trunc);
                 ofs << j.dump(2) << std::endl;
+            } else {
+                auto          rootNode = rlf::Engine::getInstance().getRootNode();
+                rlf::Json     j        = rootNode->serialize();
+                auto          path     = rootNode->getName() + ".json";
+                std::ofstream ofs(path, std::ios::trunc);
+                ofs << j.dump(2) << std::endl;
+                mLoadedWorld = path;
             }
         }
 
@@ -45,7 +58,7 @@ namespace rlf::System {
 
         // Show what we are currently editing
         if (!mLoadedWorld.empty()) {
-            ImGui::Text("Currently editing: %s", mLoadedWorld.filename().c_str());
+            ImGui::Text("Currently editing: %s", std::filesystem::relative(mLoadedWorld, std::filesystem::current_path()).c_str());
         }
 
         ImGui::Separator();
