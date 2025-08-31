@@ -23,6 +23,7 @@
 #include <Node/Render/BurstParticleRenderNode.cpp>
 
 #include <Node/UI/UINode.hpp>
+#include <Node/UI/UISpriteNode.hpp>
 #include <Node/UI/UITextNode.hpp>
 
 #include <Node/BaseNode.cpp>
@@ -78,6 +79,7 @@ namespace rlf {
 
         // UI Nodes
         rlf::TypeManager::getInstance().registerType<rlf::Node::UINode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::UISpriteNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::UITextNode>();
 
         if (mSetupFunc) {

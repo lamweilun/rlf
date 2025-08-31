@@ -12,6 +12,7 @@ static inline constexpr std::string_view assetsPathName = "assets";
 int main() {
     auto& engine = rlf::Engine::getInstance();
 
+    // Register game node types
     engine.setSetupFunc([]() {
         rlf::TypeManager::getInstance().registerType<rlf::Node::PlayerNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::BallNode>();

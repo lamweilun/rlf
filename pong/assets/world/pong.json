@@ -95,8 +95,7 @@
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0,
-                "Draw In Wireframe": false
+                "layer": 0
               }
             }
           ]
@@ -166,8 +165,7 @@
                   "b": 0,
                   "a": 255
                 },
-                "layer": 0,
-                "Draw In Wireframe": false
+                "layer": 0
               }
             }
           ]
@@ -235,8 +233,7 @@
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0,
-                "Draw In Wireframe": false
+                "layer": 0
               }
             }
           ]
@@ -304,8 +301,7 @@
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0,
-                "Draw In Wireframe": true
+                "layer": 0
               }
             }
           ]
@@ -368,11 +364,62 @@
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0,
-                "Draw In Wireframe": false
+                "layer": 0
               }
             }
           ]
+        }
+      },
+      {
+        "type": "UITextNode",
+        "data": {
+          "active": true,
+          "name": "New UITextNode",
+          "position": {
+            "x": 0.0,
+            "y": -330.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "tint": {
+            "r": 255,
+            "g": 0,
+            "b": 240,
+            "a": 238
+          },
+          "layer": 0,
+          "Font": "",
+          "Text": "Score",
+          "Font Size": 20,
+          "Spacing": 0.0,
+          "Auto Spacing": true
+        }
+      },
+      {
+        "type": "UISpriteNode",
+        "data": {
+          "active": true,
+          "name": "New UISpriteNode",
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "tint": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 255
+          },
+          "layer": 0,
+          "Texture": ""
         }
       }
     ]

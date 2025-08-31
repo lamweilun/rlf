@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Node/UI/UINode.hpp>
+#include <Resource/FontResource.hpp>
 
 namespace rlf::Node {
     class UITextNode : public UINode {
