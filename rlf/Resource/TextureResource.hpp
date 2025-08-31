@@ -8,6 +8,9 @@ namespace rlf {
         void                       setTexture(std::shared_ptr<::Texture> texture);
         std::shared_ptr<::Texture> getTexture() const;
 
+        u32 getWidth() const;
+        u32 getHeight() const;
+
     private:
         std::shared_ptr<::Texture> mTexture;
 

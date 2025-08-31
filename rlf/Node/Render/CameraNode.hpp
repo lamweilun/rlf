@@ -13,6 +13,9 @@ namespace rlf::Node {
         f32  getZoom() const;
         void setZoom(f32 const zoom);
 
+        Camera2D getAsCamera2D() const;
+        Camera2D getAsCamera2DUI() const;
+
     protected:
         void initImpl() override;
         void shutdownImpl() override;

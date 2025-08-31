@@ -22,14 +22,16 @@ namespace rlf::Node {
     void RenderNode::renderImpl() {
     }
 
+    Color const& RenderNode::getTint() const {
+        return mTint;
+    }
     void RenderNode::setTint(Color const& tint) {
         mTint = tint;
     }
 
-    Color const& RenderNode::getTint() const {
-        return mTint;
+    i32 RenderNode::getLayer() const {
+        return mLayer;
     }
-
     void RenderNode::setLayer(i32 const layer) {
         if (mLayer == layer) {
             return;
@@ -38,7 +40,5 @@ namespace rlf::Node {
         mLayer = layer;
         rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
-    i32 RenderNode::getLayer() const {
-        return mLayer;
-    }
+
 }

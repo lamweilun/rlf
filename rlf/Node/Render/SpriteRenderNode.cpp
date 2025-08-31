@@ -14,10 +14,10 @@ namespace rlf::Node {
         RenderNode::shutdownImpl();
     }
 
-    void SpriteRenderNode::setTexture(rlf::TextureResource const& textureRsc) {
-        mTexture = textureRsc;
-    }
     rlf::TextureResource const& SpriteRenderNode::getTexture() const {
         return mTexture;
+    }
+    void SpriteRenderNode::setTexture(rlf::TextureResource const& textureRsc) {
+        mTexture = textureRsc;
     }
 }

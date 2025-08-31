@@ -43,13 +43,13 @@ namespace rlf::System {
         mActiveCameraNode = cameraNode;
     }
 
+    std::shared_ptr<rlf::Node::CameraNode> RenderSystem::getActiveCameraNode() const {
+        return mActiveCameraNode;
+    }
+
     void RenderSystem::render() {
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {
-            Camera2D camera = {};
-            camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f} + mActiveCameraNode->getGlobalPosition();
-            camera.target   = Vector2Zeros;
-            camera.rotation = QuaternionToEuler(mActiveCameraNode->getGlobalRotation()).z * RAD2DEG;
-            camera.zoom     = mActiveCameraNode->getZoom();
+            Camera2D camera = mActiveCameraNode->getAsCamera2D();
             BeginMode2D(camera);
         }
 
@@ -81,11 +81,7 @@ namespace rlf::System {
 
         // Render UI
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {
-            Camera2D camera = {};
-            camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
-            camera.target   = Vector2Zeros;
-            camera.rotation = 0.0f;
-            camera.zoom     = mActiveCameraNode->getZoom();
+            Camera2D camera = mActiveCameraNode->getAsCamera2DUI();
             BeginMode2D(camera);
         }
         for (auto& [layer, nodes] : mUINodes) {

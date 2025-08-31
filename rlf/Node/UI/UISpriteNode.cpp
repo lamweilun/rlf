@@ -11,10 +11,10 @@ namespace rlf::Node {
         }
     }
 
-    void UISpriteNode::setTexture(rlf::TextureResource const& textureRsc) {
-        mTexture = textureRsc;
-    }
     rlf::TextureResource const& UISpriteNode::getTexture() const {
         return mTexture;
+    }
+    void UISpriteNode::setTexture(rlf::TextureResource const& textureRsc) {
+        mTexture = textureRsc;
     }
 }

@@ -32,4 +32,21 @@ namespace rlf::Node {
     void CameraNode::setZoom(f32 const zoom) {
         mZoom = zoom;
     }
+
+    Camera2D CameraNode::getAsCamera2D() const {
+        Camera2D camera;
+        camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f} + getGlobalPosition();
+        camera.target   = Vector2Zeros;
+        camera.rotation = QuaternionToEuler(getGlobalRotation()).z * RAD2DEG;
+        camera.zoom     = mZoom;
+        return camera;
+    }
+    Camera2D CameraNode::getAsCamera2DUI() const {
+        Camera2D camera;
+        camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
+        camera.target   = Vector2Zeros;
+        camera.rotation = 0.0f;
+        camera.zoom     = mZoom;
+        return camera;
+    }
 }

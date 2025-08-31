@@ -12,6 +12,19 @@ namespace rlf {
         return mTexture;
     }
 
+    u32 TextureResource::getWidth() const {
+        if (mTexture && IsTextureValid(*mTexture)) {
+            return static_cast<u32>(mTexture->width);
+        }
+        return 0;
+    }
+    u32 TextureResource::getHeight() const {
+        if (mTexture && IsTextureValid(*mTexture)) {
+            return static_cast<u32>(mTexture->height);
+        }
+        return 0;
+    }
+
     void to_json(rlf::Json& j, rlf::TextureResource const& rsc) {
         j = rsc.getFilePath();
     }

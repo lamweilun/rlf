@@ -10,8 +10,8 @@ namespace rlf::Node {
 
         void renderImpl() override;
 
-        void                        setTexture(rlf::TextureResource const& textureRsc);
         rlf::TextureResource const& getTexture() const;
+        void                        setTexture(rlf::TextureResource const& textureRsc);
 
     protected:
         RLF_NODE_ACCESS_START

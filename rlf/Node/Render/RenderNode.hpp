@@ -9,11 +9,11 @@ namespace rlf::Node {
 
         virtual void renderImpl();
 
-        void         setTint(Color const& tint);
         Color const& getTint() const;
+        void         setTint(Color const& tint);
 
-        virtual void setLayer(i32 const layer);
         i32          getLayer() const;
+        virtual void setLayer(i32 const layer);
 
     protected:
         void setActiveImpl(bool const selfActive) override;

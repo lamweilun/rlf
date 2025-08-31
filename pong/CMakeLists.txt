@@ -10,6 +10,8 @@ add_executable(
     
     Ball/BallNode.cpp
 
+    UIManagerNode.cpp
+
     main.cpp
 )
 add_warning_flags(${PROJECT_NAME})

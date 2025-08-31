@@ -7,9 +7,9 @@ namespace rlf::Node {
     public:
         RLF_TYPE_REGISTER_QUICK(PlayerNode)
 
-    protected:
         void updateImpl() override;
 
+    protected:
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(RigidbodyNode)
         RLF_NODE_ACCESS_MEMBER("Is Player One", mIsPlayerOne)

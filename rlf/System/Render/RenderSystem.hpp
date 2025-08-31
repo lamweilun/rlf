@@ -18,9 +18,10 @@ namespace rlf::System {
         void addUINode(std::shared_ptr<rlf::Node::UINode> uiNode);
         void removeUINode(std::shared_ptr<rlf::Node::UINode> uiNode);
 
-        void addCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
-        void eraseCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
-        void setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
+        void                                   addCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
+        void                                   eraseCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
+        void                                   setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
+        std::shared_ptr<rlf::Node::CameraNode> getActiveCameraNode() const;
 
         void render() override;
 

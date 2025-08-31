@@ -2,6 +2,7 @@
 
 #include <Player/PlayerNode.hpp>
 #include <Ball/BallNode.hpp>
+#include <UIManagerNode.hpp>
 
 #ifdef RLF_EDITOR
 #include <source_location>
@@ -16,6 +17,7 @@ int main() {
     engine.setSetupFunc([]() {
         rlf::TypeManager::getInstance().registerType<rlf::Node::PlayerNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::BallNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::UIManagerNode>();
     });
 
 #ifdef RLF_EDITOR
