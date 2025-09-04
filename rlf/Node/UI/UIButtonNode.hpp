@@ -38,6 +38,8 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_MEMBER_GET_SET("Hovered Tint", getHoveredTint, setHoveredTint)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Clicked Texture", getClickedTexture, setClickedTexture)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Clicked Tint", getClickedTint, setClickedTint)
+        RLF_NODE_ACCESS_MEMBER("Use Border", mUseBorder)
+        RLF_NODE_ACCESS_MEMBER("Border Thickness", mBorderThickness)
         RLF_NODE_ACCESS_END
 
     private:
@@ -46,6 +48,8 @@ namespace rlf::Node {
         rlf::TextureResource mClickedTexture;
         Color                mHoveredTint = WHITE;
         Color                mClickedTint = WHITE;
+        bool                 mUseBorder = false;
+        f32                  mBorderThickness = 1.0f;
 
         rlf::TextureResource mTextureInUse;
         Color                mTintToUse = WHITE;

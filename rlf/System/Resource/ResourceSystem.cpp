@@ -4,6 +4,9 @@ namespace rlf::System {
 
     TextureResource ResourceSystem::getTextureResource(std::string const& filePath) {
         TextureResource          rsc;
+        if (filePath.empty()) {
+            return rsc;
+        }
         std::shared_ptr<Texture> texture;
 
         // If texture cannot be found, create and load it in
@@ -23,6 +26,9 @@ namespace rlf::System {
 
     SoundResource ResourceSystem::getSoundResource(std::string const& filePath) {
         SoundResource          rsc;
+        if (filePath.empty()) {
+            return rsc;
+        }
         std::shared_ptr<Sound> sound;
 
         // If sound cannot be found, create and load it in
@@ -42,6 +48,9 @@ namespace rlf::System {
 
     FontResource ResourceSystem::getFontResource(std::string const& filePath) {
         FontResource          rsc;
+        if (filePath.empty()) {
+            return rsc;
+        }
         std::shared_ptr<Font> font;
 
         // If sound cannot be found, create and load it in

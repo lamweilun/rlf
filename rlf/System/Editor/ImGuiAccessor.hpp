@@ -13,6 +13,8 @@
 #include <System/Resource/ResourceSystem.hpp>
 #include <System/Editor/EditorSystem.hpp>
 
+#include <sstream>
+
 namespace rlf::acc {
     class ImGuiAccessor {
     public:

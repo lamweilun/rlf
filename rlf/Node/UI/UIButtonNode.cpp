@@ -16,6 +16,15 @@ namespace rlf::Node {
             DrawTexture(*texture, 0, 0, mTintToUse);
             rlPopMatrix();
         }
+
+        if (mUseBorder) {
+            Rectangle rec = {};
+            rec.x = -0.5f;
+            rec.y = -0.5f;
+            rec.width = 1.0f;
+            rec.height = 1.0f;
+            DrawRectangleLinesEx(rec, mBorderThickness, mTintToUse);
+        }
     }
 
     void UIButtonNode::updateImpl() {
@@ -37,8 +46,12 @@ namespace rlf::Node {
         auto const globalScale = getGlobalScale();
         auto const globalPos   = getGlobalPosition();
         Rectangle  buttonRec;
-        buttonRec.width  = globalScale.x * static_cast<f32>(mTexture.getWidth());
-        buttonRec.height = globalScale.y * static_cast<f32>(mTexture.getHeight());
+        buttonRec.width  = globalScale.x;
+        buttonRec.height  = globalScale.y;
+        if (mTexture.getTexture()) {
+            buttonRec.width  *= static_cast<f32>(mTexture.getWidth());
+            buttonRec.height *= static_cast<f32>(mTexture.getHeight());
+        }
         buttonRec.x      = globalPos.x - (buttonRec.width * 0.5f);
         buttonRec.y      = globalPos.y - (buttonRec.height * 0.5f);
 
