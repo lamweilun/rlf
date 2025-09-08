@@ -61,58 +61,21 @@ namespace rlf::acc {
                 strcpy(buffer, temp.data());
                 ImGui::InputText(name.data(), buffer, std::size(buffer));
                 temp = buffer;
-            } else if constexpr (std::is_same_v<T, TextureResource>) {
+            } else if constexpr (std::is_base_of_v<IResource, T>) {
                 ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
                 if (ImGui::BeginDragDropTarget()) {
                     if (ImGui::AcceptDragDropPayload("DragFromFileBrowser")) {
                         auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
                         auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
                         auto const filepath    = editorSys->getDraggedFilePath();
-                        temp                   = resourceSys->getTextureResource(filepath);
-                        temp.mFilePath         = filepath;
-                        editorSys->clearDraggedFilePath();
-                    }
-                    ImGui::EndDragDropTarget();
-                }
-                ImGui::SameLine();
-                std::stringstream ss;
-                ss << &temp;
-                std::string closeBtn = std::string("X##") + ss.str();
-                if (ImGui::Button(closeBtn.c_str())) {
-                    T newTemp;
-                    std::swap(temp, newTemp);
-                }
-            } else if constexpr (std::is_same_v<T, SoundResource>) {
-                ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
-                if (ImGui::BeginDragDropTarget()) {
-                    if (ImGui::AcceptDragDropPayload("DragFromFileBrowser")) {
-                        auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
-                        auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
-                        auto const filepath    = editorSys->getDraggedFilePath();
-                        temp                   = resourceSys->getSoundResource(filepath);
-                        temp.mFilePath         = filepath;
-                        editorSys->clearDraggedFilePath();
-                    }
-                }
-                ImGui::SameLine();
-                std::stringstream ss;
-                ss << &temp;
-                std::string closeBtn = std::string("X##") + ss.str();
-                if (ImGui::Button(closeBtn.c_str())) {
-                    T newTemp;
-                    std::swap(temp, newTemp);
-                }
-                ImGui::EndDragDropTarget();
-            } else if constexpr (std::is_same_v<T, FontResource>) {
-                ImGui::LabelText(name.data(), "%s", temp.getFilePath().c_str());
-                if (ImGui::BeginDragDropTarget()) {
-                    if (ImGui::AcceptDragDropPayload("DragFromFileBrowser")) {
-                        auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
-                        auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
-                        auto const filepath    = editorSys->getDraggedFilePath();
-                        temp                   = resourceSys->getFontResource(filepath);
-                        temp.mFilePath         = filepath;
-                        editorSys->clearDraggedFilePath();
+                        if constexpr (std::is_same_v<T, TextureResource>) {
+                            temp = resourceSys->getTextureResource(filepath);
+                        } else if constexpr (std::is_same_v<T, SoundResource>) {
+                            temp = resourceSys->getSoundResource(filepath);
+                        } else if constexpr (std::is_same_v<T, FontResource>) {
+                            temp = resourceSys->getFontResource(filepath);
+                        }
+                        temp.mFilePath = filepath;
                     }
                     ImGui::EndDragDropTarget();
                 }
