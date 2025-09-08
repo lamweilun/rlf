@@ -10,6 +10,7 @@ namespace rlf::Node {
     public:
         RLF_TYPE_REGISTER_QUICK(UIButtonNode)
 
+        void preUpdateImpl() override;
         void updateImpl() override;
         void renderImpl() override;
 
@@ -46,13 +47,15 @@ namespace rlf::Node {
         rlf::TextureResource mTexture;
         rlf::TextureResource mHoveredTexture;
         rlf::TextureResource mClickedTexture;
-        Color                mHoveredTint = WHITE;
-        Color                mClickedTint = WHITE;
-        bool                 mUseBorder = false;
+        Color                mHoveredTint     = WHITE;
+        Color                mClickedTint     = WHITE;
+        bool                 mUseBorder       = false;
         f32                  mBorderThickness = 1.0f;
 
         rlf::TextureResource mTextureInUse;
-        Color                mTintToUse = WHITE;
+        Color                mTintToUse  = WHITE;
+        bool                 mIsHovering = false;
+        bool                 mIsDown     = false;
 
         std::function<void(std::shared_ptr<UIButtonNode>)> mClickedCallback;
     };

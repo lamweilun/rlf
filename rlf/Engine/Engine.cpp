@@ -113,7 +113,9 @@ namespace rlf {
                 mUpdateFunc(mRootNode);
             }
 
+            mRootNode->preUpdate();
             mRootNode->update();
+            mRootNode->postUpdate();
 
             for (auto& system : mSystems) {
                 system->update();

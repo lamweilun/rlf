@@ -371,38 +371,10 @@
         }
       },
       {
-        "type": "UITextNode",
+        "type": "UIManagerNode",
         "data": {
           "active": true,
-          "name": "New UITextNode",
-          "position": {
-            "x": 0.0,
-            "y": -330.0
-          },
-          "scale": {
-            "x": 1.0,
-            "y": 1.0
-          },
-          "rotation": 0.0,
-          "tint": {
-            "r": 255,
-            "g": 0,
-            "b": 240,
-            "a": 238
-          },
-          "layer": 0,
-          "Font": "",
-          "Text": "Score",
-          "Font Size": 20,
-          "Spacing": 0.0,
-          "Auto Spacing": true
-        }
-      },
-      {
-        "type": "UISpriteNode",
-        "data": {
-          "active": true,
-          "name": "New UISpriteNode",
+          "name": "New UIManagerNode",
           "position": {
             "x": 0.0,
             "y": 0.0
@@ -412,14 +384,76 @@
             "y": 1.0
           },
           "rotation": 0.0,
-          "tint": {
-            "r": 255,
-            "g": 255,
-            "b": 255,
-            "a": 255
-          },
-          "layer": 0,
-          "Texture": ""
+          "children": [
+            {
+              "type": "UIButtonNode",
+              "data": {
+                "active": true,
+                "name": "New UIButtonNode",
+                "position": {
+                  "x": -365.0,
+                  "y": -147.0
+                },
+                "scale": {
+                  "x": 228.0,
+                  "y": 105.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0,
+                "Texture": "",
+                "Hovered Texture": "",
+                "Hovered Tint": {
+                  "r": 255,
+                  "g": 0,
+                  "b": 0,
+                  "a": 255
+                },
+                "Clicked Texture": "",
+                "Clicked Tint": {
+                  "r": 0,
+                  "g": 255,
+                  "b": 0,
+                  "a": 255
+                },
+                "Use Border": true,
+                "Border Thickness": 0.10000000149011612
+              }
+            },
+            {
+              "type": "UITextNode",
+              "data": {
+                "active": true,
+                "name": "ScoreUINode",
+                "position": {
+                  "x": 0.0,
+                  "y": -330.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 0,
+                  "b": 240,
+                  "a": 238
+                },
+                "layer": 0,
+                "Font": "Roboto-Regular.ttf",
+                "Text": "Score",
+                "Font Size": 20,
+                "Spacing": 0.0,
+                "Auto Spacing": true
+              }
+            }
+          ]
         }
       }
     ]

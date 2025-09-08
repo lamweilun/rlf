@@ -342,6 +342,21 @@ namespace rlf::Node {
         shutdownImpl();
     }
 
+    void BaseNode::preUpdate() {
+        for (auto& child : getChildren()) {
+            child->preUpdate();
+        }
+
+        // If inactive just return
+        if (!mActive) {
+            return;
+        }
+
+#ifndef RLF_EDITOR
+        preUpdateImpl();
+#endif
+    }
+
     void BaseNode::update() {
         for (auto& child : getChildren()) {
             child->update();
@@ -354,6 +369,21 @@ namespace rlf::Node {
 
 #ifndef RLF_EDITOR
         updateImpl();
+#endif
+    }
+
+    void BaseNode::postUpdate() {
+        for (auto& child : getChildren()) {
+            child->postUpdate();
+        }
+
+        // If inactive just return
+        if (!mActive) {
+            return;
+        }
+
+#ifndef RLF_EDITOR
+        postUpdateImpl();
 #endif
     }
 
@@ -412,7 +442,13 @@ namespace rlf::Node {
     void BaseNode::shutdownImpl() {
     }
 
+    void BaseNode::preUpdateImpl() {
+    }
+
     void BaseNode::updateImpl() {
+    }
+
+    void BaseNode::postUpdateImpl() {
     }
 
     void BaseNode::markGlobalDirty() {

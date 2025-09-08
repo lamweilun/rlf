@@ -2,10 +2,10 @@
 
 std::ostream& operator<<(std::ostream& os, Color color) {
     os << "[";
-    os << color.r << ", ";
-    os << color.g << ", ";
-    os << color.b << ", ";
-    os << color.a;
+    os << static_cast<u16>(color.r) << ", ";
+    os << static_cast<u16>(color.g) << ", ";
+    os << static_cast<u16>(color.b) << ", ";
+    os << static_cast<u16>(color.a);
     os << "]";
     return os;
 }
@@ -21,4 +21,11 @@ void from_json(rlf::Json const& j, Color& color) {
     color.g = j["g"];
     color.b = j["b"];
     color.a = j["a"];
+}
+
+bool operator==(Color const& lhs, Color const& rhs) {
+    return ColorIsEqual(lhs, rhs);
+}
+bool operator!=(Color const& lhs, Color const& rhs) {
+    return !(lhs == rhs);
 }

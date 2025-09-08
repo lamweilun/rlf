@@ -19,17 +19,28 @@ namespace rlf::Node {
 
         if (mUseBorder) {
             Rectangle rec = {};
-            rec.x = -0.5f;
-            rec.y = -0.5f;
-            rec.width = 1.0f;
-            rec.height = 1.0f;
+            rec.x         = -0.5f;
+            rec.y         = -0.5f;
+            rec.width     = 1.0f;
+            rec.height    = 1.0f;
             DrawRectangleLinesEx(rec, mBorderThickness, mTintToUse);
+        }
+    }
+
+    void UIButtonNode::preUpdateImpl() {
+        // Trigger callback based on last frame behaviour
+        if (mIsHovering && mIsDown) {
+            if (mClickedCallback && IsMouseButtonReleased(0)) {
+                mClickedCallback(std::static_pointer_cast<UIButtonNode>(shared_from_this()));
+            }
         }
     }
 
     void UIButtonNode::updateImpl() {
         mTextureInUse = mTexture;
         mTintToUse    = getTint();
+        mIsHovering   = false;
+        mIsDown       = false;
 
         // Get Current Active Camera
         Camera2D camera;
@@ -47,30 +58,28 @@ namespace rlf::Node {
         auto const globalPos   = getGlobalPosition();
         Rectangle  buttonRec;
         buttonRec.width  = globalScale.x;
-        buttonRec.height  = globalScale.y;
+        buttonRec.height = globalScale.y;
         if (mTexture.getTexture()) {
-            buttonRec.width  *= static_cast<f32>(mTexture.getWidth());
+            buttonRec.width *= static_cast<f32>(mTexture.getWidth());
             buttonRec.height *= static_cast<f32>(mTexture.getHeight());
         }
-        buttonRec.x      = globalPos.x - (buttonRec.width * 0.5f);
-        buttonRec.y      = globalPos.y - (buttonRec.height * 0.5f);
+        buttonRec.x = globalPos.x - (buttonRec.width * 0.5f);
+        buttonRec.y = globalPos.y - (buttonRec.height * 0.5f);
 
         // Get Global Mouse Pos
         auto mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
 
         // Check if mouse is clicking
-        if (CheckCollisionPointRec(mouseWorldPos, buttonRec)) {
-            if (!IsMouseButtonDown(0)) {
+        mIsHovering = CheckCollisionPointRec(mouseWorldPos, buttonRec);
+        mIsDown     = IsMouseButtonDown(0);
+        if (mIsHovering) {
+            if (!mIsDown) {
                 mTextureInUse = mHoveredTexture;
                 mTintToUse    = mHoveredTint;
             } else {
                 mTextureInUse = mClickedTexture;
                 mTintToUse    = mClickedTint;
             }
-        }
-
-        if (IsMouseButtonPressed(0) && mClickedCallback) {
-            mClickedCallback(std::static_pointer_cast<UIButtonNode>(shared_from_this()));
         }
     }
 

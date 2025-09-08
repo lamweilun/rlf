@@ -119,7 +119,9 @@ namespace rlf::Node {
 
         void      init();
         void      shutdown();
+        void      preUpdate();
         void      update();
+        void      postUpdate();
         rlf::Json serialize();
         void      deserialize(rlf::Json const& j);
 
@@ -129,7 +131,9 @@ namespace rlf::Node {
         virtual void setActiveImpl(bool const selfActive);
         virtual void initImpl();
         virtual void shutdownImpl();
+        virtual void preUpdateImpl();
         virtual void updateImpl();
+        virtual void postUpdateImpl();
 
     private:
         void markGlobalDirty();
