@@ -11,7 +11,7 @@ namespace rlf::Node {
 
     protected:
         void setActiveImpl(bool const selfActive) override;
-        void initImpl() override;
+        void setupImpl() override;
         void shutdownImpl() override;
 
         RLF_NODE_ACCESS_START

@@ -83,6 +83,9 @@ namespace rlf::Node {
         std::shared_ptr<T>        addOrGetFirstChildOfType();
         std::shared_ptr<BaseNode> addOrGetFirstChildOfType(std::string_view typeName);
 
+        template <class T>
+        std::optional<std::shared_ptr<T>> getFirstChildOfName(std::string_view childName) const;
+
         Vector2 const& getPosition() const;
         void           setPosition(Vector2 const& position);
         Vector2 const& getScale() const;
@@ -117,7 +120,9 @@ namespace rlf::Node {
         std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
         std::vector<std::shared_ptr<BaseNode>>        getAllChildren();
 
+        void      setup();
         void      init();
+        void      uninit();
         void      shutdown();
         void      preUpdate();
         void      update();
@@ -129,7 +134,9 @@ namespace rlf::Node {
 
     protected:
         virtual void setActiveImpl(bool const selfActive);
+        virtual void setupImpl();
         virtual void initImpl();
+        virtual void uninitImpl();
         virtual void shutdownImpl();
         virtual void preUpdateImpl();
         virtual void updateImpl();
@@ -142,6 +149,7 @@ namespace rlf::Node {
 
         bool mActive    = true;
         bool mToDestroy = false;
+        bool mHasSetup  = false;
         bool mHasInited = false;
 
         mutable Matrix mLocalTransform  = MatrixIdentity();

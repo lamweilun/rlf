@@ -20,7 +20,7 @@ namespace rlf::Node {
 
     protected:
         void initImpl() override;
-        void shutdownImpl() override;
+        void uninitImpl() override;
         void setActiveImpl(bool const active) override;
 
         RLF_NODE_ACCESS_START

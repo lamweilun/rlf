@@ -4,7 +4,7 @@
 #include <System/Render/RenderSystem.hpp>
 
 namespace rlf::Node {
-    void CameraNode::initImpl() {
+    void CameraNode::setupImpl() {
         auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
         renderSys->addCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
     }

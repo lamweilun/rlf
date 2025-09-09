@@ -19,7 +19,7 @@ namespace rlf::Node {
         mEndPoint = endPoint;
     }
 
-    void LineColliderNode::initImpl() {
+    void LineColliderNode::setupImpl() {
         rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
     }
     void LineColliderNode::shutdownImpl() {

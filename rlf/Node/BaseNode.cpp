@@ -261,6 +261,7 @@ namespace rlf::Node {
                 }
             }
             for (size_t i = newSize; i < mChildren.size(); ++i) {
+                mChildren[i]->uninit();
                 mChildren[i]->shutdown();
             }
             mChildren.resize(newSize);
@@ -273,6 +274,7 @@ namespace rlf::Node {
             mChildren.append_range(mNewChildren);
             mNewChildren.clear();
             for (size_t i = oldSize; i < newSize; ++i) {
+                mChildren[i]->setup();
                 mChildren[i]->init();
                 mChildren[i]->setActiveImpl(mChildren[i]->getActiveSelf());
             }
@@ -320,9 +322,22 @@ namespace rlf::Node {
     void BaseNode::setActiveImpl([[maybe_unused]] bool const active) {
     }
 
+    void BaseNode::setup() {
+        if (!mHasSetup) {
+            setupImpl();
+            mHasSetup = true;
+        }
+
+        for (auto& child : getChildren()) {
+            child->setup();
+        }
+    }
+
     void BaseNode::init() {
         if (!mHasInited) {
+#ifndef RLF_EDITOR
             initImpl();
+#endif
             mHasInited = true;
         }
 
@@ -331,10 +346,25 @@ namespace rlf::Node {
         }
     }
 
+    void BaseNode::uninit() {
+        // Shutdown all children first
+        for ([[maybe_unused]] auto& child : getChildren()) {
+#ifndef RLF_EDITOR
+            child->uninit();
+#endif
+            mHasInited = false;
+        }
+        mChildren.clear();
+
+        // Calls uninit on self
+        uninitImpl();
+    }
+
     void BaseNode::shutdown() {
         // Shutdown all children first
         for (auto& child : getChildren()) {
             child->shutdown();
+            mHasSetup = false;
         }
         mChildren.clear();
 
@@ -343,10 +373,6 @@ namespace rlf::Node {
     }
 
     void BaseNode::preUpdate() {
-        for (auto& child : getChildren()) {
-            child->preUpdate();
-        }
-
         // If inactive just return
         if (!mActive) {
             return;
@@ -355,13 +381,13 @@ namespace rlf::Node {
 #ifndef RLF_EDITOR
         preUpdateImpl();
 #endif
+
+        for (auto& child : getChildren()) {
+            child->preUpdate();
+        }
     }
 
     void BaseNode::update() {
-        for (auto& child : getChildren()) {
-            child->update();
-        }
-
         // If inactive just return
         if (!mActive) {
             return;
@@ -370,13 +396,13 @@ namespace rlf::Node {
 #ifndef RLF_EDITOR
         updateImpl();
 #endif
+
+        for (auto& child : getChildren()) {
+            child->update();
+        }
     }
 
     void BaseNode::postUpdate() {
-        for (auto& child : getChildren()) {
-            child->postUpdate();
-        }
-
         // If inactive just return
         if (!mActive) {
             return;
@@ -385,6 +411,10 @@ namespace rlf::Node {
 #ifndef RLF_EDITOR
         postUpdateImpl();
 #endif
+
+        for (auto& child : getChildren()) {
+            child->postUpdate();
+        }
     }
 
     rlf::Json BaseNode::serialize() {
@@ -420,6 +450,7 @@ namespace rlf::Node {
         }
         mNewChildren = std::move(newChildren);
         mToDestroy   = false;
+        mHasSetup    = false;
         mHasInited   = false;
         mLocalDirty  = true;
         mGlobalDirty = true;
@@ -436,7 +467,13 @@ namespace rlf::Node {
         deserialize(j);
     }
 
+    void BaseNode::setupImpl() {
+    }
+
     void BaseNode::initImpl() {
+    }
+
+    void BaseNode::uninitImpl() {
     }
 
     void BaseNode::shutdownImpl() {

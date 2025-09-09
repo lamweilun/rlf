@@ -4,7 +4,7 @@
 #include <System/Physics/PhysicsSystem.hpp>
 
 namespace rlf::Node {
-    void CircleColliderNode::initImpl() {
+    void CircleColliderNode::setupImpl() {
         rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(std::static_pointer_cast<CircleColliderNode>(shared_from_this()));
     }
     void CircleColliderNode::shutdownImpl() {

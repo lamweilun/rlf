@@ -71,7 +71,7 @@
             "configurePreset": "configure-debug",
             "targets": [
                 "rlf",
-                "rlf_pong"
+                "exteroids"
             ]
         },
         {
@@ -80,7 +80,7 @@
             "configurePreset": "configure-release",
             "targets": [
                 "rlf",
-                "rlf_pong"
+                "exteroids"
             ]
         },
         {
@@ -89,7 +89,7 @@
             "configurePreset": "configure-debug-editor",
             "targets": [
                 "rlf",
-                "rlf_pong"
+                "exteroids"
             ]
         },
         {
@@ -98,7 +98,7 @@
             "configurePreset": "configure-release-editor",
             "targets": [
                 "rlf",
-                "rlf_pong"
+                "exteroids"
             ]
         }
     ]

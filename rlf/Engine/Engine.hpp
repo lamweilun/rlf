@@ -22,6 +22,7 @@ namespace rlf {
         Engine &operator=(Engine &&)      = delete;
 
         void run();
+        void setToQuit();
 
         void               setAssetsDirectory(std::filesystem::path const &assetsPath);
         std::string const &getAssetsDirectory() const;
@@ -50,6 +51,8 @@ namespace rlf {
 
         std::vector<std::shared_ptr<System::ISystem>> mSystems;
         std::unordered_map<std::string, u64>          mSystemLUT;
+
+        bool mToQuit = false;
     };
 }
 

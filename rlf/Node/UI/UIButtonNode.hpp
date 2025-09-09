@@ -29,7 +29,7 @@ namespace rlf::Node {
         Color const& getClickedTint() const;
         void         setClickedTint(Color const& tint);
 
-        void setClickedCallback(std::function<void(std::shared_ptr<UIButtonNode>)> callback);
+        void setClickedCallback(std::function<void()> callback);
 
     protected:
         RLF_NODE_ACCESS_START
@@ -50,13 +50,13 @@ namespace rlf::Node {
         Color                mHoveredTint     = WHITE;
         Color                mClickedTint     = WHITE;
         bool                 mUseBorder       = false;
-        f32                  mBorderThickness = 1.0f;
+        f32                  mBorderThickness = 0.1f;
 
         rlf::TextureResource mTextureInUse;
         Color                mTintToUse  = WHITE;
         bool                 mIsHovering = false;
         bool                 mIsDown     = false;
 
-        std::function<void(std::shared_ptr<UIButtonNode>)> mClickedCallback;
+        std::function<void()> mClickedCallback;
     };
 }

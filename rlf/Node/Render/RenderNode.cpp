@@ -12,7 +12,7 @@ namespace rlf::Node {
         }
     }
 
-    void RenderNode::initImpl() {
+    void RenderNode::setupImpl() {
         rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
     }
     void RenderNode::shutdownImpl() {

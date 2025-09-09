@@ -1,0 +1,226 @@
+{
+  "type": "BaseNode",
+  "data": {
+    "active": true,
+    "name": "BaseNode",
+    "position": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "rotation": 0.0,
+    "children": [
+      {
+        "type": "CameraNode",
+        "data": {
+          "active": true,
+          "name": "MainCamera",
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "Is Active Camera": true,
+          "Zoom": 1.0
+        }
+      },
+      {
+        "type": "GameManagerNode",
+        "data": {
+          "active": true,
+          "name": "GameManagerNode",
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "children": [
+            {
+              "type": "BaseNode",
+              "data": {
+                "active": true,
+                "name": "MainMenuUI",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "children": [
+                  {
+                    "type": "UITextNode",
+                    "data": {
+                      "active": true,
+                      "name": "GameTitle",
+                      "position": {
+                        "x": 0.0,
+                        "y": -200.0
+                      },
+                      "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                      },
+                      "rotation": 0.0,
+                      "tint": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 255
+                      },
+                      "layer": 0,
+                      "Font": "",
+                      "Text": "Exteroids",
+                      "Font Size": 20,
+                      "Spacing": 0.0,
+                      "Auto Spacing": true
+                    }
+                  },
+                  {
+                    "type": "UIButtonNode",
+                    "data": {
+                      "active": true,
+                      "name": "StartButton",
+                      "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                      },
+                      "scale": {
+                        "x": 150.0,
+                        "y": 50.0
+                      },
+                      "rotation": 0.0,
+                      "tint": {
+                        "r": 0,
+                        "g": 255,
+                        "b": 0,
+                        "a": 255
+                      },
+                      "layer": 0,
+                      "Texture": "",
+                      "Hovered Texture": "",
+                      "Hovered Tint": {
+                        "r": 100,
+                        "g": 255,
+                        "b": 100,
+                        "a": 255
+                      },
+                      "Clicked Texture": "",
+                      "Clicked Tint": {
+                        "r": 0,
+                        "g": 150,
+                        "b": 0,
+                        "a": 255
+                      },
+                      "Use Border": true,
+                      "Border Thickness": 0.019999999552965164
+                    }
+                  },
+                  {
+                    "type": "UIButtonNode",
+                    "data": {
+                      "active": true,
+                      "name": "QuitButton",
+                      "position": {
+                        "x": 0.0,
+                        "y": 100.0
+                      },
+                      "scale": {
+                        "x": 150.0,
+                        "y": 50.0
+                      },
+                      "rotation": 0.0,
+                      "tint": {
+                        "r": 255,
+                        "g": 0,
+                        "b": 0,
+                        "a": 255
+                      },
+                      "layer": 0,
+                      "Texture": "",
+                      "Hovered Texture": "",
+                      "Hovered Tint": {
+                        "r": 255,
+                        "g": 100,
+                        "b": 100,
+                        "a": 255
+                      },
+                      "Clicked Texture": "",
+                      "Clicked Tint": {
+                        "r": 150,
+                        "g": 0,
+                        "b": 0,
+                        "a": 255
+                      },
+                      "Use Border": true,
+                      "Border Thickness": 0.019999999552965164
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "BaseNode",
+              "data": {
+                "active": false,
+                "name": "GameUI",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "children": [
+                  {
+                    "type": "UITextNode",
+                    "data": {
+                      "active": true,
+                      "name": "Score",
+                      "position": {
+                        "x": 0.0,
+                        "y": -300.0
+                      },
+                      "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                      },
+                      "rotation": 0.0,
+                      "tint": {
+                        "r": 255,
+                        "g": 0,
+                        "b": 255,
+                        "a": 255
+                      },
+                      "layer": 0,
+                      "Font": "",
+                      "Text": "Score",
+                      "Font Size": 20,
+                      "Spacing": 0.0,
+                      "Auto Spacing": true
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

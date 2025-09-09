@@ -31,7 +31,7 @@ namespace rlf::Node {
         // Trigger callback based on last frame behaviour
         if (mIsHovering && mIsDown) {
             if (mClickedCallback && IsMouseButtonReleased(0)) {
-                mClickedCallback(std::static_pointer_cast<UIButtonNode>(shared_from_this()));
+                mClickedCallback();
             }
         }
     }
@@ -118,7 +118,7 @@ namespace rlf::Node {
         return mClickedTint;
     }
 
-    void UIButtonNode::setClickedCallback(std::function<void(std::shared_ptr<UIButtonNode>)> callback) {
+    void UIButtonNode::setClickedCallback(std::function<void()> callback) {
         mClickedCallback = callback;
     }
 }

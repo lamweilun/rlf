@@ -21,4 +21,15 @@ namespace rlf::Node {
     std::shared_ptr<T> BaseNode::addOrGetFirstChildOfType() {
         return std::static_pointer_cast<T>(addOrGetFirstChildOfType(T::getTypeName()));
     }
+
+    template <class T>
+    std::optional<std::shared_ptr<T>> BaseNode::getFirstChildOfName(std::string_view childName) const {
+        auto children = getChildren();
+        for (auto child : children) {
+            if (child->getName() == childName) {
+                return std::static_pointer_cast<T>(child);
+            }
+        }
+        return std::nullopt;
+    }
 }

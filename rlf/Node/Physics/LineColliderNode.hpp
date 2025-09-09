@@ -14,7 +14,7 @@ namespace rlf::Node {
         void           setEndPoint(Vector2 const& endPoint);
 
     protected:
-        void initImpl() override;
+        void setupImpl() override;
         void shutdownImpl() override;
         void updateImpl() override;
 

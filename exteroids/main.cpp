@@ -1,8 +1,6 @@
 #include <Engine/Engine.hpp>
 
-#include <Player/PlayerNode.hpp>
-#include <Ball/BallNode.hpp>
-#include <UIManagerNode.hpp>
+#include <Node/Game/GameManagerNode.hpp>
 
 #ifdef RLF_EDITOR
 #include <source_location>
@@ -15,9 +13,7 @@ int main() {
 
     // Register game node types
     engine.setSetupFunc([]() {
-        rlf::TypeManager::getInstance().registerType<rlf::Node::PlayerNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::BallNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::UIManagerNode>();
+        rlf::TypeManager::getInstance().registerType<ext::Node::GameManagerNode>();
     });
 
 #ifdef RLF_EDITOR
@@ -45,7 +41,7 @@ int main() {
     engine.setAssetsDirectory(assetsPath);
 
     // Set initial world to load
-    engine.setInitialWorldToLoad("world/pong.json");
+    engine.setInitialWorldToLoad("world/game.json");
 #endif
 
     // Run the engine

@@ -11,4 +11,4 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
 
 # Add the subdirectories of what we want to build
 add_subdirectory(rlf)
-add_subdirectory(pong)
+add_subdirectory(exteroids)

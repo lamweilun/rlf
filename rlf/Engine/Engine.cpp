@@ -44,6 +44,7 @@ namespace rlf {
         InitWindow(static_cast<int>(width), static_cast<int>(height), title);
         SetWindowMonitor(0);
         SetTargetFPS(GetMonitorRefreshRate(0));
+        SetExitKey(KEY_NULL);
 
         addSystem<rlf::System::PhysicsSystem>();
         addSystem<rlf::System::AudioSystem>();
@@ -108,7 +109,7 @@ namespace rlf {
         }
         mRootNode->init();
 
-        while (!WindowShouldClose()) {
+        while (!(WindowShouldClose() || mToQuit)) {
             if (mUpdateFunc) {
                 mUpdateFunc(mRootNode);
             }
@@ -142,6 +143,10 @@ namespace rlf {
         for (auto& system : mSystems) {
             system->shutdown();
         }
+    }
+
+    void Engine::setToQuit() {
+        mToQuit = true;
     }
 
     void Engine::setInitialWorldToLoad(std::string const& filename) {

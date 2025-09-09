@@ -1,16 +1,11 @@
 cmake_minimum_required(VERSION 3.31.0)
 
-project(rlf_pong)
+project(exteroids)
 
 add_executable(
     ${PROJECT_NAME}
 
-    # Game Related Stuffs
-    Player/PlayerNode.cpp
-    
-    Ball/BallNode.cpp
-
-    UIManagerNode.cpp
+    Node/Game/GameManagerNode.cpp
 
     main.cpp
 )

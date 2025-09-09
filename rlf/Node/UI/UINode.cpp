@@ -11,7 +11,7 @@ namespace rlf::Node {
             rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeUINode(std::static_pointer_cast<UINode>(shared_from_this()));
         }
     }
-    void UINode::initImpl() {
+    void UINode::setupImpl() {
         rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addUINode(std::static_pointer_cast<UINode>(shared_from_this()));
     }
     void UINode::shutdownImpl() {

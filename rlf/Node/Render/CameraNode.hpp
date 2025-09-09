@@ -17,7 +17,7 @@ namespace rlf::Node {
         Camera2D getAsCamera2DUI() const;
 
     protected:
-        void initImpl() override;
+        void setupImpl() override;
         void shutdownImpl() override;
 
         RLF_NODE_ACCESS_START

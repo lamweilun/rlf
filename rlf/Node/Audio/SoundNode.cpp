@@ -57,7 +57,7 @@ namespace rlf::Node {
         }
     }
 
-    void SoundNode::shutdownImpl() {
+    void SoundNode::uninitImpl() {
         stop();
     }
 

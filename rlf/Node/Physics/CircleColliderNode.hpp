@@ -8,7 +8,7 @@ namespace rlf::Node {
         RLF_TYPE_REGISTER_QUICK(CircleColliderNode)
 
     protected:
-        void initImpl() override;
+        void setupImpl() override;
         void shutdownImpl() override;
         void updateImpl() override;
 
