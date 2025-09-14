@@ -1,6 +1,8 @@
 #include <Engine/Engine.hpp>
 
 #include <Node/Game/GameManagerNode.hpp>
+#include <Node/Player/PlayerNode.hpp>
+#include <Node/Player/PlayerBulletNode.hpp>
 
 #ifdef RLF_EDITOR
 #include <source_location>
@@ -14,6 +16,8 @@ int main() {
     // Register game node types
     engine.setSetupFunc([]() {
         rlf::TypeManager::getInstance().registerType<ext::Node::GameManagerNode>();
+        rlf::TypeManager::getInstance().registerType<ext::Node::PlayerNode>();
+        rlf::TypeManager::getInstance().registerType<ext::Node::PlayerBulletNode>();
     });
 
 #ifdef RLF_EDITOR

@@ -13,6 +13,7 @@ namespace rlf::Editor {
     static inline constexpr char const* id_ShiftDownButton      = "ShiftDownButton";
     static inline constexpr char const* id_ShiftUpButton        = "ShiftUpButton";
     static inline constexpr char const* id_DeleteButton         = "DeleteButton";
+    static inline constexpr char const* id_CloneButton          = "CloneButton";
 }
 
 namespace rlf::System {
@@ -146,6 +147,16 @@ namespace rlf::System {
                         mShowChildrenTable.erase(node);
                     }
                     mSelectedNode = nullptr;
+                }
+                ImGui::PopStyleColor();
+                ImGui::PopStyleColor();
+
+                ImGui::SameLine();
+                std::string const cloneID = std::string("C") + nodeUniqueID + rlf::Editor::id_CloneButton;
+                ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.5f, 0.0f, 1.0f)));
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.75f, 0.0f, 1.0f)));
+                if (ImGui::Button(cloneID.c_str())) {
+                    mSelectedNode = mSelectedNode->clone();
                 }
                 ImGui::PopStyleColor();
                 ImGui::PopStyleColor();

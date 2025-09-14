@@ -47,6 +47,34 @@ namespace rlf::System {
         return mActiveCameraNode;
     }
 
+    Vector2 RenderSystem::getMousePosition() const {
+        Camera2D camera;
+        if (auto activeCameraNode = getActiveCameraNode()) {
+            camera = activeCameraNode->getAsCamera2D();
+        } else {
+            camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
+            camera.target   = Vector2Zeros;
+            camera.rotation = 0.0f;
+            camera.zoom     = 1.0f;
+        }
+        auto const mousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+        return mousePos;
+    }
+
+    Vector2 RenderSystem::getUIMousePosition() const {
+        Camera2D camera;
+        if (auto activeCameraNode = getActiveCameraNode()) {
+            camera = activeCameraNode->getAsCamera2DUI();
+        } else {
+            camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
+            camera.target   = Vector2Zeros;
+            camera.rotation = 0.0f;
+            camera.zoom     = 1.0f;
+        }
+        auto const mousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+        return mousePos;
+    }
+
     void RenderSystem::render() {
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {
             Camera2D camera = mActiveCameraNode->getAsCamera2D();

@@ -126,7 +126,37 @@
                         "a": 255
                       },
                       "Use Border": true,
-                      "Border Thickness": 0.019999999552965164
+                      "Border Thickness": 0.019999999552965164,
+                      "children": [
+                        {
+                          "type": "UITextNode",
+                          "data": {
+                            "active": true,
+                            "name": "StartText",
+                            "position": {
+                              "x": 0.0,
+                              "y": 0.0
+                            },
+                            "scale": {
+                              "x": 0.006670000031590462,
+                              "y": 0.019999999552965164
+                            },
+                            "rotation": 0.0,
+                            "tint": {
+                              "r": 255,
+                              "g": 255,
+                              "b": 255,
+                              "a": 255
+                            },
+                            "layer": 0,
+                            "Font": "",
+                            "Text": "Start",
+                            "Font Size": 20,
+                            "Spacing": 0.0,
+                            "Auto Spacing": true
+                          }
+                        }
+                      ]
                     }
                   },
                   {
@@ -166,7 +196,37 @@
                         "a": 255
                       },
                       "Use Border": true,
-                      "Border Thickness": 0.019999999552965164
+                      "Border Thickness": 0.019999999552965164,
+                      "children": [
+                        {
+                          "type": "UITextNode",
+                          "data": {
+                            "active": true,
+                            "name": "QuitText",
+                            "position": {
+                              "x": 0.0,
+                              "y": 0.0
+                            },
+                            "scale": {
+                              "x": 0.007000000216066837,
+                              "y": 0.019999999552965164
+                            },
+                            "rotation": 0.0,
+                            "tint": {
+                              "r": 255,
+                              "g": 255,
+                              "b": 255,
+                              "a": 255
+                            },
+                            "layer": 0,
+                            "Font": "",
+                            "Text": "Quit",
+                            "Font Size": 20,
+                            "Spacing": 0.0,
+                            "Auto Spacing": true
+                          }
+                        }
+                      ]
                     }
                   }
                 ]
@@ -216,6 +276,113 @@
                     }
                   }
                 ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "PlayerNode",
+        "data": {
+          "active": false,
+          "name": "PlayerNode",
+          "position": {
+            "x": 174.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "speed": 300.0,
+          "children": [
+            {
+              "type": "QuadRenderNode",
+              "data": {
+                "active": true,
+                "name": "PlayerRenderNode",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 50.0,
+                  "y": 50.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            },
+            {
+              "type": "QuadRenderNode",
+              "data": {
+                "active": true,
+                "name": "New QuadRenderNode",
+                "position": {
+                  "x": 30.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 10.0,
+                  "y": 10.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 0,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "PlayerBulletNode",
+        "data": {
+          "active": false,
+          "name": "PlayerBulletNode",
+          "position": {
+            "x": 150.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "speed": 1000.0,
+          "children": [
+            {
+              "type": "CircleRenderNode",
+              "data": {
+                "active": true,
+                "name": "New CircleRenderNode",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 10.0,
+                  "y": 10.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
               }
             }
           ]

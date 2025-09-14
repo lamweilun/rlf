@@ -86,6 +86,11 @@ namespace rlf::Node {
         template <class T>
         std::optional<std::shared_ptr<T>> getFirstChildOfName(std::string_view childName) const;
 
+        template <class T>
+        std::shared_ptr<T> as();
+        template <class T>
+        std::shared_ptr<T> as() const;
+
         Vector2 const& getPosition() const;
         void           setPosition(Vector2 const& position);
         Vector2 const& getScale() const;
@@ -131,6 +136,8 @@ namespace rlf::Node {
         void      deserialize(rlf::Json const& j);
 
         void deserializeFromFile(std::string const& filePath);
+
+        std::shared_ptr<BaseNode> clone();
 
     protected:
         virtual void setActiveImpl(bool const selfActive);

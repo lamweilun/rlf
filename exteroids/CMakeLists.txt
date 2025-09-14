@@ -7,6 +7,9 @@ add_executable(
 
     Node/Game/GameManagerNode.cpp
 
+    Node/Player/PlayerNode.cpp
+    Node/Player/PlayerBulletNode.cpp
+
     main.cpp
 )
 add_warning_flags(${PROJECT_NAME})

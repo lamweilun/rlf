@@ -42,17 +42,6 @@ namespace rlf::Node {
         mIsHovering   = false;
         mIsDown       = false;
 
-        // Get Current Active Camera
-        Camera2D camera;
-        if (auto activeCameraNode = rlf::Engine::getInstance().getSystem<System::RenderSystem>()->getActiveCameraNode()) {
-            camera = activeCameraNode->getAsCamera2DUI();
-        } else {
-            camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
-            camera.target   = Vector2Zeros;
-            camera.rotation = 0.0f;
-            camera.zoom     = 1.0f;
-        }
-
         // Get Global Button Rec
         auto const globalScale = getGlobalScale();
         auto const globalPos   = getGlobalPosition();
@@ -67,7 +56,7 @@ namespace rlf::Node {
         buttonRec.y = globalPos.y - (buttonRec.height * 0.5f);
 
         // Get Global Mouse Pos
-        auto mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
+        auto mouseWorldPos = rlf::Engine::getInstance().getSystem<System::RenderSystem>()->getUIMousePosition();
 
         // Check if mouse is clicking
         mIsHovering = CheckCollisionPointRec(mouseWorldPos, buttonRec);

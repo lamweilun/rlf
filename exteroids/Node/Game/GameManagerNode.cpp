@@ -13,10 +13,14 @@ namespace ext::Node {
 
         // Setup Game UI
         mGameUINode = getFirstChildOfName<rlf::Node::BaseNode>("GameUI").value();
+
+        // Setup Player
+        mPlayerNode = getRootNode()->getFirstChildOfName<ext::Node::PlayerNode>("PlayerNode").value();
     }
 
     void GameManagerNode::startGameButtonCallback() {
         mMainMenuUINode->setActive(false);
         mGameUINode->setActive(true);
+        mPlayerNode->setActive(true);
     }
 }

@@ -23,6 +23,9 @@ namespace rlf::System {
         void                                   setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode);
         std::shared_ptr<rlf::Node::CameraNode> getActiveCameraNode() const;
 
+        Vector2 getMousePosition() const;
+        Vector2 getUIMousePosition() const;
+
         void render() override;
 
     private:

@@ -3,6 +3,8 @@
 #include <Node/BaseNode.hpp>
 #include <Node/UI/UIButtonNode.hpp>
 
+#include <Node/Player/PlayerNode.hpp>
+
 namespace ext::Node {
     class GameManagerNode : public rlf::Node::BaseNode {
     public:
@@ -22,5 +24,8 @@ namespace ext::Node {
 
         // Game UI
         std::shared_ptr<rlf::Node::BaseNode> mGameUINode;
+
+        // Player
+        std::shared_ptr<ext::Node::PlayerNode> mPlayerNode;
     };
 }

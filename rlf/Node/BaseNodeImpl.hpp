@@ -32,4 +32,20 @@ namespace rlf::Node {
         }
         return std::nullopt;
     }
+
+    template <class T>
+    std::shared_ptr<T> BaseNode::as() {
+        if (T::getTypeName() == getTypeNameImpl()) {
+            return std::static_pointer_cast<T>(shared_from_this());
+        }
+        return nullptr;
+    }
+
+    template <class T>
+    std::shared_ptr<T> BaseNode::as() const {
+        if (T::getTypeName() == getTypeNameImpl()) {
+            return std::static_pointer_cast<T>(shared_from_this());
+        }
+        return nullptr;
+    }
 }

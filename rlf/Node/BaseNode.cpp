@@ -352,24 +352,29 @@ namespace rlf::Node {
 #ifndef RLF_EDITOR
             child->uninit();
 #endif
-            mHasInited = false;
         }
-        mChildren.clear();
 
         // Calls uninit on self
+        if (!mHasInited) {
+            return;
+        }
         uninitImpl();
+        mHasInited = false;
     }
 
     void BaseNode::shutdown() {
         // Shutdown all children first
         for (auto& child : getChildren()) {
             child->shutdown();
-            mHasSetup = false;
         }
         mChildren.clear();
 
         // Calls shutdown on self
+        if (!mHasSetup) {
+            return;
+        }
         shutdownImpl();
+        mHasSetup = false;
     }
 
     void BaseNode::preUpdate() {
@@ -465,6 +470,14 @@ namespace rlf::Node {
         ss << ifs.rdbuf();
         rlf::Json j = rlf::Json::parse(ss.str());
         deserialize(j);
+    }
+
+    std::shared_ptr<BaseNode> BaseNode::clone() {
+        auto const nodeJson = serialize();
+        auto const nodeType = getTypeNameImpl();
+        auto       newChild = getParent().lock()->addChild(nodeType);
+        newChild->deserialize(nodeJson);
+        return newChild;
     }
 
     void BaseNode::setupImpl() {
