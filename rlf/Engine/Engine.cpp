@@ -45,6 +45,7 @@ namespace rlf {
         SetWindowMonitor(0);
         SetTargetFPS(GetMonitorRefreshRate(0));
         SetExitKey(KEY_NULL);
+        // ToggleBorderlessWindowed();
 
         addSystem<rlf::System::PhysicsSystem>();
         addSystem<rlf::System::AudioSystem>();

@@ -26,6 +26,20 @@ namespace rlf::Node {
         }
     }
 
+    bool CameraNode::getZoomToWindowSize() const {
+        return mZoomToWindowSize;
+    }
+    void CameraNode::setZoomToWindowSize(bool const zoomToWindowSize) {
+        mZoomToWindowSize = zoomToWindowSize;
+    }
+
+    Vector2 const& CameraNode::getReferenceResolution() const {
+        return mReferenceResolution;
+    }
+    void CameraNode::setReferenceResolution(Vector2 const& referenceResolution) {
+        mReferenceResolution = referenceResolution;
+    }
+
     f32 CameraNode::getZoom() const {
         return mZoom;
     }
@@ -34,19 +48,29 @@ namespace rlf::Node {
     }
 
     Camera2D CameraNode::getAsCamera2D() const {
-        Camera2D camera;
+        Camera2D camera = {};
         camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f} + getGlobalPosition();
         camera.target   = Vector2Zeros;
         camera.rotation = QuaternionToEuler(getGlobalRotation()).z * RAD2DEG;
-        camera.zoom     = mZoom;
+        if (mZoomToWindowSize) {
+            auto const scale = Vector2{static_cast<f32>(GetScreenWidth()), static_cast<f32>(GetScreenHeight())} / mReferenceResolution;
+            camera.zoom      = scale.y * mZoom;
+        } else {
+            camera.zoom = mZoom;
+        }
         return camera;
     }
     Camera2D CameraNode::getAsCamera2DUI() const {
-        Camera2D camera;
+        Camera2D camera = {};
         camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
         camera.target   = Vector2Zeros;
         camera.rotation = 0.0f;
-        camera.zoom     = mZoom;
+        if (mZoomToWindowSize) {
+            auto const scale = Vector2{static_cast<f32>(GetScreenWidth()), static_cast<f32>(GetScreenHeight())} / mReferenceResolution;
+            camera.zoom      = scale.y * mZoom;
+        } else {
+            camera.zoom = mZoom;
+        }
         return camera;
     }
 }
