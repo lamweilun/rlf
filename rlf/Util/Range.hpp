@@ -91,6 +91,15 @@ namespace rlf {
                 value.z            = Range<f32>(minVal.z, maxVal.z).getValue();
                 value.w            = Range<f32>(minVal.w, maxVal.w).getValue();
                 return value;
+            } else if constexpr (std::is_same_v<Color, T>) {
+                Color       value;
+                auto const& minVal = impl::RangeBase<T>::getMin();
+                auto const& maxVal = impl::RangeBase<T>::getMax();
+                value.r            = Range<u8>(minVal.r, maxVal.r).getValue();
+                value.g            = Range<u8>(minVal.g, maxVal.g).getValue();
+                value.b            = Range<u8>(minVal.b, maxVal.b).getValue();
+                value.a            = Range<u8>(minVal.a, maxVal.a).getValue();
+                return value;
             }
             return T{};
         }

@@ -37,6 +37,12 @@ namespace rlf::Node {
         rlf::Range<Vector2> const& getDirectionRange() const;
         void                       setDirectionRange(rlf::Range<Vector2> const& directionRange);
 
+        rlf::Range<Color> const& getStartColorRange() const;
+        void                     setStartColorRange(rlf::Range<Color> const& startColor);
+
+        rlf::Range<Color> const& getEndColorRange() const;
+        void                     setEndColorRange(rlf::Range<Color> const& endColor);
+
     protected:
         void updateLiveParticles();
         bool anyParticleAlive() const;
@@ -54,6 +60,8 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_MEMBER_GET_SET("End Scale Range", getEndScaleRange, setEndScaleRange)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Start Speed Range", getStartSpeedRange, setStartSpeedRange)
         RLF_NODE_ACCESS_MEMBER_GET_SET("End Speed Range", getEndSpeedRange, setEndSpeedRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Start Color Range", getStartColorRange, setStartColorRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("End Color Range", getEndColorRange, setEndColorRange)
         RLF_NODE_ACCESS_END
 
     private:
@@ -71,6 +79,14 @@ namespace rlf::Node {
             Vector2{-1.0f, -1.0f},
             Vector2{ 1.0f,  1.0f}
         };
+        rlf::Range<Color> mStartColorRange = {
+            Color{255, 255, 255, 255},
+            Color{255, 255, 255, 255}
+        };
+        rlf::Range<Color> mEndColorRange = {
+            Color{255, 255, 255, 255},
+            Color{255, 255, 255, 255}
+        };
 
         // Runtime params (Resize the vector params in resizeParams)
         f32                  mCurrentSpawnRate = 1.0f;
@@ -81,6 +97,8 @@ namespace rlf::Node {
         std::vector<f32>     mSpeedDeltas;
         std::vector<Vector2> mPositions;
         std::vector<Vector2> mDirections;
+        std::vector<Color>   mColors;
+        std::vector<Color>   mColorDeltas;
 
         std::vector<u64> mLiveIndices;
         std::vector<u64> mFreeIndices;

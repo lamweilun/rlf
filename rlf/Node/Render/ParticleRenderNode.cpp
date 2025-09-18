@@ -8,7 +8,8 @@ namespace rlf::Node {
             auto const& position = mPositions[index];
             rlTranslatef(position.x, position.y, 0.0f);
 
-            DrawRectangleV(Vector2Zeros, {mScales[index], mScales[index]}, getTint());
+            DrawRectangleV(Vector2Zeros, {mScales[index], mScales[index]},
+                           Vector4ToColor(ColorToVector4(getTint()) * ColorToVector4(mColors[index])));
 
             rlPopMatrix();
         }
@@ -123,6 +124,20 @@ namespace rlf::Node {
         mDirectionRange = directionRange;
     }
 
+    rlf::Range<Color> const& ParticleRenderNode::getStartColorRange() const {
+        return mStartColorRange;
+    }
+    void ParticleRenderNode::setStartColorRange(rlf::Range<Color> const& startColorRange) {
+        mStartColorRange = startColorRange;
+    }
+
+    rlf::Range<Color> const& ParticleRenderNode::getEndColorRange() const {
+        return mEndColorRange;
+    }
+    void ParticleRenderNode::setEndColorRange(rlf::Range<Color> const& endColorRange) {
+        mEndColorRange = endColorRange;
+    }
+
     bool ParticleRenderNode::anyParticleAlive() const {
         return !mLiveIndices.empty();
     }
@@ -156,6 +171,11 @@ namespace rlf::Node {
         mDirections[index]   = direction;
 
         mPositions[index] = Vector2Zeros;
+
+        auto const startColor = mStartColorRange.getValue();
+        auto const endColor   = mEndColorRange.getValue();
+        mColors[index]        = startColor;
+        mColorDeltas[index]   = (endColor - startColor) / lifeTime;
     }
 
     void ParticleRenderNode::resizeParams() {
@@ -166,5 +186,7 @@ namespace rlf::Node {
         mSpeedDeltas.resize(mMaxCount);
         mPositions.resize(mMaxCount);
         mDirections.resize(mMaxCount);
+        mColors.resize(mMaxCount);
+        mColorDeltas.resize(mMaxCount);
     }
 }
