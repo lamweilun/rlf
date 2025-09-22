@@ -392,6 +392,191 @@
             }
           ]
         }
+      },
+      {
+        "type": "ParticleRenderNode",
+        "data": {
+          "active": true,
+          "name": "ParticleRenderNode",
+          "position": {
+            "x": 300.0,
+            "y": 200.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "tint": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 255
+          },
+          "layer": 0,
+          "Max Count": 1000,
+          "Spawn Rate": 0.009999999776482582,
+          "Lifetime Range": {
+            "min": 0.5,
+            "max": 1.5
+          },
+          "Direction Range": {
+            "min": {
+              "x": 1.0,
+              "y": -1.0
+            },
+            "max": {
+              "x": -1.0,
+              "y": -1.0
+            }
+          },
+          "Start Scale Range": {
+            "min": 10.0,
+            "max": 20.0
+          },
+          "End Scale Range": {
+            "min": 0.0,
+            "max": 0.0
+          },
+          "Start Speed Range": {
+            "min": 300.0,
+            "max": 500.0
+          },
+          "End Speed Range": {
+            "min": 0.0,
+            "max": 10.0
+          },
+          "Start Rotation Range": {
+            "min": -45.0,
+            "max": 45.0
+          },
+          "End Rotation Range": {
+            "min": -90.0,
+            "max": 90.0
+          },
+          "Start Color Range": {
+            "min": {
+              "x": 1.0,
+              "y": 0.0,
+              "z": 0.0,
+              "w": 1.0
+            },
+            "max": {
+              "x": 1.0,
+              "y": 0.0,
+              "z": 0.0,
+              "w": 1.0
+            }
+          },
+          "End Color Range": {
+            "min": {
+              "x": 1.0,
+              "y": 1.0,
+              "z": 0.0,
+              "w": 1.0
+            },
+            "max": {
+              "x": 1.0,
+              "y": 1.0,
+              "z": 0.0,
+              "w": 1.0
+            }
+          }
+        }
+      },
+      {
+        "type": "BurstParticleRenderNode",
+        "data": {
+          "active": true,
+          "name": "New BurstParticleRenderNode",
+          "position": {
+            "x": 200.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "tint": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 255
+          },
+          "layer": 0,
+          "Max Count": 1000,
+          "Spawn Rate": 0.5,
+          "Lifetime Range": {
+            "min": 1.0,
+            "max": 2.0
+          },
+          "Direction Range": {
+            "min": {
+              "x": 1.0,
+              "y": -1.0
+            },
+            "max": {
+              "x": -1.0,
+              "y": 1.0
+            }
+          },
+          "Start Scale Range": {
+            "min": 20.0,
+            "max": 20.0
+          },
+          "End Scale Range": {
+            "min": 0.0,
+            "max": 0.0
+          },
+          "Start Speed Range": {
+            "min": 100.0,
+            "max": 100.0
+          },
+          "End Speed Range": {
+            "min": 0.0,
+            "max": 0.0
+          },
+          "Start Rotation Range": {
+            "min": 0.0,
+            "max": 0.0
+          },
+          "End Rotation Range": {
+            "min": 0.0,
+            "max": 0.0
+          },
+          "Start Color Range": {
+            "min": {
+              "x": 1.0,
+              "y": 0.0,
+              "z": 0.0,
+              "w": 1.0
+            },
+            "max": {
+              "x": 1.0,
+              "y": 0.0,
+              "z": 0.0,
+              "w": 1.0
+            }
+          },
+          "End Color Range": {
+            "min": {
+              "x": 1.0,
+              "y": 1.0,
+              "z": 0.0,
+              "w": 1.0
+            },
+            "max": {
+              "x": 1.0,
+              "y": 1.0,
+              "z": 0.0,
+              "w": 1.0
+            }
+          },
+          "Burst Count": 5,
+          "Burst Particle Count": 50,
+          "To Destroy After Burst": true
+        }
       }
     ]
   }

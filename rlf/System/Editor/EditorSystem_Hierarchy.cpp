@@ -20,6 +20,11 @@ namespace rlf::System {
     void EditorSystem::displayHierarchyWindow() {
         ImGui::Begin("Hierarchy");
 
+        {
+            auto const fps = std::to_string(GetFPS());
+            ImGui::Text("FPS: %s", fps.c_str());
+        }
+
         if (ImGui::Button("New World")) {
             mLoadedWorld.clear();
             auto rootNode = rlf::Engine::getInstance().getRootNode();

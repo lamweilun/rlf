@@ -10,6 +10,9 @@ namespace rlf::Node {
         u64  getBurstCount() const;
         void setBurstCount(u64 const burstCount);
 
+        u64  getBurstParticleCount() const;
+        void setBurstParticleCount(u64 const burstParticleCount);
+
         bool getToDestroyAfterBurst() const;
         void setToDestroyAfterBurst(bool const toDestroyAfterBurst);
 
@@ -19,12 +22,14 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(rlf::Node::ParticleRenderNode)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Burst Count", getBurstCount, setBurstCount)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Burst Particle Count", getBurstParticleCount, setBurstParticleCount)
         RLF_NODE_ACCESS_MEMBER_GET_SET("To Destroy After Burst", getToDestroyAfterBurst, setToDestroyAfterBurst)
         RLF_NODE_ACCESS_END
 
     private:
         // Config params
         u64  mBurstCount          = 1;
+        u64  mBurstParticleCount  = 1;
         bool mToDestroyAfterBurst = false;
 
         // Runtime params

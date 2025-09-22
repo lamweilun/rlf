@@ -44,17 +44,17 @@ void to_json(rlf::Json& j, Vector4 const& v) {
 }
 
 void from_json(rlf::Json const& j, Vector2& v) {
-    v.x = j["x"];
-    v.y = j["y"];
+    rlf::JsonGetSafe(j, "x", v.x);
+    rlf::JsonGetSafe(j, "y", v.y);
 }
 void from_json(rlf::Json const& j, Vector3& v) {
-    v.x = j["x"];
-    v.y = j["y"];
-    v.z = j["z"];
+    rlf::JsonGetSafe(j, "x", v.x);
+    rlf::JsonGetSafe(j, "y", v.y);
+    rlf::JsonGetSafe(j, "z", v.z);
 }
 void from_json(rlf::Json const& j, Vector4& v) {
-    v.x = j["x"];
-    v.y = j["y"];
-    v.z = j["z"];
-    v.w = j["w"];
+    rlf::JsonGetSafe(j, "x", v.x);
+    rlf::JsonGetSafe(j, "y", v.y);
+    rlf::JsonGetSafe(j, "z", v.z);
+    rlf::JsonGetSafe(j, "w", v.w);
 }
