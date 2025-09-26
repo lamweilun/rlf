@@ -14,6 +14,8 @@ namespace rlf::Node {
         updateImpl();
 #endif
 
+        auto const tintVec4 = ColorToVector4(getTint());
+        rlSetBlendMode(BlendMode::BLEND_ADD_COLORS);
         for (auto const& index : mLiveIndices) {
             rlPushMatrix();
 
@@ -23,13 +25,11 @@ namespace rlf::Node {
             auto const& rotation = mRotations[index];
             rlRotatef(rotation, 0.0f, 0.0f, 1.0f);
 
-            rlSetBlendMode(BlendMode::BLEND_ADD_COLORS);
-            // DrawRectangleV(Vector2Zeros, {mScales[index], mScales[index]}, Vector4ToColor(ColorToVector4(getTint()) * mColors[index]));
-            DrawCircleV(Vector2Zeros, mScales[index], Vector4ToColor(ColorToVector4(getTint()) * mColors[index]));
-            rlSetBlendMode(BlendMode::BLEND_ALPHA);
+            DrawCircleV(Vector2Zeros, mScales[index], Vector4ToColor(tintVec4 * mColors[index]));
 
             rlPopMatrix();
         }
+        rlSetBlendMode(BlendMode::BLEND_ALPHA);
     }
 
     void ParticleRenderNode::updateLiveParticles() {
