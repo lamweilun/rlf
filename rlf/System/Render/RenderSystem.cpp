@@ -11,6 +11,13 @@ namespace rlf::System {
         mRenderNodes[renderNode->getLayer()].erase(renderNode);
     }
 
+    void RenderSystem::addParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> renderNode) {
+        mParticleRenderNodes[renderNode->getLayer()].insert(renderNode);
+    }
+    void RenderSystem::removeParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> renderNode) {
+        mParticleRenderNodes[renderNode->getLayer()].erase(renderNode);
+    }
+
     void RenderSystem::addUINode(std::shared_ptr<rlf::Node::UINode> uiNode) {
         mUINodes[uiNode->getLayer()].insert(uiNode);
     }
@@ -82,6 +89,24 @@ namespace rlf::System {
         }
 
         for (auto& [layer, nodes] : mRenderNodes) {
+            for (auto& node : nodes) {
+                // Not required, check RenderNode::setActiveImpl
+                // if (!node->getActive()) {
+                //     continue;
+                // }
+
+                auto matF = MatrixToFloatV(node->getGlobalTransform());
+                rlPushMatrix();
+                rlMultMatrixf(matF.v);
+
+                node->renderImpl();
+
+                rlPopMatrix();
+            }
+        }
+
+        // Render Particles
+        for (auto& [layer, nodes] : mParticleRenderNodes) {
             for (auto& node : nodes) {
                 // Not required, check RenderNode::setActiveImpl
                 // if (!node->getActive()) {

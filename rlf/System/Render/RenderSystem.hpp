@@ -2,6 +2,7 @@
 
 #include <System/ISystem.hpp>
 #include <Node/Render/RenderNode.hpp>
+#include <Node/Render/ParticleRenderNode.hpp>
 #include <Node/UI/UINode.hpp>
 #include <Node/Render/CameraNode.hpp>
 
@@ -14,6 +15,9 @@ namespace rlf::System {
     public:
         void addRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode);
         void removeRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode);
+
+        void addParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> renderNode);
+        void removeParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> renderNode);
 
         void addUINode(std::shared_ptr<rlf::Node::UINode> uiNode);
         void removeUINode(std::shared_ptr<rlf::Node::UINode> uiNode);
@@ -30,6 +34,7 @@ namespace rlf::System {
 
     private:
         std::map<int, std::unordered_set<std::shared_ptr<rlf::Node::RenderNode>>> mRenderNodes;
+        std::map<int, std::unordered_set<std::shared_ptr<rlf::Node::ParticleRenderNode>>> mParticleRenderNodes;
         std::map<int, std::unordered_set<std::shared_ptr<rlf::Node::UINode>>>     mUINodes;
         std::unordered_set<std::shared_ptr<rlf::Node::CameraNode>>                mCameraNodes;
         std::shared_ptr<rlf::Node::CameraNode>                                    mActiveCameraNode;

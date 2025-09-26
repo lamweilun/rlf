@@ -1,12 +1,25 @@
 #include <Node/Render/ParticleRenderNode.hpp>
 
-#include <execution>
-#include <chrono>
+#include <Engine/Engine.hpp>
+#include <System/Render/RenderSystem.hpp>
 
 namespace rlf::Node {
 
     void ParticleRenderNode::setupImpl() {
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
         unspawnAllParticle();
+    }
+
+    void ParticleRenderNode::shutdownImpl() {
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
+    }
+
+    void ParticleRenderNode::setActiveImpl([[maybe_unused]] bool const selfActive) {
+        if (getActive()) {
+            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
+        } else {
+            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
+        }
     }
 
     void ParticleRenderNode::renderImpl() {

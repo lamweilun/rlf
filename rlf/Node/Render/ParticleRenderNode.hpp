@@ -56,6 +56,8 @@ namespace rlf::Node {
         void unspawnAllParticle();
 
         void setupImpl() override;
+        void shutdownImpl() override;
+        void setActiveImpl(bool const selfActive) override;
         void updateImpl() override;
 
         RLF_NODE_ACCESS_START
