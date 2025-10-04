@@ -125,13 +125,14 @@ namespace rlf::Node {
         std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
         std::vector<std::shared_ptr<BaseNode>>        getAllChildren();
 
-        void      setup();
-        void      init();
-        void      uninit();
-        void      shutdown();
-        void      preUpdate();
-        void      update();
-        void      postUpdate();
+        void setup();      // Meant for editor and systems
+        void init();       // Meant for gameplay
+        void uninit();     // Meant for gameplay
+        void shutdown();   // Meant for editor and systems
+        void preUpdate();  // Called before update
+        void update();
+        void postUpdate();  // Called right after update
+
         rlf::Json serialize();
         void      deserialize(rlf::Json const& j);
 

@@ -43,12 +43,13 @@ namespace rlf {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
         InitWindow(static_cast<int>(width), static_cast<int>(height), title);
         SetWindowMonitor(0);
-        // SetTargetFPS(GetMonitorRefreshRate(0));
+        SetTargetFPS(GetMonitorRefreshRate(0));
         SetExitKey(KEY_NULL);
-        // ToggleBorderlessWindowed();
 
 #ifdef RLF_EDITOR
         MaximizeWindow();
+#else
+        ToggleBorderlessWindowed();
 #endif
 
         addSystem<rlf::System::PhysicsSystem>();
