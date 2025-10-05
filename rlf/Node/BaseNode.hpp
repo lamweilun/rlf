@@ -152,6 +152,7 @@ namespace rlf::Node {
 
     private:
         void markGlobalDirty();
+        void clearChildrenMarkedForDestruction();
 
         std::string mName;
 

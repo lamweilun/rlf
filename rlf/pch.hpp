@@ -4,6 +4,7 @@
 #include <raymath.h>
 #include <rlgl.h>
 
+#include <Util/Util.hpp>
 #include <Util/Reflection/Reflection.hpp>
 #include <Util/Types.hpp>
 #include <Util/Json.hpp>

@@ -76,6 +76,7 @@ add_library(
     Util/Reflection/NamedValue.cpp
     Util/Color.cpp
     Util/Math.cpp
+    Util/Util.cpp
 )
 
 if (RLF_EDITOR)

@@ -3,6 +3,7 @@
 #include <Node/Game/GameManagerNode.hpp>
 #include <Node/Player/PlayerNode.hpp>
 #include <Node/Player/PlayerBulletNode.hpp>
+#include <Node/Enemy/EnemyNode.hpp>
 
 #ifdef RLF_EDITOR
 #include <source_location>
@@ -18,6 +19,7 @@ int main() {
         rlf::TypeManager::getInstance().registerType<ext::Node::GameManagerNode>();
         rlf::TypeManager::getInstance().registerType<ext::Node::PlayerNode>();
         rlf::TypeManager::getInstance().registerType<ext::Node::PlayerBulletNode>();
+        rlf::TypeManager::getInstance().registerType<ext::Node::EnemyNode>();
     });
 
 #ifdef RLF_EDITOR

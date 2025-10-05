@@ -1,7 +1,6 @@
 #pragma once
 
 #include <imgui.h>
-#include <string_view>
 
 #include <Util/Range.hpp>
 
@@ -13,7 +12,9 @@
 #include <System/Resource/ResourceSystem.hpp>
 #include <System/Editor/EditorSystem.hpp>
 
+#include <string_view>
 #include <sstream>
+#include <set>
 
 namespace rlf::acc {
     class ImGuiAccessor {
@@ -122,6 +123,86 @@ namespace rlf::acc {
             MemberType temp  = (instance.*getter)();
             (*this)(name, temp);
             (instance.*setter)(temp);
+        }
+
+        // std::pair support
+        template <class T1, class T2>
+        void operator()(std::string_view name, std::pair<T1, T2>& p) {
+            auto const childName = std::string(name) + "##" + getAddressAsString(&p);
+            ImGui::BeginChild(childName.c_str(), ImVec2(0, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_AutoResizeY);
+            ImGui::Text("%s", name.data());
+            auto const firstName  = std::string("first##") + getAddressAsString(&p.first);
+            auto const secondName = std::string("second##") + getAddressAsString(&p.second);
+            (*this)(firstName, p.first);
+            (*this)(secondName, p.second);
+            ImGui::EndChild();
+        }
+
+        // std::array Support
+        template <class T, size_t N>
+        void operator()(std::string_view name, std::array<T, N>& arr) {
+            if (ImGui::CollapsingHeader(name.data(), ImGuiTreeNodeFlags_DefaultOpen)) {
+                for (size_t i = 0; i < N; ++i) {
+                    std::string indexedName = std::string(name) + ' ' + std::to_string(i);
+                    (*this)(indexedName, arr[i]);
+                }
+            }
+        }
+
+        // std::vector support
+        template <class T>
+        void operator()(std::string_view name, std::vector<T>& vec) {
+            std::vector<T> vec2;
+            vec2.reserve(vec.size() + 1);
+            vec2.resize(vec.size());
+            for (u32 i = 0; i < vec.size(); ++i) {
+                vec2[i] = vec[i];
+            }
+
+            if (ImGui::CollapsingHeader(name.data(), ImGuiTreeNodeFlags_DefaultOpen)) {
+                for (u32 i = 0; i < vec2.size(); ++i) {
+                    std::string indexedName = std::string(name) + ' ' + std::to_string(i);
+                    (*this)(indexedName, vec2[i]);
+
+                    ImGui::SameLine();
+
+                    auto const removeEntryButton = std::string("-##") + getAddressAsString(&vec2[i]);
+                    if (ImGui::Button(removeEntryButton.c_str())) {
+                        vec2.erase(std::begin(vec2) + static_cast<i32>(i));
+                        break;
+                    }
+                }
+                {
+                    auto const addVecButton = std::string("+##") + getAddressAsString(&vec2);
+                    if (ImGui::Button(addVecButton.c_str())) {
+                        vec2.resize(vec2.size() + 1);
+                    }
+                }
+            }
+            vec = vec2;
+        }
+
+        // std::set support
+        template <class T>
+        void operator()(std::string_view name, std::set<T>& s) {
+            std::vector<T> vec(std::begin(s), std::end(s));
+            (*this)(name, vec);
+            s = std::set<T>(std::begin(vec), std::end(vec));
+        }
+
+        // std::map support
+        template <class K, class T>
+        void operator()(std::string_view name, std::map<K, T>& m) {
+            std::vector<std::pair<K, T>> vec;
+            vec.reserve(m.size());
+            for (auto const& [key, val] : m) {
+                vec.push_back({key, val});
+            }
+            (*this)(name, vec);
+            m.clear();
+            for (auto const& v : vec) {
+                m.insert({v.first, v.second});
+            }
         }
 
     private:

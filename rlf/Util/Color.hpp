@@ -25,10 +25,10 @@ Color  operator/(Color const& lhs, f32 const v);
 Color& operator/=(Color& lhs, f32 const v);
 
 struct Color4F {
-    f32 r = 0.0f;
-    f32 g = 0.0f;
-    f32 b = 0.0f;
-    f32 a = 0.0f;
+    f32 r = 1.0f;
+    f32 g = 1.0f;
+    f32 b = 1.0f;
+    f32 a = 1.0f;
 
     Color4F()                          = default;
     ~Color4F()                         = default;

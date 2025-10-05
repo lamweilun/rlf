@@ -249,23 +249,7 @@ namespace rlf::Node {
     }
 
     std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren() {
-        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
-        {
-            size_t newSize = mChildren.size();
-            for (size_t i = 0; i < newSize;) {
-                if (mChildren[i]->mToDestroy) {
-                    std::swap(mChildren[i], mChildren[newSize - 1]);
-                    --newSize;
-                } else {
-                    ++i;
-                }
-            }
-            for (size_t i = newSize; i < mChildren.size(); ++i) {
-                mChildren[i]->uninit();
-                mChildren[i]->shutdown();
-            }
-            mChildren.resize(newSize);
-        }
+        clearChildrenMarkedForDestruction();
 
         // Append newly created children and call init on them
         if (!mNewChildren.empty()) {
@@ -505,6 +489,26 @@ namespace rlf::Node {
         mGlobalDirty = true;
         for (auto& child : getChildren()) {
             child->markGlobalDirty();
+        }
+    }
+
+    void BaseNode::clearChildrenMarkedForDestruction() {
+        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
+        {
+            size_t newSize = mChildren.size();
+            for (size_t i = 0; i < newSize;) {
+                if (mChildren[i]->mToDestroy) {
+                    std::swap(mChildren[i], mChildren[newSize - 1]);
+                    --newSize;
+                } else {
+                    ++i;
+                }
+            }
+            for (size_t i = newSize; i < mChildren.size(); ++i) {
+                mChildren[i]->uninit();
+                mChildren[i]->shutdown();
+            }
+            mChildren.resize(newSize);
         }
     }
 }

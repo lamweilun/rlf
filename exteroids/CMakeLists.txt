@@ -10,6 +10,8 @@ add_executable(
     Node/Player/PlayerNode.cpp
     Node/Player/PlayerBulletNode.cpp
 
+    Node/Enemy/EnemyNode.cpp
+
     main.cpp
 )
 add_warning_flags(${PROJECT_NAME})

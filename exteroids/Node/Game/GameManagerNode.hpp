@@ -4,6 +4,7 @@
 #include <Node/UI/UIButtonNode.hpp>
 
 #include <Node/Player/PlayerNode.hpp>
+#include <Node/Enemy/EnemyNode.hpp>
 
 namespace ext::Node {
     class GameManagerNode : public rlf::Node::BaseNode {
@@ -27,5 +28,8 @@ namespace ext::Node {
 
         // Player
         std::shared_ptr<ext::Node::PlayerNode> mPlayerNode;
+
+        // Test Enemy
+        std::shared_ptr<ext::Node::EnemyNode> mEnemyNode;
     };
 }

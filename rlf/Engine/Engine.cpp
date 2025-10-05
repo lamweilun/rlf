@@ -49,7 +49,7 @@ namespace rlf {
 #ifdef RLF_EDITOR
         MaximizeWindow();
 #else
-        ToggleBorderlessWindowed();
+        // ToggleBorderlessWindowed();
 #endif
 
         addSystem<rlf::System::PhysicsSystem>();

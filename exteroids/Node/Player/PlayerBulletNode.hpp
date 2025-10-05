@@ -8,6 +8,7 @@ namespace ext::Node {
         RLF_TYPE_REGISTER_QUICK(PlayerBulletNode)
 
     protected:
+        void initImpl() override;
         void updateImpl() override;
 
     private:

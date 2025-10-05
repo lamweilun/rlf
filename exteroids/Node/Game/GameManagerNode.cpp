@@ -16,11 +16,15 @@ namespace ext::Node {
 
         // Setup Player
         mPlayerNode = getRootNode()->getFirstChildOfName<ext::Node::PlayerNode>("PlayerNode").value();
+
+        // Setup Test Enemy
+        mEnemyNode = getRootNode()->getFirstChildOfName<ext::Node::EnemyNode>("EnemyNode").value();
     }
 
     void GameManagerNode::startGameButtonCallback() {
         mMainMenuUINode->setActive(false);
         mGameUINode->setActive(true);
         mPlayerNode->setActive(true);
+        mEnemyNode->setActive(true);
     }
 }

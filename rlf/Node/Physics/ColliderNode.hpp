@@ -10,9 +10,9 @@ namespace rlf::Node {
         RLF_TYPE_REGISTER_QUICK(ColliderNode)
         void setCollidedCallback(std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> callback);
 
-        void                         addTag(std::string const& tag);
+        void                         addTag(std::string_view tag);
         std::set<std::string> const& getTags() const;
-        bool                         hasTag(std::string const& tag) const;
+        bool                         hasTag(std::string_view tag) const;
         bool                         hasAnyOfTags(std::set<std::string> const& tags) const;
 
     protected:

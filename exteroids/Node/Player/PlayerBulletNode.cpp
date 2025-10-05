@@ -1,6 +1,22 @@
 #include <Node/Player/PlayerBulletNode.hpp>
+#include <Node/Physics/CircleColliderNode.hpp>
+
+#include <Node/Enemy/EnemyNode.hpp>
 
 namespace ext::Node {
+
+    void PlayerBulletNode::initImpl() {
+        if (auto childCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>()) {
+            auto bulletCollider = childCollider.value();
+            bulletCollider->setCollidedCallback([this](std::shared_ptr<rlf::Node::ColliderNode> collided) {
+                if (collided->hasTag("Enemy")) {
+                    setToDestroy(true);
+                    // auto enemy = collided->getParent().lock()->as<EnemyNode>();
+                    // enemy->setHP(enemy->getHP() - 1);
+                }
+            });
+        }
+    }
 
     void PlayerBulletNode::updateImpl() {
         auto const pos              = getGlobalPosition();
