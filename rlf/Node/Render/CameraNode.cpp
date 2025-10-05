@@ -13,24 +13,11 @@ namespace rlf::Node {
         renderSys->eraseCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
     }
 
-    bool CameraNode::getIsActiveCamera() const {
-        return mIsActiveCamera;
+    Color const& CameraNode::getClearColor() const {
+        return mClearColor;
     }
-    void CameraNode::setIsActiveCamera(bool const isActiveCamera) {
-        mIsActiveCamera = isActiveCamera;
-        auto renderSys  = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
-        if (mIsActiveCamera) {
-            renderSys->setActiveCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
-        } else {
-            renderSys->setActiveCameraNode(nullptr);
-        }
-    }
-
-    bool CameraNode::getZoomToWindowSize() const {
-        return mZoomToWindowSize;
-    }
-    void CameraNode::setZoomToWindowSize(bool const zoomToWindowSize) {
-        mZoomToWindowSize = zoomToWindowSize;
+    void CameraNode::setClearColor(Color const& color) {
+        mClearColor = color;
     }
 
     Vector2 const& CameraNode::getReferenceResolution() const {
@@ -47,6 +34,26 @@ namespace rlf::Node {
         mZoom = zoom;
     }
 
+    bool CameraNode::getZoomToWindowSize() const {
+        return mZoomToWindowSize;
+    }
+    void CameraNode::setZoomToWindowSize(bool const zoomToWindowSize) {
+        mZoomToWindowSize = zoomToWindowSize;
+    }
+
+    bool CameraNode::getIsActiveCamera() const {
+        return mIsActiveCamera;
+    }
+    void CameraNode::setIsActiveCamera(bool const isActiveCamera) {
+        mIsActiveCamera = isActiveCamera;
+        auto renderSys  = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
+        if (mIsActiveCamera) {
+            renderSys->setActiveCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
+        } else {
+            renderSys->setActiveCameraNode(nullptr);
+        }
+    }
+
     Camera2D CameraNode::getAsCamera2D() const {
         Camera2D camera = {};
         camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f} + getGlobalPosition();
@@ -54,7 +61,7 @@ namespace rlf::Node {
         camera.rotation = QuaternionToEuler(getGlobalRotation()).z * RAD2DEG;
         if (mZoomToWindowSize) {
             auto const scale = Vector2{static_cast<f32>(GetScreenWidth()), static_cast<f32>(GetScreenHeight())} / mReferenceResolution;
-            camera.zoom      = scale.y * mZoom;
+            camera.zoom      = std::min(scale.x, scale.y) * mZoom;
         } else {
             camera.zoom = mZoom;
         }
@@ -67,7 +74,7 @@ namespace rlf::Node {
         camera.rotation = 0.0f;
         if (mZoomToWindowSize) {
             auto const scale = Vector2{static_cast<f32>(GetScreenWidth()), static_cast<f32>(GetScreenHeight())} / mReferenceResolution;
-            camera.zoom      = scale.y * mZoom;
+            camera.zoom      = std::min(scale.x, scale.y) * mZoom;
         } else {
             camera.zoom = mZoom;
         }

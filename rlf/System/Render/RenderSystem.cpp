@@ -86,6 +86,7 @@ namespace rlf::System {
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {
             Camera2D camera = mActiveCameraNode->getAsCamera2D();
             BeginMode2D(camera);
+            ClearBackground(mActiveCameraNode->getClearColor());
         }
 
         for (auto& [layer, nodes] : mRenderNodes) {
