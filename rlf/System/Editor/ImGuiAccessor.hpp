@@ -50,12 +50,13 @@ namespace rlf::acc {
             } else if constexpr (std::is_same_v<T, Vector4>) {
                 ImGui::DragFloat4(name.data(), &temp.x);
             } else if constexpr (std::is_same_v<T, Color>) {
-                std::array<int, 4> col{temp.r, temp.g, temp.b, temp.a};
-                ImGui::DragInt4(name.data(), &col[0], 1.0f, 0, 255);
-                temp.r = static_cast<unsigned char>(col[0]);
-                temp.g = static_cast<unsigned char>(col[1]);
-                temp.b = static_cast<unsigned char>(col[2]);
-                temp.a = static_cast<unsigned char>(col[3]);
+                std::array<f32, 4> col{temp.r / 255.0f, temp.g / 255.0f, temp.b / 255.0f, temp.a / 255.0f};
+                ImGui::ColorEdit4(name.data(), col.data());
+                temp.r = static_cast<u8>(col[0] * 255.0f);
+                temp.g = static_cast<u8>(col[1] * 255.0f);
+                temp.b = static_cast<u8>(col[2] * 255.0f);
+                temp.a = static_cast<u8>(col[3] * 255.0f);
+
             } else if constexpr (std::is_same_v<T, std::string>) {
                 char buffer[512];
                 strcpy(buffer, temp.data());
