@@ -27,7 +27,7 @@ namespace rlf::Node {
         updateImpl();
 #endif
 
-        auto const tintVec4 = ColorToVector4(getTint());
+        auto const tint = Color4F::FromColor(getTint());
         rlSetBlendMode(BlendMode::BLEND_ADD_COLORS);
         for (auto const& index : mLiveIndices) {
             rlPushMatrix();
@@ -38,7 +38,7 @@ namespace rlf::Node {
             auto const& rotation = mRotations[index];
             rlRotatef(rotation, 0.0f, 0.0f, 1.0f);
 
-            DrawCircleV(Vector2Zeros, mScales[index], Vector4ToColor(tintVec4 * mColors[index]));
+            DrawCircleV(Vector2Zeros, mScales[index], (tint * mColors[index]).ToColor());
 
             rlPopMatrix();
         }
@@ -159,17 +159,17 @@ namespace rlf::Node {
         mDirectionRange = directionRange;
     }
 
-    rlf::Range<Vector4> const& ParticleRenderNode::getStartColorRange() const {
+    rlf::Range<Color4F> const& ParticleRenderNode::getStartColorRange() const {
         return mStartColorRange;
     }
-    void ParticleRenderNode::setStartColorRange(rlf::Range<Vector4> const& startColorRange) {
+    void ParticleRenderNode::setStartColorRange(rlf::Range<Color4F> const& startColorRange) {
         mStartColorRange = startColorRange;
     }
 
-    rlf::Range<Vector4> const& ParticleRenderNode::getEndColorRange() const {
+    rlf::Range<Color4F> const& ParticleRenderNode::getEndColorRange() const {
         return mEndColorRange;
     }
-    void ParticleRenderNode::setEndColorRange(rlf::Range<Vector4> const& endColorRange) {
+    void ParticleRenderNode::setEndColorRange(rlf::Range<Color4F> const& endColorRange) {
         mEndColorRange = endColorRange;
     }
 

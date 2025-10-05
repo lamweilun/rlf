@@ -43,11 +43,11 @@ namespace rlf::Node {
         rlf::Range<Vector2> const& getDirectionRange() const;
         void                       setDirectionRange(rlf::Range<Vector2> const& directionRange);
 
-        rlf::Range<Vector4> const& getStartColorRange() const;
-        void                       setStartColorRange(rlf::Range<Vector4> const& startColor);
+        rlf::Range<Color4F> const& getStartColorRange() const;
+        void                       setStartColorRange(rlf::Range<Color4F> const& startColor);
 
-        rlf::Range<Vector4> const& getEndColorRange() const;
-        void                       setEndColorRange(rlf::Range<Vector4> const& endColor);
+        rlf::Range<Color4F> const& getEndColorRange() const;
+        void                       setEndColorRange(rlf::Range<Color4F> const& endColor);
 
     protected:
         void updateLiveParticles();
@@ -95,8 +95,8 @@ namespace rlf::Node {
             Vector2{-1.0f, -1.0f},
             Vector2Ones
         };
-        rlf::Range<Vector4> mStartColorRange = {Vector4Ones, Vector4Ones};
-        rlf::Range<Vector4> mEndColorRange   = {Vector4Ones, Vector4Ones};
+        rlf::Range<Color4F> mStartColorRange = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
+        rlf::Range<Color4F> mEndColorRange   = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
 
         // Runtime params (Resize the vector params in resizeParams)
         std::vector<f32>     mLifeTimes;
@@ -108,8 +108,8 @@ namespace rlf::Node {
         std::vector<f32>     mRotationDeltas;
         std::vector<Vector2> mPositions;
         std::vector<Vector2> mDirections;
-        std::vector<Vector4> mColors;
-        std::vector<Vector4> mColorDeltas;
+        std::vector<Color4F> mColors;
+        std::vector<Color4F> mColorDeltas;
 
         std::vector<u64> mLiveIndices;
         std::vector<u64> mFreeIndices;

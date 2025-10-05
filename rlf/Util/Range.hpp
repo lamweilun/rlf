@@ -31,8 +31,8 @@ namespace rlf {
             }
 
         private:
-            T mMin = {};
-            T mMax = {};
+            T mMin = T{};
+            T mMax = T{};
         };
     }
     template <class T>
@@ -99,6 +99,15 @@ namespace rlf {
                 value.g            = Range<u8>(minVal.g, maxVal.g).getValue();
                 value.b            = Range<u8>(minVal.b, maxVal.b).getValue();
                 value.a            = Range<u8>(minVal.a, maxVal.a).getValue();
+                return value;
+            } else if constexpr (std::is_same_v<Color4F, T>) {
+                Color4F     value;
+                auto const& minVal = impl::RangeBase<T>::getMin();
+                auto const& maxVal = impl::RangeBase<T>::getMax();
+                value.r            = Range<f32>(minVal.r, maxVal.r).getValue();
+                value.g            = Range<f32>(minVal.g, maxVal.g).getValue();
+                value.b            = Range<f32>(minVal.b, maxVal.b).getValue();
+                value.a            = Range<f32>(minVal.a, maxVal.a).getValue();
                 return value;
             }
             return T{};
