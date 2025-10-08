@@ -3,6 +3,10 @@
 #include <Engine/Engine.hpp>
 #include <System/Physics/PhysicsSystem.hpp>
 
+#ifdef RLF_EDITOR
+#include <System/Editor/EditorSystem.hpp>
+#endif
+
 namespace rlf::System {
     void RenderSystem::addRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode) {
         mRenderNodes[renderNode->getLayer()].insert(renderNode);
@@ -132,6 +136,22 @@ namespace rlf::System {
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {
             EndMode2D();
         }
+
+#ifdef RLF_EDITOR
+        if (mActiveCameraNode && mActiveCameraNode->getActive()) {
+            Camera2D camera = mActiveCameraNode->getAsCamera2D();
+            camera.zoom = 1.0f;
+            BeginMode2D(camera);
+        }
+
+        auto editorSys = rlf::Engine::getInstance().getSystem<rlf::System::EditorSystem>();
+        editorSys->renderGizmo();
+
+        if (mActiveCameraNode && mActiveCameraNode->getActive()) {
+            EndMode2D();
+        }
+#endif
+
 
         // Render UI
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {

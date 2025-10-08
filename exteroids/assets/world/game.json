@@ -295,7 +295,7 @@
       {
         "type": "PlayerNode",
         "data": {
-          "active": false,
+          "active": true,
           "name": "PlayerNode",
           "position": {
             "x": 0.0,

@@ -17,6 +17,8 @@ namespace rlf::System {
         std::filesystem::path const& getDraggedFilePath() const;
         void                         clearDraggedFilePath();
 
+        void renderGizmo();
+
     private:
         void displayHierarchyWindow();
         void displayInspectorWindow();

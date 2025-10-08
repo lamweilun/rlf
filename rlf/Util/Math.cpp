@@ -58,3 +58,7 @@ void from_json(rlf::Json const& j, Vector4& v) {
     rlf::JsonGetSafe(j, "z", v.z);
     rlf::JsonGetSafe(j, "w", v.w);
 }
+
+Vector2 operator-(Vector2 const& v) {
+    return Vector2(-v.x, -v.y);
+}

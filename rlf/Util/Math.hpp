@@ -13,3 +13,5 @@ void to_json(rlf::Json& j, Vector4 const& v);
 void from_json(rlf::Json const& j, Vector2& v);
 void from_json(rlf::Json const& j, Vector3& v);
 void from_json(rlf::Json const& j, Vector4& v);
+
+Vector2 operator-(Vector2 const&);
