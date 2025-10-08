@@ -67,17 +67,4 @@ namespace rlf::Node {
         }
         return camera;
     }
-    Camera2D CameraNode::getAsCamera2DUI() const {
-        Camera2D camera = {};
-        camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
-        camera.target   = Vector2Zeros;
-        camera.rotation = 0.0f;
-        if (mZoomToWindowSize) {
-            auto const scale = Vector2{static_cast<f32>(GetScreenWidth()), static_cast<f32>(GetScreenHeight())} / mReferenceResolution;
-            camera.zoom      = std::min(scale.x, scale.y) * mZoom;
-        } else {
-            camera.zoom = mZoom;
-        }
-        return camera;
-    }
 }

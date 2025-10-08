@@ -133,7 +133,7 @@ namespace rlf::Node {
 
     Matrix const& BaseNode::getLocalTransform() const {
         if (mLocalDirty) {
-            auto scaleMat     = MatrixScale(mScale.x, mScale.y, 0.0f);
+            auto scaleMat     = MatrixScale(mScale.x, mScale.y, 1.0f);
             auto translateMat = MatrixTranslate(mPosition.x, mPosition.y, 0.0f);
             auto rotMat       = MatrixRotateZ(mRotation);
             mLocalTransform   = scaleMat * rotMat * translateMat;
@@ -175,7 +175,7 @@ namespace rlf::Node {
 
         auto globalScaleX = Vector3Length(Vector3{globalMat.m0, globalMat.m1, globalMat.m2});
         auto globalScaleY = Vector3Length(Vector3{globalMat.m4, globalMat.m5, globalMat.m6});
-        auto globalScaleZ = Vector3Length(Vector3{globalMat.m7, globalMat.m8, globalMat.m9});
+        auto globalScaleZ = Vector3Length(Vector3{globalMat.m8, globalMat.m9, globalMat.m10});
 
         auto invScale = Vector3Invert(Vector3{globalScaleX, globalScaleY, globalScaleZ});
         invScale.x    = std::min(invScale.x, 1.0f);

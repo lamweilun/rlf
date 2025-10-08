@@ -38,7 +38,6 @@ namespace rlf::System {
             mActiveCameraNode = nullptr;
         }
     }
-
     void RenderSystem::setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode) {
         if (cameraNode == nullptr) {
             mActiveCameraNode = nullptr;
@@ -53,9 +52,35 @@ namespace rlf::System {
         }
         mActiveCameraNode = cameraNode;
     }
-
     std::shared_ptr<rlf::Node::CameraNode> RenderSystem::getActiveCameraNode() const {
         return mActiveCameraNode;
+    }
+
+    void RenderSystem::addUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> uiCameraNode) {
+        mUICameraNodes.insert(uiCameraNode);
+    }
+    void RenderSystem::eraseUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> uiCameraNode) {
+        mUICameraNodes.erase(uiCameraNode);
+        if (mActiveUICameraNode == uiCameraNode) {
+            mActiveUICameraNode = nullptr;
+        }
+    }
+    void RenderSystem::setActiveUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> uiCameraNode) {
+        if (uiCameraNode == nullptr) {
+            mActiveUICameraNode = nullptr;
+            return;
+        }
+
+        for (auto camNode : mUICameraNodes) {
+            if (camNode == uiCameraNode) {
+                continue;
+            }
+            camNode->setIsActiveUICamera(false);
+        }
+        mActiveUICameraNode = uiCameraNode;
+    }
+    std::shared_ptr<rlf::Node::UICameraNode> RenderSystem::getActiveUICameraNode() const {
+        return mActiveUICameraNode;
     }
 
     Vector2 RenderSystem::getMousePosition() const {
@@ -74,7 +99,7 @@ namespace rlf::System {
 
     Vector2 RenderSystem::getUIMousePosition() const {
         Camera2D camera;
-        if (auto activeCameraNode = getActiveCameraNode()) {
+        if (auto activeCameraNode = getActiveUICameraNode()) {
             camera = activeCameraNode->getAsCamera2DUI();
         } else {
             camera.offset   = Vector2{static_cast<f32>(GetScreenWidth()) * 0.5f, static_cast<f32>(GetScreenHeight()) * 0.5f};
@@ -137,25 +162,9 @@ namespace rlf::System {
             EndMode2D();
         }
 
-#ifdef RLF_EDITOR
-        if (mActiveCameraNode && mActiveCameraNode->getActive()) {
-            Camera2D camera = mActiveCameraNode->getAsCamera2D();
-            camera.zoom = 1.0f;
-            BeginMode2D(camera);
-        }
-
-        auto editorSys = rlf::Engine::getInstance().getSystem<rlf::System::EditorSystem>();
-        editorSys->renderGizmo();
-
-        if (mActiveCameraNode && mActiveCameraNode->getActive()) {
-            EndMode2D();
-        }
-#endif
-
-
         // Render UI
-        if (mActiveCameraNode && mActiveCameraNode->getActive()) {
-            Camera2D camera = mActiveCameraNode->getAsCamera2DUI();
+        if (mActiveUICameraNode && mActiveCameraNode->getActive()) {
+            Camera2D camera = mActiveUICameraNode->getAsCamera2DUI();
             BeginMode2D(camera);
         }
         for (auto& [layer, nodes] : mUINodes) {
@@ -174,7 +183,7 @@ namespace rlf::System {
                 rlPopMatrix();
             }
         }
-        if (mActiveCameraNode && mActiveCameraNode->getActive()) {
+        if (mActiveUICameraNode && mActiveUICameraNode->getActive()) {
             EndMode2D();
         }
     }

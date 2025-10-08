@@ -52,6 +52,7 @@ add_library(
     Node/Render/ParticleRenderNode.cpp
     Node/Render/BurstParticleRenderNode.cpp
 
+    Node/UI/UICameraNode.cpp
     Node/UI/UINode.cpp
     Node/UI/UIButtonNode.cpp
     Node/UI/UISpriteNode.cpp
