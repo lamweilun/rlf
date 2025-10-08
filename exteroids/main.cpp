@@ -31,10 +31,15 @@ int main() {
     // Set shutdown function such that it will copy assets over to application directory
     engine.setShutdownFunc([](std::shared_ptr<rlf::Node::BaseNode>) {
         std::filesystem::path currentPath     = GetWorkingDirectory();
-        std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory()).append(assetsPathName);
+#ifdef RLF_DEBUG
+static constexpr std::string_view buildTypePathName = "Debug";
+#else
+static constexpr std::string_view buildTypePathName = "Release";
+#endif
+        std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory()).append("..").append("..").append(buildTypePathName).append(assetsPathName);
+        std::println("currentPath: {}, destinationPath: {}", currentPath.string(), destinationPath.string());
         std::filesystem::remove_all(destinationPath);
-        auto const copyOptions = std::filesystem::copy_options::recursive;
-        std::filesystem::copy(currentPath, destinationPath, copyOptions);
+        std::filesystem::copy(currentPath, destinationPath, std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
 
         // imgui.ini remove
         auto imguiConfigFile = destinationPath.append("imgui.ini");

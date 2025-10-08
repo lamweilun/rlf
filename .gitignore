@@ -38,6 +38,9 @@
 .vscode
 build
 
+# JetBrains
+.idea
+
 # xmake
 .xmake
 

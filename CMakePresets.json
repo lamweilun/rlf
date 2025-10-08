@@ -50,6 +50,7 @@
         {
             "name": "configure-debug-editor",
             "displayName": "Configure Debug Editor",
+            "binaryDir": "${sourceDir}/build/Debug-Editor",
             "inherits": [
                 "configure-base-editor",
                 "configure-debug"
@@ -58,6 +59,7 @@
         {
             "name": "configure-release-editor",
             "displayName": "Configure Release Editor",
+            "binaryDir": "${sourceDir}/build/Release-Editor",
             "inherits": [
                 "configure-base-editor",
                 "configure-release"

@@ -94,7 +94,7 @@
                       },
                       "layer": 0,
                       "Font": "",
-                      "Text": "Exteroids",
+                      "Text": "Exteroids LMAO",
                       "Font Size": 20,
                       "Spacing": 0.0,
                       "Auto Spacing": true
@@ -307,12 +307,6 @@
           },
           "rotation": 0.0,
           "speed": 300.0,
-          "Test": {},
-          "Test2": [
-            -144,
-            258.0
-          ],
-          "colors": [],
           "children": [
             {
               "type": "QuadRenderNode",
@@ -378,12 +372,6 @@
           },
           "rotation": 0.0,
           "speed": 1000.0,
-          "Test": {},
-          "Test2": [
-            0,
-            0.0
-          ],
-          "colors": [],
           "children": [
             {
               "type": "CircleRenderNode",
@@ -445,12 +433,6 @@
           },
           "rotation": 0.0,
           "speed": 0.0,
-          "Test": {},
-          "Test2": [
-            0,
-            0.0
-          ],
-          "colors": [],
           "Enemy HP": 1,
           "children": [
             {
