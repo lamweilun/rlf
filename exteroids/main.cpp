@@ -30,13 +30,16 @@ int main() {
 
     // Set shutdown function such that it will copy assets over to application directory
     engine.setShutdownFunc([](std::shared_ptr<rlf::Node::BaseNode>) {
+        static constexpr std::string_view appName = "exteroids";
         std::filesystem::path currentPath     = GetWorkingDirectory();
 #ifdef RLF_DEBUG
 static constexpr std::string_view buildTypePathName = "Debug";
 #else
 static constexpr std::string_view buildTypePathName = "Release";
 #endif
-        std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory()).append("..").append("..").append(buildTypePathName).append(assetsPathName);
+        std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory())
+                                                    .append("..").append("..")
+                                                    .append(buildTypePathName).append(appName).append(assetsPathName);
         std::println("currentPath: {}, destinationPath: {}", currentPath.string(), destinationPath.string());
         std::filesystem::remove_all(destinationPath);
         std::filesystem::copy(currentPath, destinationPath, std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
