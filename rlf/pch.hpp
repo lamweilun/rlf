@@ -11,6 +11,7 @@
 #include <Util/Color.hpp>
 #include <Util/Math.hpp>
 
+#include <numbers>
 #include <string>
 #include <string_view>
 #include <iostream>

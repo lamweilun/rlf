@@ -40,9 +40,10 @@ add_library(
 
     Node/Physics/ColliderNode.cpp
     Node/Physics/LineColliderNode.cpp
+    Node/Physics/BoxColliderNode.cpp
     Node/Physics/CircleColliderNode.cpp
     Node/Physics/RigidbodyNode.cpp
-    
+
     Node/Render/RenderNode.cpp
     Node/Render/CameraNode.cpp
     Node/Render/LineRenderNode.cpp
@@ -57,7 +58,7 @@ add_library(
     Node/UI/UIButtonNode.cpp
     Node/UI/UISpriteNode.cpp
     Node/UI/UITextNode.cpp
-    
+
     Node/BaseNode.cpp
 
     Resource/IResource.cpp
@@ -81,7 +82,7 @@ add_library(
 )
 
 if (RLF_EDITOR)
-    target_sources(${PROJECT_NAME} PRIVATE 
+    target_sources(${PROJECT_NAME} PRIVATE
         System/Editor/EditorSystem.cpp
         System/Editor/EditorSystem_Gizmo.cpp
         System/Editor/EditorSystem_FileBrowser.cpp

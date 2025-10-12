@@ -4,18 +4,12 @@
 
 namespace rlf::Node {
     void ColliderNode::updateImpl() {
-        for (auto& cn : mCollidedNodes) {
-            if (mCollidedCallback) {
-                mCollidedCallback(cn);
-            }
+        if (mCollidedCallback) {
+            mCollidedCallback(mCollisionInfos);
         }
     }
 
-    void ColliderNode::shutdownImpl() {
-        mCollidedCallback = nullptr;
-    }
-
-    void ColliderNode::setCollidedCallback(std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> callback) {
+    void ColliderNode::setCollidedCallback(std::function<void(std::vector<rlf::CollideInfo> const&)> callback) {
         mCollidedCallback = callback;
     }
 

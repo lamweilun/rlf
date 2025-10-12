@@ -4,9 +4,11 @@
 namespace ext::Node {
     void EnemyNode::initImpl() {
         auto enemyCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>().value();
-        enemyCollider->setCollidedCallback([this](std::shared_ptr<rlf::Node::ColliderNode> collided) {
-            if (collided->hasTag("PlayerBullet")) {
-                setHP(getHP() - 1);
+        enemyCollider->setCollidedCallback([this](std::vector<rlf::CollideInfo> const& infos) {
+            for (auto const& info : infos) {
+                if (info.other->hasTag("PlayerBullet")) {
+                    setToDestroy(true);
+                }
             }
         });
     }

@@ -249,8 +249,6 @@ namespace rlf::Node {
     }
 
     std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren() {
-        clearChildrenMarkedForDestruction();
-
         // Append newly created children and call init on them
         if (!mNewChildren.empty()) {
             size_t const oldSize = mChildren.size();
@@ -362,6 +360,7 @@ namespace rlf::Node {
     }
 
     void BaseNode::preUpdate() {
+        clearChildrenMarkedForDestruction();
         // If inactive just return
         if (!mActive) {
             return;

@@ -6,6 +6,9 @@ namespace rlf::System {
     void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode) {
         mLineColliderNodes.insert(lineColliderNode);
     }
+    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode) {
+        mBoxColliderNodes.insert(boxColliderNode);
+    }
 
     void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
         mCircleColliderNodes.insert(sphereColliderNode);
@@ -15,115 +18,57 @@ namespace rlf::System {
         mLineColliderNodes.erase(lineColliderNode);
     }
 
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode) {
+        mBoxColliderNodes.erase(boxColliderNode);
+    }
+
     void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
         mCircleColliderNodes.erase(sphereColliderNode);
     }
 
-    std::vector<std::shared_ptr<rlf::Node::ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<rlf::Node::LineColliderNode> colliderNode) {
-        // Initialize data
-        std::vector<std::shared_ptr<rlf::Node::ColliderNode>> collided;
-
-        auto const& globalTransform1 = colliderNode->getGlobalTransform();
-        auto const  startPt1         = colliderNode->getStartPoint() * globalTransform1;
-        auto const  endPt1           = colliderNode->getEndPoint() * globalTransform1;
-
-        // Check against other line colliders
-        for (auto const& cn : mLineColliderNodes) {
-            if (cn->hasAnyOfTags(colliderNode->getTags())) {
-                continue;
-            }
-
-            if (!cn->getActive()) {
-                continue;
-            }
-
-            if (cn == colliderNode) {
-                continue;
-            }
-
-            auto const& globalTransform2 = cn->getGlobalTransform();
-            auto const  startPt2         = cn->getStartPoint() * globalTransform2;
-            auto const  endPt2           = cn->getEndPoint() * globalTransform2;
-
-            // Perform line to line collision here
-            Vector2 collisionPt = Vector2Zeros;
-            if (CheckCollisionLines(startPt1, endPt1, startPt2, endPt2, &collisionPt)) {
-                collided.push_back(cn);
-            }
-        }
-
-        // Check against sphere colliders
-        for (auto const& cn : mCircleColliderNodes) {
-            if (cn->hasAnyOfTags(colliderNode->getTags())) {
-                continue;
-            }
-
-            if (!cn->getActive()) {
-                continue;
-            }
-
-            Vector2 const cnGlobalPos   = cn->getGlobalPosition();
-            Vector2 const cnGlobalScale = cn->getGlobalScale();
-            float const   cnMaxScale    = std::max(cnGlobalScale.x, cnGlobalScale.y);
-
-            if (CheckCollisionCircleLine(cnGlobalPos, cnMaxScale, startPt1, endPt1)) {
-                collided.push_back(cn);
-            }
-        }
-
-        return collided;
+    std::vector<rlf::CollideInfo> PhysicsSystem::getCollisionInfos(std::shared_ptr<rlf::Node::LineColliderNode> colliderNode) {
+        (void)colliderNode;
+        std::vector<rlf::CollideInfo> infos;
+        return infos;
     }
 
-    std::vector<std::shared_ptr<rlf::Node::ColliderNode>> PhysicsSystem::checkCollision(std::shared_ptr<rlf::Node::CircleColliderNode> colliderNode) {
-        // Initialize data
-        std::vector<std::shared_ptr<rlf::Node::ColliderNode>> collided;
+    std::vector<rlf::CollideInfo> PhysicsSystem::getCollisionInfos(std::shared_ptr<rlf::Node::BoxColliderNode> colliderNode) {
+        (void)colliderNode;
+        std::vector<rlf::CollideInfo> infos;
+        return infos;
+    }
 
-        Vector2 colliderGlobalPosition = colliderNode->getGlobalPosition();
-        Vector2 colliderGlobalScale    = colliderNode->getGlobalScale();
-        f32     colliderMaxScale       = std::max(colliderGlobalScale.x, colliderGlobalScale.y);
+    std::vector<rlf::CollideInfo> PhysicsSystem::getCollisionInfos(std::shared_ptr<rlf::Node::CircleColliderNode> colliderNode) {
+        std::vector<rlf::CollideInfo> collidedInfos;
 
-        // Check against line colliders
-        for (auto const& cn : mLineColliderNodes) {
-            if (cn->hasAnyOfTags(colliderNode->getTags())) {
+        Vector2 const globalPos1      = colliderNode->getGlobalPosition();
+        Vector2 const globalScale1    = colliderNode->getGlobalScale();
+        f32 const     colliderRadius1 = std::min(globalScale1.x, globalScale1.y);
+
+        for (auto const& circleCollider : mCircleColliderNodes) {
+            if (circleCollider == colliderNode) {
+                continue;
+            }
+            if (!circleCollider->getActive()) {
                 continue;
             }
 
-            if (!cn->getActive()) {
-                continue;
-            }
+            Vector2 const globalPos2      = circleCollider->getGlobalPosition();
+            Vector2 const globalScale2    = circleCollider->getGlobalScale();
+            f32 const     colliderRadius2 = std::min(globalScale2.x, globalScale2.y);
+            if (CheckCollisionCircles(globalPos1, colliderRadius1, globalPos2, colliderRadius2)) {
+                rlf::CollideInfo info;
+                info.self            = colliderNode;
+                info.other           = circleCollider;
+                info.collidedNormal  = Vector2Normalize(globalPos2 - globalPos1);
+                info.collidedPoint   = globalPos1 + info.collidedNormal * colliderRadius1;
+                info.collidedTangent = Vector2Rotate(info.collidedNormal, std::numbers::pi_v<f32> * 0.5f);
 
-            auto const& globalTransform = cn->getGlobalTransform();
-            auto const  startPt         = cn->getStartPoint() * globalTransform;
-            auto const  endPt           = cn->getEndPoint() * globalTransform;
-            if (CheckCollisionCircleLine(colliderGlobalPosition, colliderMaxScale, startPt, endPt)) {
-                collided.push_back(cn);
+                collidedInfos.push_back(info);
             }
         }
 
-        // Check against sphere colliders
-        for (auto const& cn : mCircleColliderNodes) {
-            if (cn->hasAnyOfTags(colliderNode->getTags())) {
-                continue;
-            }
-
-            if (!cn->getActive()) {
-                continue;
-            }
-
-            if (cn == colliderNode) {
-                continue;
-            }
-
-            Vector2 const cnGlobalPos   = cn->getGlobalPosition();
-            Vector2 const cnGlobalScale = cn->getGlobalScale();
-            float const   cnMaxScale    = std::max(cnGlobalScale.x, cnGlobalScale.y);
-
-            if (CheckCollisionCircles(colliderGlobalPosition, colliderMaxScale, cnGlobalPos, cnMaxScale)) {
-                collided.push_back(cn);
-            }
-        }
-
-        return collided;
+        return collidedInfos;
     }
 
 #ifdef RLF_EDITOR

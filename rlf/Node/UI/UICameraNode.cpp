@@ -1,5 +1,6 @@
 #include <Node/UI/UICameraNode.hpp>
 
+#include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
 namespace rlf::Node {

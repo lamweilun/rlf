@@ -4,11 +4,13 @@
 #include <functional>
 #include <set>
 
+#include <System/Physics/CollideInfo.hpp>
+
 namespace rlf::Node {
     class ColliderNode : public BaseNode {
     public:
         RLF_TYPE_REGISTER_QUICK(ColliderNode)
-        void setCollidedCallback(std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> callback);
+        void setCollidedCallback(std::function<void(std::vector<rlf::CollideInfo> const&)> callback);
 
         void                         addTag(std::string_view tag);
         std::set<std::string> const& getTags() const;
@@ -17,10 +19,9 @@ namespace rlf::Node {
 
     protected:
         void updateImpl() override;
-        void shutdownImpl() override;
 
-        std::vector<std::shared_ptr<ColliderNode>>                    mCollidedNodes;
-        std::function<void(std::shared_ptr<rlf::Node::ColliderNode>)> mCollidedCallback;
+        std::vector<rlf::CollideInfo>                             mCollisionInfos;
+        std::function<void(std::vector<rlf::CollideInfo> const&)> mCollidedCallback;
 
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)

@@ -20,18 +20,17 @@ namespace rlf::Node {
     }
 
     void LineColliderNode::setupImpl() {
-        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
+        auto lineCollider = shared_from_this()->as<LineColliderNode>();
+        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(lineCollider);
     }
     void LineColliderNode::shutdownImpl() {
-        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
-        ColliderNode::shutdownImpl();
+        auto lineCollider = shared_from_this()->as<LineColliderNode>();
+        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(lineCollider);
     }
 
     void LineColliderNode::updateImpl() {
-        if (!mCollidedCallback) {
-            return;
-        }
-        mCollidedNodes = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->checkCollision(std::static_pointer_cast<LineColliderNode>(shared_from_this()));
+        auto lineCollider = shared_from_this()->as<LineColliderNode>();
+        mCollisionInfos   = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->getCollisionInfos(lineCollider);
         ColliderNode::updateImpl();
     }
 }

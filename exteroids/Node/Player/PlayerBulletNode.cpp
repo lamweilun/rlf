@@ -8,11 +8,15 @@ namespace ext::Node {
     void PlayerBulletNode::initImpl() {
         if (auto childCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>()) {
             auto bulletCollider = childCollider.value();
-            bulletCollider->setCollidedCallback([this](std::shared_ptr<rlf::Node::ColliderNode> collided) {
-                if (collided->hasTag("Enemy")) {
-                    setToDestroy(true);
-                    // auto enemy = collided->getParent().lock()->as<EnemyNode>();
-                    // enemy->setHP(enemy->getHP() - 1);
+            bulletCollider->setCollidedCallback([this](std::vector<rlf::CollideInfo> const& infos) {
+                for (auto const& info : infos) {
+                    if (info.other->hasTag("Enemy")) {
+                        // Test reflection
+                        // auto const& tangent     = info.collidedNormal;
+                        // auto        newVelocity = Vector2Reflect(Vector2Normalize(getVelocity()), tangent);
+                        // setVelocity(newVelocity);
+                        setToDestroy(true);
+                    }
                 }
             });
         }
