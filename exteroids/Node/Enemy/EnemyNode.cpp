@@ -4,7 +4,7 @@
 
 namespace ext::Node {
     void EnemyNode::initImpl() {
-        if (auto enemyCollider = getFirstChildOfType<rlf::Node::BoxColliderNode>()) {
+        if (auto const enemyCollider = getFirstChildOfType<rlf::Node::BoxColliderNode>()) {
             enemyCollider.value()->setCollidedCallback([this](std::vector<rlf::CollideInfo> const& infos) {
                 for (auto const& info : infos) {
                     if (info.other->hasTag("PlayerBullet")) {

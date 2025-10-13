@@ -33,9 +33,42 @@ namespace rlf::System {
     }
 
     std::vector<rlf::CollideInfo> PhysicsSystem::getCollisionInfos(std::shared_ptr<rlf::Node::BoxColliderNode> colliderNode) {
-        (void)colliderNode;
-        std::vector<rlf::CollideInfo> infos;
-        return infos;
+        std::vector<rlf::CollideInfo> collidedInfos;
+
+        Vector2 const     globalPos1   = colliderNode->getGlobalPosition();
+        Vector2 const     globalScale1 = colliderNode->getGlobalScale();
+        Vector2 const     boxMin       = globalPos1 - globalScale1 * 0.5f;
+        Vector2 const     boxMax       = globalPos1 + globalScale1 * 0.5f;
+        BoundingBox const box{
+            {boxMin.x, boxMin.y, 0.0f},
+            {boxMax.x, boxMax.y, 0.0f}
+        };
+
+        for (auto const& circleCollider : mCircleColliderNodes) {
+            if (!circleCollider->getActive()) {
+                continue;
+            }
+
+            Vector2 const circlePos    = circleCollider->getGlobalPosition();
+            Vector2 const globalScale2 = circleCollider->getGlobalScale();
+            f32 const     circleRadius = std::min(globalScale2.x * 0.5f, globalScale2.y * 0.5f);
+
+            Vector2 collidedPoint    = Vector2Zeros;
+            Vector2 collidedNormal   = Vector2Zeros;
+            Vector2 collidedTangent  = Vector2Zeros;
+            f32     penetratingDepth = 0.0f;
+            if (rlf::phys::CheckCollisionBoxCircle(box, circlePos, circleRadius, collidedPoint, collidedNormal, collidedTangent, penetratingDepth)) {
+                rlf::CollideInfo info;
+                info.self            = colliderNode;
+                info.other           = circleCollider;
+                info.collidedPoint   = collidedPoint;
+                info.collidedNormal  = collidedNormal;
+                info.collidedTangent = collidedTangent;
+                info.collidedDepth   = penetratingDepth;
+                collidedInfos.push_back(info);
+            }
+        }
+        return collidedInfos;
     }
 
     std::vector<rlf::CollideInfo> PhysicsSystem::getCollisionInfos(std::shared_ptr<rlf::Node::CircleColliderNode> colliderNode) {
@@ -67,9 +100,9 @@ namespace rlf::System {
                 rlf::CollideInfo info;
                 info.self            = colliderNode;
                 info.other           = boxCollider;
-                info.collidedPoint   = std::move(collidedPoint);
-                info.collidedNormal  = std::move(collidedNormal);
-                info.collidedTangent = std::move(collidedTangent);
+                info.collidedPoint   = collidedPoint;
+                info.collidedNormal  = collidedNormal;
+                info.collidedTangent = collidedTangent;
                 info.collidedDepth   = penetratingDepth;
                 collidedInfos.push_back(info);
             }
