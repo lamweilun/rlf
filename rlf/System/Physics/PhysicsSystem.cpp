@@ -45,6 +45,37 @@ namespace rlf::System {
         Vector2 const globalScale1    = colliderNode->getGlobalScale();
         f32 const     colliderRadius1 = std::min(globalScale1.x, globalScale1.y);
 
+        // Check collision with other box colliders
+        for (auto const& boxCollider : mBoxColliderNodes) {
+            if (!boxCollider->getActive()) {
+                continue;
+            }
+
+            Vector2 const globalPos2   = boxCollider->getGlobalPosition();
+            Vector2 const globalScale2 = boxCollider->getGlobalScale();
+            Vector2 const boxMin       = globalPos2 - globalScale2 * 0.5f;
+            Vector2 const boxMax       = globalPos2 + globalScale2 * 0.5f;
+            BoundingBox   box;
+            box.min = Vector3{boxMin.x, boxMin.y, 0.0f};
+            box.max = Vector3{boxMax.x, boxMax.y, 0.0f};
+
+            Vector2 collidedPoint    = Vector2Zeros;
+            Vector2 collidedNormal   = Vector2Zeros;
+            Vector2 collidedTangent  = Vector2Zeros;
+            f32     penetratingDepth = 0.0f;
+            if (rlf::phys::CheckCollisionBoxCircle(box, globalPos1, colliderRadius1, collidedPoint, collidedNormal, collidedTangent, penetratingDepth)) {
+                rlf::CollideInfo info;
+                info.self            = colliderNode;
+                info.other           = boxCollider;
+                info.collidedPoint   = std::move(collidedPoint);
+                info.collidedNormal  = std::move(collidedNormal);
+                info.collidedTangent = std::move(collidedTangent);
+                info.collidedDepth   = penetratingDepth;
+                collidedInfos.push_back(info);
+            }
+        }
+
+        // Check collision with other circle colliders
         for (auto const& circleCollider : mCircleColliderNodes) {
             if (circleCollider == colliderNode) {
                 continue;
@@ -63,7 +94,6 @@ namespace rlf::System {
                 info.collidedNormal  = Vector2Normalize(globalPos2 - globalPos1);
                 info.collidedPoint   = globalPos1 + info.collidedNormal * colliderRadius1;
                 info.collidedTangent = Vector2Rotate(info.collidedNormal, std::numbers::pi_v<f32> * 0.5f);
-
                 collidedInfos.push_back(info);
             }
         }
@@ -83,6 +113,24 @@ namespace rlf::System {
             rlMultMatrixf(matF.v);
 
             DrawLineEx(node->getStartPoint(), node->getEndPoint(), 1.0f, GREEN);
+
+            rlPopMatrix();
+        }
+
+        for (auto const& node : mBoxColliderNodes) {
+            if (!node->getActive()) {
+                continue;
+            }
+
+            auto matF = MatrixToFloatV(node->getGlobalTransform());
+            rlPushMatrix();
+            rlMultMatrixf(matF.v);
+
+            DrawBoundingBox(BoundingBox{
+                                Vector3{-0.5f, -0.5f, 0.0f},
+                                Vector3{ 0.5f,  0.5f, 0.0f}
+            },
+                            GREEN);
 
             rlPopMatrix();
         }

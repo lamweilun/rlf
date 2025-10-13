@@ -1,6 +1,90 @@
 #include <Util/Physics/CollisionDetection.hpp>
 
 namespace rlf::phys {
+
+    bool CheckCollisionBoxCircle(BoundingBox const& box,
+                                 Vector2 const&     circlePosition,
+                                 f32 const&         circleRadius,
+                                 Vector2&           outCollisionPoint,
+                                 Vector2&           outCollisionNormal,
+                                 Vector2&           outCollisionTangent,
+                                 f32&               outPenetrationDepth) {  // Added penetration depth
+        // Find the closest point on the bounding box to the center of the circle
+        f32 closestX = std::max(box.min.x, std::min(circlePosition.x, box.max.x));
+        f32 closestY = std::max(box.min.y, std::min(circlePosition.y, box.max.y));
+
+        outCollisionPoint = {closestX, closestY};
+
+        // Calculate the vector from the closest point on the box to the circle's center
+        Vector2 const diff = circlePosition - outCollisionPoint;
+
+        // Calculate the distance squared between the closest point and the circle's center
+        f32 const distanceSquared = Vector2LengthSqr(diff);
+
+        // If the distance is greater than or equal to the circle's radius squared, no collision
+        if (distanceSquared >= circleRadius * circleRadius) {
+            outPenetrationDepth = 0.0f;
+            return false;
+        }
+
+        // A collision has occurred.
+        f32 const distance  = std::sqrt(distanceSquared);
+        outPenetrationDepth = circleRadius - distance;
+
+        // Determine the collision normal.
+        if (FloatEquals(distance, 0)) {  // Use distance, not distanceSquared, for clarity
+            // Case 1: Circle's center is exactly on or inside the bounding box.
+            // We need to find the "shallowest" penetration axis.
+
+            // Calculate overlap on each axis
+            f32 const overlapX_min = circlePosition.x + circleRadius - box.min.x;
+            f32 const overlapX_max = box.max.x - (circlePosition.x - circleRadius);
+            f32 const overlapY_min = circlePosition.y + circleRadius - box.min.y;
+            f32 const overlapY_max = box.max.y - (circlePosition.y - circleRadius);
+
+            // Find the smallest positive overlap
+            f32 minOverlap = std::numeric_limits<f32>::max();
+
+            // Initialize normal to a default (e.g., up) in case no valid overlap found, though
+            // it shouldn't happen if there is an actual collision with center inside.
+            outCollisionNormal = {0.0f, 1.0f};
+
+            if (overlapX_min > 0 && overlapX_min < minOverlap) {
+                minOverlap         = overlapX_min;
+                outCollisionNormal = {-1.0f, 0.0f};  // Normal pointing left (from box to circle)
+            }
+            if (overlapX_max > 0 && overlapX_max < minOverlap) {
+                minOverlap         = overlapX_max;
+                outCollisionNormal = {1.0f, 0.0f};  // Normal pointing right
+            }
+            if (overlapY_min > 0 && overlapY_min < minOverlap) {
+                minOverlap         = overlapY_min;
+                outCollisionNormal = {0.0f, -1.0f};  // Normal pointing down
+            }
+            if (overlapY_max > 0 && overlapY_max < minOverlap) {
+                minOverlap         = overlapY_max;
+                outCollisionNormal = {0.0f, 1.0f};  // Normal pointing up
+            }
+
+            outPenetrationDepth = minOverlap;  // The true penetration depth for this axis
+
+            // The collision point for this case can be projected along the normal
+            // from the circle's center by its radius to find the contact point on the box.
+            outCollisionPoint = circlePosition - outCollisionNormal * circleRadius;
+
+        } else {
+            // Case 2: Circle's center is outside the AABB, or very near an edge/corner.
+            // The normal is simply the normalized vector from the closest point to the circle's center.
+            outCollisionNormal = Vector2Normalize(diff);
+        }
+
+        // The collision tangent is perpendicular to the normal.
+        // For 2D, if normal is (nx, ny), tangent can be (-ny, nx).
+        outCollisionTangent = {-outCollisionNormal.y, outCollisionNormal.x};
+
+        return true;
+    }
+
     bool CheckCollisionLines(Vector3 const& l1Start, Vector3 const& l1End, Vector3 const& l2Start, Vector3 const& l2End) {
         Vector3 D1 = l1End - l1Start;    // Direction vector of segment 1
         Vector3 D2 = l2End - l2Start;    // Direction vector of segment 2

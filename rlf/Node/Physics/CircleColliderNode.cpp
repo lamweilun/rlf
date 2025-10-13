@@ -16,7 +16,6 @@ namespace rlf::Node {
     void CircleColliderNode::updateImpl() {
         auto circleCollider = shared_from_this()->as<CircleColliderNode>();
         auto infos          = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->getCollisionInfos(circleCollider);
-        // mCollidedNodes      = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->checkCollision(circleCollider);
         mCollisionInfos = infos;
         ColliderNode::updateImpl();
     }

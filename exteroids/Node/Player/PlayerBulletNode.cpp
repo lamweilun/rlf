@@ -11,11 +11,14 @@ namespace ext::Node {
             bulletCollider->setCollidedCallback([this](std::vector<rlf::CollideInfo> const& infos) {
                 for (auto const& info : infos) {
                     if (info.other->hasTag("Enemy")) {
+                        // Collision resolver
+                        setPosition(getPosition() + info.collidedNormal * info.collidedDepth);
+
                         // Test reflection
-                        // auto const& tangent     = info.collidedNormal;
-                        // auto        newVelocity = Vector2Reflect(Vector2Normalize(getVelocity()), tangent);
-                        // setVelocity(newVelocity);
-                        setToDestroy(true);
+                        auto const& tangent     = info.collidedNormal;
+                        auto        newVelocity = Vector2Reflect(Vector2Normalize(getVelocity()), tangent);
+                        setVelocity(newVelocity);
+                        // setToDestroy(true);
                     }
                 }
             });

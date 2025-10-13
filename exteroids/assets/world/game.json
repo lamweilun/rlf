@@ -482,7 +482,7 @@
               }
             },
             {
-              "type": "CircleColliderNode",
+              "type": "BoxColliderNode",
               "data": {
                 "active": true,
                 "name": "EnemyCollider",
@@ -491,8 +491,8 @@
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 10.0,
-                  "y": 10.0
+                  "x": 20.0,
+                  "y": 20.0
                 },
                 "rotation": 0.0,
                 "tags": [

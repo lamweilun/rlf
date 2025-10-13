@@ -10,6 +10,7 @@
 
 #include <Node/Physics/ColliderNode.cpp>
 #include <Node/Physics/LineColliderNode.cpp>
+#include <Node/Physics/BoxColliderNode.cpp>
 #include <Node/Physics/CircleColliderNode.cpp>
 #include <Node/Physics/RigidbodyNode.cpp>
 
@@ -73,6 +74,7 @@ namespace rlf {
         rlf::TypeManager::getInstance().registerType<rlf::Node::SoundNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::ColliderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::LineColliderNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::BoxColliderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::CircleColliderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::RigidbodyNode>();
 

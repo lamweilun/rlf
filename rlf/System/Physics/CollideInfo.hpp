@@ -13,5 +13,6 @@ namespace rlf {
         Vector2                                  collidedPoint   = Vector2Zeros;
         Vector2                                  collidedNormal  = Vector2Zeros;
         Vector2                                  collidedTangent = Vector2Zeros;
+        f32                                      collidedDepth   = 0.0f;
     };
 }
