@@ -22,6 +22,9 @@ namespace rlf::Node {
         Camera2D getAsCamera2DUI() const;
 
     protected:
+        void setupImpl() override;
+        void shutdownImpl() override;
+
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Reference Resolution", getReferenceResolution, setReferenceResolution)

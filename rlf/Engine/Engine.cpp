@@ -151,8 +151,8 @@ namespace rlf {
         mRootNode->shutdown();
         mRootNode.reset();
 
-        std::reverse(std::begin(mSystems), std::end(mSystems));
-        for (auto& system : mSystems) {
+        std::ranges::reverse(mSystems);
+        for (auto const& system : mSystems) {
             system->shutdown();
         }
     }
