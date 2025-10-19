@@ -1,87 +1,115 @@
+#include <memory>
 #include <Util/Physics/CollisionDetection.hpp>
 
+#ifndef SIGN
+#define SIGN(x) ((x) > 0 ? 1.0f : ((x) < 0 ? -1.0f : 0.0f))
+#endif
+
+namespace {
+    // Assuming BoundingBox is defined similar to raylib's BoundingBox,
+    // but for 2D, or we can adapt it. Let's use a custom struct for 2D.
+    // This assumes `min` and `max` define the AABB of the box *before* rotation.
+    struct BoundingBox2D {
+        Vector2 min;
+        Vector2 max;
+    };
+
+    // Helper function to transform a point from world space to box's local space
+    Vector2 WorldToLocal(Vector2 const& point,
+                         Vector2 const& boxCenter,
+                         f32 const      rotationRad) {
+        // Translate point to origin
+        Vector2 translatedPoint = Vector2Subtract(point, boxCenter);
+        // Rotate point inversely
+        f32 cosRot = cosf(-rotationRad);
+        f32 sinRot = sinf(-rotationRad);
+        return Vector2{
+            translatedPoint.x * cosRot - translatedPoint.y * sinRot,
+            translatedPoint.x * sinRot + translatedPoint.y * cosRot};
+    }
+
+    // Helper function to transform a point from box's local space to world space
+    Vector2 LocalToWorld(Vector2 const& point,
+                         Vector2 const& boxCenter,
+                         f32 const      rotationRad) {
+        // Rotate point
+        f32     cosRot       = cosf(rotationRad);
+        f32     sinRot       = sinf(rotationRad);
+        Vector2 rotatedPoint = Vector2{
+            point.x * cosRot - point.y * sinRot,
+            point.x * sinRot + point.y * cosRot};
+        // Translate point back
+        return Vector2Add(rotatedPoint, boxCenter);
+    }
+}
+
 namespace rlf::phys {
+    bool CheckCollisionBoxCircle(BoundingBox const& box3D,
+                                 f32 const          rotationRad,
+                                 Vector2 const&     circlePosition,
+                                 f32 const&         circleRadius,
+                                 Vector2&           collidedPoint,
+                                 Vector2&           collidedNormal,
+                                 Vector2&           collidedTangent,
+                                 f32&               penetratingDepth) {
+        // For a 2D box, we'll use the x and y components of the 3D BoundingBox.
+        // First, let's define the 2D box properties.
+        Vector2 boxCenter = {
+            (box3D.min.x + box3D.max.x) / 2.0f,
+            (box3D.min.y + box3D.max.y) / 2.0f};
+        Vector2 boxHalfSize = {
+            (box3D.max.x - box3D.min.x) / 2.0f,
+            (box3D.max.y - box3D.min.y) / 2.0f};
 
-    bool CheckCollisionBoxCircle(BoundingBox const&         box,
-                                 [[maybe_unused]] f32 const rotationRad,
-                                 Vector2 const&             circlePosition,
-                                 f32 const&                 circleRadius,
-                                 Vector2&                   collidedPoint,
-                                 Vector2&                   collidedNormal,
-                                 Vector2&                   collidedTangent,
-                                 f32&                       penetratingDepth) {
-        // Find the closest point on the bounding box to the center of the circle
-        f32 closestX = std::max(box.min.x, std::min(circlePosition.x, box.max.x));
-        f32 closestY = std::max(box.min.y, std::min(circlePosition.y, box.max.y));
+        // Transform the circle's position into the box's local space
+        Vector2 localCirclePos = WorldToLocal(circlePosition, boxCenter, rotationRad);
 
-        collidedPoint = {closestX, closestY};
+        // Find the closest point on the AABB (in local space) to the circle center
+        Vector2 closestPointLocal = localCirclePos;
+        closestPointLocal.x       = fmaxf(-boxHalfSize.x, fminf(closestPointLocal.x, boxHalfSize.x));
+        closestPointLocal.y       = fmaxf(-boxHalfSize.y, fminf(closestPointLocal.y, boxHalfSize.y));
 
-        // Calculate the vector from the closest point on the box to the circle's center
-        Vector2 const diff = circlePosition - collidedPoint;
+        // Calculate the distance squared from the circle center to this closest point
+        Vector2 diff       = Vector2Subtract(localCirclePos, closestPointLocal);
+        f32     distanceSq = Vector2LengthSqr(diff);
 
-        // Calculate the distance squared between the closest point and the circle's center
-        f32 const distanceSquared = Vector2LengthSqr(diff);
-
-        // If the distance is greater than or equal to the circle's radius squared, no collision
-        if (distanceSquared >= circleRadius * circleRadius) {
-            penetratingDepth = 0.0f;
-            return false;
+        // Check if collision occurred
+        if (distanceSq > (circleRadius * circleRadius)) {
+            return false;  // No collision
         }
 
-        // A collision has occurred.
-        f32 const distance = std::sqrt(distanceSquared);
-        penetratingDepth   = circleRadius - distance;
+        // Collision detected!
+        // Determine the collision details in local space first.
 
-        // Determine the collision normal.
-        if (FloatEquals(distance, 0)) {  // Use distance, not distanceSquared, for clarity
-            // Case 1: Circle's center is exactly on or inside the bounding box.
-            // We need to find the "shallowest" penetration axis.
+        // Collided point in local space is the closest point on the box
+        collidedPoint = LocalToWorld(closestPointLocal, boxCenter, rotationRad);
 
-            // Calculate overlap on each axis
-            f32 const overlapX_min = circlePosition.x + circleRadius - box.min.x;
-            f32 const overlapX_max = box.max.x - (circlePosition.x - circleRadius);
-            f32 const overlapY_min = circlePosition.y + circleRadius - box.min.y;
-            f32 const overlapY_max = box.max.y - (circlePosition.y - circleRadius);
+        // Calculate the normal in local space
+        Vector2 localNormal;
+        if (FloatEquals(distanceSq, 0.0f)) {
+            // Circle center is inside the box. We need to find the minimum penetration axis.
+            // This is a special case: project circle center onto each face plane.
+            f32 dx = fabsf(localCirclePos.x) - boxHalfSize.x;
+            f32 dy = fabsf(localCirclePos.y) - boxHalfSize.y;
 
-            // Find the smallest positive overlap
-            f32 minOverlap = std::numeric_limits<f32>::max();
-
-            // Initialize normal to a default (e.g., up) in case no valid overlap found, though
-            // it shouldn't happen if there is an actual collision with center inside.
-            collidedNormal = {0.0f, 1.0f};
-
-            if (overlapX_min > 0 && overlapX_min < minOverlap) {
-                minOverlap     = overlapX_min;
-                collidedNormal = {-1.0f, 0.0f};  // Normal pointing left (from box to circle)
+            if (dx > dy) {  // Penetrating more horizontally
+                localNormal      = Vector2{SIGN(localCirclePos.x), 0.0f};
+                penetratingDepth = circleRadius + dx;
+            } else {  // Penetrating more vertically
+                localNormal      = Vector2{0.0f, SIGN(localCirclePos.y)};
+                penetratingDepth = circleRadius + dy;
             }
-            if (overlapX_max > 0 && overlapX_max < minOverlap) {
-                minOverlap     = overlapX_max;
-                collidedNormal = {1.0f, 0.0f};  // Normal pointing right
-            }
-            if (overlapY_min > 0 && overlapY_min < minOverlap) {
-                minOverlap     = overlapY_min;
-                collidedNormal = {0.0f, -1.0f};  // Normal pointing down
-            }
-            if (overlapY_max > 0 && overlapY_max < minOverlap) {
-                minOverlap     = overlapY_max;
-                collidedNormal = {0.0f, 1.0f};  // Normal pointing up
-            }
-
-            penetratingDepth = minOverlap;  // The true penetration depth for this axis
-
-            // The collision point for this case can be projected along the normal
-            // from the circle's center by its radius to find the contact point on the box.
-            collidedPoint = circlePosition - collidedNormal * circleRadius;
-
         } else {
-            // Case 2: Circle's center is outside the AABB, or very near an edge/corner.
-            // The normal is simply the normalized vector from the closest point to the circle's center.
-            collidedNormal = Vector2Normalize(diff);
+            localNormal = Vector2Normalize(Vector2Subtract(localCirclePos, closestPointLocal));
+            // Penetrating depth
+            penetratingDepth = circleRadius - sqrtf(distanceSq);
         }
 
-        // The collision tangent is perpendicular to the normal.
-        // For 2D, if normal is (nx, ny), tangent can be (-ny, nx).
-        collidedTangent = {-collidedNormal.y, collidedNormal.x};
+        // Transform local normal to world space
+        collidedNormal = LocalToWorld(localNormal, {0, 0}, rotationRad);  // Only rotate the normal
+
+        // Calculate tangent (perpendicular to normal)
+        collidedTangent = Vector2{-collidedNormal.y, collidedNormal.x};
 
         return true;
     }

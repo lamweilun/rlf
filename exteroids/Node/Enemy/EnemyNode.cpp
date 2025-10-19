@@ -12,6 +12,7 @@ namespace ext::Node {
         }
     }
     void EnemyNode::updateImpl() {
+        setRotationDeg(getRotationDeg() + 45.0f * GetFrameTime());
         rlf::Node::RigidbodyNode::updateImpl();
     }
 
