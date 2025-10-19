@@ -133,10 +133,11 @@ namespace rlf::System {
             if (!bc1->getActive()) {
                 continue;
             }
-            Vector2 const bc1Pos   = bc1->getGlobalPosition();
-            Vector2 const bc1Scale = bc1->getGlobalScale();
-            Vector2 const box1Min  = bc1Pos - bc1Scale * 0.5f;
-            Vector2 const box1Max  = bc1Pos + bc1Scale * 0.5f;
+            Vector2 const bc1Pos         = bc1->getGlobalPosition();
+            Vector2 const bc1Scale       = bc1->getGlobalScale();
+            f32 const     bc1RotationRad = bc1->getGlobalRotationRad();
+            Vector2 const box1Min        = bc1Pos - bc1Scale * 0.5f;
+            Vector2 const box1Max        = bc1Pos + bc1Scale * 0.5f;
             BoundingBox   box1{
                 Vector3{box1Min.x, box1Min.y, 0.0f},
                 Vector3{box1Max.x, box1Max.y, 0.0f}
@@ -154,10 +155,11 @@ namespace rlf::System {
                     continue;
                 }
 
-                Vector2 const bc2Pos   = bc2->getGlobalPosition();
-                Vector2 const bc2Scale = bc2->getGlobalScale();
-                Vector2 const box2Min  = bc2Pos - bc2Scale * 0.5f;
-                Vector2 const box2Max  = bc2Pos + bc2Scale * 0.5f;
+                Vector2 const bc2Pos         = bc2->getGlobalPosition();
+                Vector2 const bc2Scale       = bc2->getGlobalScale();
+                f32 const     bc2RotationRad = bc2->getGlobalRotationRad();
+                Vector2 const box2Min        = bc2Pos - bc2Scale * 0.5f;
+                Vector2 const box2Max        = bc2Pos + bc2Scale * 0.5f;
                 BoundingBox   box2{
                     Vector3{box2Min.x, box2Min.y, 0.0f},
                     Vector3{box2Max.x, box2Max.y, 0.0f}
@@ -167,7 +169,9 @@ namespace rlf::System {
                 Vector2 collidedNormal   = Vector2Zeros;
                 Vector2 collidedTangent  = Vector2Zeros;
                 f32     penetratingDepth = 0.0f;
-                if (rlf::phys::CheckCollisionBoxToBox(box1, box2, collidedPoint, collidedNormal, collidedTangent, penetratingDepth)) {
+                if (rlf::phys::CheckCollisionBoxToBox(box1, bc1RotationRad,
+                                                      box2, bc2RotationRad,
+                                                      collidedPoint, collidedNormal, collidedTangent, penetratingDepth)) {
                     collidedMap[bc1.get()].insert(bc2.get());
                     collidedMap[bc2.get()].insert(bc1.get());
 

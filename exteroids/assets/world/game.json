@@ -397,17 +397,36 @@
           "speed": 1000.0,
           "children": [
             {
-              "type": "CircleRenderNode",
+              "type": "BoxColliderNode",
               "data": {
                 "active": true,
-                "name": "PlayerBulletRender",
+                "name": "BoxColliderNode",
                 "position": {
                   "x": 0.0,
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 5.0,
-                  "y": 5.0
+                  "x": 10.0,
+                  "y": 10.0
+                },
+                "rotation": 0.0,
+                "tags": [
+                  "PlayerBullet"
+                ]
+              }
+            },
+            {
+              "type": "QuadRenderNode",
+              "data": {
+                "active": true,
+                "name": "New QuadRenderNode",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 10.0,
+                  "y": 10.0
                 },
                 "rotation": 0.0,
                 "tint": {
@@ -417,25 +436,6 @@
                   "a": 255
                 },
                 "layer": 0
-              }
-            },
-            {
-              "type": "CircleColliderNode",
-              "data": {
-                "active": true,
-                "name": "New CircleColliderNode",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1.0,
-                  "y": 1.0
-                },
-                "rotation": 0.0,
-                "tags": [
-                  "PlayerBullet"
-                ]
               }
             }
           ]
@@ -468,7 +468,7 @@
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 30.0,
+                  "x": 100.0,
                   "y": 30.0
                 },
                 "rotation": 0.0,
@@ -487,7 +487,7 @@
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 30.0,
+                  "x": 100.0,
                   "y": 30.0
                 },
                 "rotation": 0.0,

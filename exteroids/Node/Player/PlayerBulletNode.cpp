@@ -8,7 +8,7 @@
 namespace ext::Node {
 
     void PlayerBulletNode::initImpl() {
-        if (auto const bulletCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>()) {
+        if (auto const bulletCollider = getFirstChildOfType<rlf::Node::BoxColliderNode>()) {
             bulletCollider.value()->setCollidedCallback([this](rlf::CollideInfo const& info) {
                 if (info.other && info.other->hasTag("Enemy")) {
                     // Collision resolver

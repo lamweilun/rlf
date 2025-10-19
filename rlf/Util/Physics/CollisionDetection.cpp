@@ -19,32 +19,93 @@ namespace {
                          Vector2 const& boxCenter,
                          f32 const      rotationRad) {
         // Translate point to origin
-        Vector2 translatedPoint = Vector2Subtract(point, boxCenter);
+        Vector2 const translatedPoint = point - boxCenter;
         // Rotate point inversely
-        f32 cosRot = cosf(-rotationRad);
-        f32 sinRot = sinf(-rotationRad);
-        return Vector2{
-            translatedPoint.x * cosRot - translatedPoint.y * sinRot,
-            translatedPoint.x * sinRot + translatedPoint.y * cosRot};
+        f32 const cosRot = std::cosf(-rotationRad);
+        f32 const sinRot = std::sinf(-rotationRad);
+        return Vector2{translatedPoint.x * cosRot - translatedPoint.y * sinRot, translatedPoint.x * sinRot + translatedPoint.y * cosRot};
     }
 
     // Helper function to transform a point from box's local space to world space
     Vector2 LocalToWorld(Vector2 const& point,
                          Vector2 const& boxCenter,
                          f32 const      rotationRad) {
-        // Rotate point
-        f32     cosRot       = cosf(rotationRad);
-        f32     sinRot       = sinf(rotationRad);
-        Vector2 rotatedPoint = Vector2{
-            point.x * cosRot - point.y * sinRot,
-            point.x * sinRot + point.y * cosRot};
-        // Translate point back
-        return Vector2Add(rotatedPoint, boxCenter);
+        // Rotate and Translate
+        f32 const     cosRot       = std::cosf(rotationRad);
+        f32 const     sinRot       = std::sinf(rotationRad);
+        Vector2 const rotatedPoint = Vector2{point.x * cosRot - point.y * sinRot, point.x * sinRot + point.y * cosRot};
+        return rotatedPoint + boxCenter;
+    }
+
+    std::vector<Vector2> GetRotatedBoxCorners(BoundingBox const& box,
+                                              f32 const          rotationRad) {
+        Vector2 const center   = {(box.min.x + box.max.x) * 0.5f, (box.min.y + box.max.y) * 0.5f};
+        Vector2 const halfSize = {(box.max.x - box.min.x) * 0.5f, (box.max.y - box.min.y) * 0.5f};
+
+        std::vector<Vector2> corners(4);
+        // Local coordinates of corners relative to center
+        std::array const localCorners = {
+            Vector2{-halfSize.x, -halfSize.y},
+            Vector2{ halfSize.x, -halfSize.y},
+            Vector2{ halfSize.x,  halfSize.y},
+            Vector2{-halfSize.x,  halfSize.y}
+        };
+
+        f32 const cosRot = std::cosf(rotationRad);
+        f32 const sinRot = std::sinf(rotationRad);
+
+        for (size_t i = 0; i < 4; ++i) {
+            // Rotate and translate to world space
+            corners[i].x = center.x + (localCorners[i].x * cosRot - localCorners[i].y * sinRot);
+            corners[i].y = center.y + (localCorners[i].x * sinRot + localCorners[i].y * cosRot);
+        }
+        return corners;
+    }
+
+    // Helper function to project a polygon onto an axis
+    void ProjectPolygon(std::vector<Vector2> const& corners,
+                        Vector2 const&              axis,
+                        f32&                        minProjection,
+                        f32&                        maxProjection) {
+        minProjection = Vector2DotProduct(corners[0], axis);
+        maxProjection = minProjection;
+
+        for (size_t i = 1; i < corners.size(); ++i) {
+            f32 const projection = Vector2DotProduct(corners[i], axis);
+            if (projection < minProjection) {
+                minProjection = projection;
+            }
+            if (projection > maxProjection) {
+                maxProjection = projection;
+            }
+        }
+    }
+
+    // Helper function to check for overlap of two 1D intervals
+    bool CheckOverlap(f32 const min1, f32 const max1, f32 const min2, f32 const max2, f32& overlap) {
+        if (max1 < min2 || max2 < min1) {
+            return false;  // No overlap
+        }
+        overlap = std::min(max1, max2) - std::max(min1, min2);
+        return true;
+    }
+
+    // Helper to get the 4 normalized edge normals (axes of separation) for a box
+    std::vector<Vector2> GetBoxNormals(std::vector<Vector2> const& corners) {
+        std::vector<Vector2> normals;
+        for (size_t i = 0; i < 4; ++i) {
+            Vector2 const p1     = corners[i];
+            Vector2 const p2     = corners[(i + 1) % 4];
+            Vector2 const edge   = p2 - p1;
+            Vector2       normal = Vector2Normalize(Vector2{-edge.y, edge.x});
+            normals.push_back(normal);
+        }
+        return normals;
     }
 }
 
 namespace rlf::phys {
-    bool CheckCollisionBoxCircle(BoundingBox const& box3D,
+    bool CheckCollisionBoxCircle(BoundingBox const& box,
                                  f32 const          rotationRad,
                                  Vector2 const&     circlePosition,
                                  f32 const&         circleRadius,
@@ -52,26 +113,20 @@ namespace rlf::phys {
                                  Vector2&           collidedNormal,
                                  Vector2&           collidedTangent,
                                  f32&               penetratingDepth) {
-        // For a 2D box, we'll use the x and y components of the 3D BoundingBox.
-        // First, let's define the 2D box properties.
-        Vector2 boxCenter = {
-            (box3D.min.x + box3D.max.x) / 2.0f,
-            (box3D.min.y + box3D.max.y) / 2.0f};
-        Vector2 boxHalfSize = {
-            (box3D.max.x - box3D.min.x) / 2.0f,
-            (box3D.max.y - box3D.min.y) / 2.0f};
+        Vector2 const boxCenter   = {(box.min.x + box.max.x) * 0.5f, (box.min.y + box.max.y) * 0.5f};
+        Vector2 const boxHalfSize = {(box.max.x - box.min.x) * 0.5f, (box.max.y - box.min.y) * 0.5f};
 
         // Transform the circle's position into the box's local space
-        Vector2 localCirclePos = WorldToLocal(circlePosition, boxCenter, rotationRad);
+        Vector2 const localCirclePos = WorldToLocal(circlePosition, boxCenter, rotationRad);
 
         // Find the closest point on the AABB (in local space) to the circle center
         Vector2 closestPointLocal = localCirclePos;
-        closestPointLocal.x       = fmaxf(-boxHalfSize.x, fminf(closestPointLocal.x, boxHalfSize.x));
-        closestPointLocal.y       = fmaxf(-boxHalfSize.y, fminf(closestPointLocal.y, boxHalfSize.y));
+        closestPointLocal.x       = std::max(-boxHalfSize.x, std::min(closestPointLocal.x, boxHalfSize.x));
+        closestPointLocal.y       = std::max(-boxHalfSize.y, std::min(closestPointLocal.y, boxHalfSize.y));
 
         // Calculate the distance squared from the circle center to this closest point
-        Vector2 diff       = Vector2Subtract(localCirclePos, closestPointLocal);
-        f32     distanceSq = Vector2LengthSqr(diff);
+        Vector2 const diff       = localCirclePos - closestPointLocal;
+        f32 const     distanceSq = Vector2LengthSqr(diff);
 
         // Check if collision occurred
         if (distanceSq > (circleRadius * circleRadius)) {
@@ -89,8 +144,8 @@ namespace rlf::phys {
         if (FloatEquals(distanceSq, 0.0f)) {
             // Circle center is inside the box. We need to find the minimum penetration axis.
             // This is a special case: project circle center onto each face plane.
-            f32 dx = fabsf(localCirclePos.x) - boxHalfSize.x;
-            f32 dy = fabsf(localCirclePos.y) - boxHalfSize.y;
+            f32 const dx = std::abs(localCirclePos.x) - boxHalfSize.x;
+            f32 const dy = std::abs(localCirclePos.y) - boxHalfSize.y;
 
             if (dx > dy) {  // Penetrating more horizontally
                 localNormal      = Vector2{SIGN(localCirclePos.x), 0.0f};
@@ -100,9 +155,9 @@ namespace rlf::phys {
                 penetratingDepth = circleRadius + dy;
             }
         } else {
-            localNormal = Vector2Normalize(Vector2Subtract(localCirclePos, closestPointLocal));
+            localNormal = Vector2Normalize(localCirclePos - closestPointLocal);
             // Penetrating depth
-            penetratingDepth = circleRadius - sqrtf(distanceSq);
+            penetratingDepth = circleRadius - std::sqrtf(distanceSq);
         }
 
         // Transform local normal to world space
@@ -115,41 +170,118 @@ namespace rlf::phys {
     }
 
     bool CheckCollisionBoxToBox(BoundingBox const& box1,
+                                f32 const          box1RotationRad,
                                 BoundingBox const& box2,
+                                f32 const          box2RotationRad,
                                 Vector2&           collidedPoint,
                                 Vector2&           collidedNormal,
                                 Vector2&           collidedTangent,
                                 f32&               penetratingDepth) {
-        Vector2 const center1 = {(box1.min.x + box1.max.x) * 0.5f, (box1.min.y + box1.max.y) * 0.5f};
-        Vector2 const center2 = {(box2.min.x + box2.max.x) * 0.5f, (box2.min.y + box2.max.y) * 0.5f};
+        // Get the corners of both rotated boxes in world space
+        std::vector<Vector2> const corners1 = GetRotatedBoxCorners(box1, box1RotationRad);
+        std::vector<Vector2> const corners2 = GetRotatedBoxCorners(box2, box2RotationRad);
 
-        Vector2 const halfSize1 = {(box1.max.x - box1.min.x) * 0.5f, (box1.max.y - box1.min.y) * 0.5f};
-        Vector2 const halfSize2 = {(box2.max.x - box2.min.x) * 0.5f, (box2.max.y - box2.min.y) * 0.5f};
+        // Get the potential separation axes (normals of each box's edges)
+        std::vector<Vector2> axes;
+        std::vector<Vector2> normals1 = GetBoxNormals(corners1);
+        std::vector<Vector2> normals2 = GetBoxNormals(corners2);
+        axes.insert(axes.end(), normals1.begin(), normals1.end());
+        axes.insert(axes.end(), normals2.begin(), normals2.end());
 
-        Vector2 const distance    = Vector2Subtract(center2, center1);
-        Vector2 const absDistance = {fabsf(distance.x), fabsf(distance.y)};
+        f32     minOverlap     = std::numeric_limits<f32>::max();
+        Vector2 minOverlapAxis = {0.0f, 0.0f};
+        bool    collisionFound = true;  // Assume collision until a separating axis is found
 
-        Vector2 const overlap = {
-            halfSize1.x + halfSize2.x - absDistance.x,
-            halfSize1.y + halfSize2.y - absDistance.y};
+        // Use SAT (Separating Axis Theorem)
+        for (auto const& axis : axes) {
+            f32 min1, max1, min2, max2;
+            ProjectPolygon(corners1, axis, min1, max1);
+            ProjectPolygon(corners2, axis, min2, max2);
 
-        if (overlap.x <= 0 || overlap.y <= 0) {
+            f32 overlap;
+            if (!CheckOverlap(min1, max1, min2, max2, overlap)) {
+                collisionFound = false;  // Found a separating axis
+                break;
+            }
+
+            // If the axis points away from the other shape's center,
+            // we might need to flip the axis for consistent normal direction.
+            // We ensure the normal always points from box2 *to* box1 in terms
+            // of calculating the overlap distance.
+            Vector2 const box1Center = {(box1.min.x + box1.max.x) * 0.5f, (box1.min.y + box1.max.y) * 0.5f};
+            Vector2 const box2Center = {(box2.min.x + box2.max.x) * 0.5f, (box2.min.y + box2.max.y) * 0.5f};
+            Vector2 const centerVec  = box1Center - box2Center;
+            if (Vector2DotProduct(centerVec, axis) < 0.0f) {
+                overlap *= -1.0f;  // This is a trick to make overlap positive for penetration
+                                   // and simplify calculation later.
+            }
+
+            // Ensure overlap is positive (magnitude of penetration)
+            overlap = std::abs(overlap);
+
+            if (overlap < minOverlap) {
+                minOverlap     = overlap;
+                minOverlapAxis = axis;
+            }
+        }
+
+        if (!collisionFound) {
             return false;  // No collision
         }
 
-        // Determine the axis of least penetration (Minimum Translation Vector)
-        if (overlap.x < overlap.y) {
-            penetratingDepth = overlap.x;
-            collidedNormal.y = 0.0f;
-            collidedNormal.x = (distance.x < 0) ? -1.0f : 1.0f;
+        // Collision occurred!
+        penetratingDepth = minOverlap;
+
+        // Determine the collision normal (the axis of least penetration)
+        // The direction of the normal should point from box2 to box1.
+        Vector2 const box1Center   = {(box1.min.x + box1.max.x) * 0.5f, (box1.min.y + box1.max.y) * 0.5f};
+        Vector2 const box2Center   = {(box2.min.x + box2.max.x) * 0.5f, (box2.min.y + box2.max.y) * 0.5f};
+        Vector2 const centerVector = box1Center - box2Center;
+
+        // If the dot product is negative, it means minOverlapAxis points
+        // from box1 to box2, so we need to reverse it for the normal.
+        if (Vector2DotProduct(centerVector, minOverlapAxis) < 0.0f) {
+            collidedNormal = Vector2Scale(minOverlapAxis, -1.0f);
         } else {
-            penetratingDepth = overlap.y;
-            collidedNormal.x = 0.0f;
-            collidedNormal.y = (distance.y < 0) ? -1.0f : 1.0f;
+            collidedNormal = minOverlapAxis;
         }
 
-        collidedPoint   = Vector2Add(center1, Vector2Scale(collidedNormal, halfSize1.x * fabsf(collidedNormal.x) + halfSize1.y * fabsf(collidedNormal.y)));
-        collidedTangent = Vector2Rotate(collidedNormal, rlf::pi * 0.5f);
+        // Collision point: this is harder for two rotated boxes.
+        // A common approach is to find the vertex of one box that penetrates
+        // the most into the other box, or the face of one box that is
+        // most deeply penetrated by the other.
+        // For simplicity, let's find the deepest penetrating vertex from box2 into box1.
+        // This is an approximation and might not be perfectly accurate for all cases,
+        // especially for edge-on-edge collisions.
+        f32     maxPenetration = -std::numeric_limits<f32>::max();
+        Vector2 deepVertex     = {0.0f, 0.0f};
+
+        // Check corners of box2 against box1
+        for (Vector2 const& vertex : corners2) {
+            // Project the vertex onto the normal
+            f32 const projection = Vector2DotProduct(vertex, collidedNormal);
+
+            // Project box1 onto the normal
+            f32 min1, max1;
+            ProjectPolygon(corners1, collidedNormal, min1, max1);
+
+            // Calculate penetration depth for this vertex
+            // If the normal points from box2 to box1, a vertex from box2
+            // would penetrate if its projection is greater than box1's max projection.
+            f32 const currentPenetration = projection - max1;  // How far beyond box1's "back" face
+                                                               // the vertex is. Negative means inside.
+
+            if (currentPenetration > maxPenetration) {
+                maxPenetration = currentPenetration;
+                deepVertex     = vertex;
+            }
+        }
+        // The point on the surface of box1 where deepVertex from box2 would collide.
+        // This is `deepVertex - collidedNormal * maxPenetration`
+        collidedPoint = Vector2Subtract(deepVertex, Vector2Scale(collidedNormal, maxPenetration));
+
+        // Calculate tangent (perpendicular to normal)
+        collidedTangent = Vector2{-collidedNormal.y, collidedNormal.x};
 
         return true;
     }

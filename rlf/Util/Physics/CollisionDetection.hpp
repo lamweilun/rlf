@@ -13,7 +13,9 @@ namespace rlf::phys {
                                  f32&               penetratingDepth);
 
     bool CheckCollisionBoxToBox(BoundingBox const& box1,
+                                f32 const          box1RotationRad,
                                 BoundingBox const& box2,
+                                f32 const          box2RotationRad,
                                 Vector2&           collidedPoint,
                                 Vector2&           collidedNormal,
                                 Vector2&           collidedTangent,
