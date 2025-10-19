@@ -163,7 +163,7 @@ namespace rlf::System {
         }
 
         // Render UI
-        if (mActiveUICameraNode && mActiveCameraNode->getActive()) {
+        if (mActiveUICameraNode && mActiveUICameraNode->getActive()) {
             Camera2D camera = mActiveUICameraNode->getAsCamera2DUI();
             BeginMode2D(camera);
         }

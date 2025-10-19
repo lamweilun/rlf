@@ -84,192 +84,6 @@
               "type": "BaseNode",
               "data": {
                 "active": true,
-                "name": "MainMenuUI",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 1.0,
-                  "y": 1.0
-                },
-                "rotation": 0.0,
-                "children": [
-                  {
-                    "type": "UITextNode",
-                    "data": {
-                      "active": true,
-                      "name": "GameTitle",
-                      "position": {
-                        "x": 0.0,
-                        "y": -200.0
-                      },
-                      "scale": {
-                        "x": 1.0,
-                        "y": 1.0
-                      },
-                      "rotation": 0.0,
-                      "tint": {
-                        "r": 255,
-                        "g": 255,
-                        "b": 255,
-                        "a": 255
-                      },
-                      "layer": 0,
-                      "Font": "",
-                      "Text": "Exteroids LMAO",
-                      "Font Size": 20,
-                      "Spacing": 0.0,
-                      "Auto Spacing": true
-                    }
-                  },
-                  {
-                    "type": "UIButtonNode",
-                    "data": {
-                      "active": true,
-                      "name": "StartButton",
-                      "position": {
-                        "x": 0.0,
-                        "y": 0.0
-                      },
-                      "scale": {
-                        "x": 150.0,
-                        "y": 50.0
-                      },
-                      "rotation": 0.0,
-                      "tint": {
-                        "r": 0,
-                        "g": 255,
-                        "b": 0,
-                        "a": 255
-                      },
-                      "layer": 0,
-                      "Texture": "",
-                      "Hovered Texture": "",
-                      "Hovered Tint": {
-                        "r": 100,
-                        "g": 255,
-                        "b": 100,
-                        "a": 255
-                      },
-                      "Clicked Texture": "",
-                      "Clicked Tint": {
-                        "r": 0,
-                        "g": 150,
-                        "b": 0,
-                        "a": 255
-                      },
-                      "Use Border": true,
-                      "Border Thickness": 0.019999999552965164,
-                      "children": [
-                        {
-                          "type": "UITextNode",
-                          "data": {
-                            "active": true,
-                            "name": "StartText",
-                            "position": {
-                              "x": 0.0,
-                              "y": 0.0
-                            },
-                            "scale": {
-                              "x": 0.006670000031590462,
-                              "y": 0.019999999552965164
-                            },
-                            "rotation": 0.0,
-                            "tint": {
-                              "r": 255,
-                              "g": 255,
-                              "b": 255,
-                              "a": 255
-                            },
-                            "layer": 0,
-                            "Font": "",
-                            "Text": "Start",
-                            "Font Size": 20,
-                            "Spacing": 0.0,
-                            "Auto Spacing": true
-                          }
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "UIButtonNode",
-                    "data": {
-                      "active": true,
-                      "name": "QuitButton",
-                      "position": {
-                        "x": 0.0,
-                        "y": 100.0
-                      },
-                      "scale": {
-                        "x": 150.0,
-                        "y": 50.0
-                      },
-                      "rotation": 0.0,
-                      "tint": {
-                        "r": 255,
-                        "g": 0,
-                        "b": 0,
-                        "a": 255
-                      },
-                      "layer": 0,
-                      "Texture": "",
-                      "Hovered Texture": "",
-                      "Hovered Tint": {
-                        "r": 255,
-                        "g": 100,
-                        "b": 100,
-                        "a": 255
-                      },
-                      "Clicked Texture": "",
-                      "Clicked Tint": {
-                        "r": 150,
-                        "g": 0,
-                        "b": 0,
-                        "a": 255
-                      },
-                      "Use Border": true,
-                      "Border Thickness": 0.019999999552965164,
-                      "children": [
-                        {
-                          "type": "UITextNode",
-                          "data": {
-                            "active": true,
-                            "name": "QuitText",
-                            "position": {
-                              "x": 0.0,
-                              "y": 0.0
-                            },
-                            "scale": {
-                              "x": 0.007000000216066837,
-                              "y": 0.019999999552965164
-                            },
-                            "rotation": 0.0,
-                            "tint": {
-                              "r": 255,
-                              "g": 255,
-                              "b": 255,
-                              "a": 255
-                            },
-                            "layer": 0,
-                            "Font": "",
-                            "Text": "Quit",
-                            "Font Size": 20,
-                            "Spacing": 0.0,
-                            "Auto Spacing": true
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "type": "BaseNode",
-              "data": {
-                "active": false,
                 "name": "GameUI",
                 "position": {
                   "x": 0.0,
@@ -318,7 +132,7 @@
       {
         "type": "PlayerNode",
         "data": {
-          "active": false,
+          "active": true,
           "name": "PlayerNode",
           "position": {
             "x": 0.0,
@@ -397,36 +211,17 @@
           "speed": 1000.0,
           "children": [
             {
-              "type": "BoxColliderNode",
+              "type": "CircleRenderNode",
               "data": {
                 "active": true,
-                "name": "BoxColliderNode",
+                "name": "New CircleRenderNode",
                 "position": {
                   "x": 0.0,
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 10.0,
-                  "y": 10.0
-                },
-                "rotation": 0.0,
-                "tags": [
-                  "PlayerBullet"
-                ]
-              }
-            },
-            {
-              "type": "QuadRenderNode",
-              "data": {
-                "active": true,
-                "name": "New QuadRenderNode",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 10.0,
-                  "y": 10.0
+                  "x": 5.0,
+                  "y": 5.0
                 },
                 "rotation": 0.0,
                 "tint": {
@@ -437,67 +232,22 @@
                 },
                 "layer": 0
               }
-            }
-          ]
-        }
-      },
-      {
-        "type": "EnemyNode",
-        "data": {
-          "active": false,
-          "name": "EnemyNode",
-          "position": {
-            "x": 270.0,
-            "y": 0.0
-          },
-          "scale": {
-            "x": 1.0,
-            "y": 1.0
-          },
-          "rotation": 0.0,
-          "speed": 0.0,
-          "Enemy HP": 1,
-          "children": [
-            {
-              "type": "BoxColliderNode",
-              "data": {
-                "active": true,
-                "name": "New BoxColliderNode",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 100.0,
-                  "y": 30.0
-                },
-                "rotation": 0.0,
-                "tags": [
-                  "Enemy"
-                ]
-              }
             },
             {
-              "type": "QuadRenderNode",
+              "type": "CircleColliderNode",
               "data": {
                 "active": true,
-                "name": "New QuadRenderNode",
+                "name": "New CircleColliderNode",
                 "position": {
                   "x": 0.0,
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 100.0,
-                  "y": 30.0
+                  "x": 5.0,
+                  "y": 5.0
                 },
                 "rotation": 0.0,
-                "tint": {
-                  "r": 255,
-                  "g": 255,
-                  "b": 255,
-                  "a": 255
-                },
-                "layer": 0
+                "tags": []
               }
             }
           ]

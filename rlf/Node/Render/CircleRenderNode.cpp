@@ -2,6 +2,6 @@
 
 namespace rlf::Node {
     void CircleRenderNode::renderImpl() {
-        DrawCircleV(Vector2Zeros, 0.5f, getTint());
+        DrawCircleV(Vector2Zeros, 1.0f, getTint());
     }
 }

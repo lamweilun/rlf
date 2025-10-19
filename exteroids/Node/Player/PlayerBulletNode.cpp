@@ -1,21 +1,12 @@
-#include "Node/Physics/BoxColliderNode.hpp"
-
 #include <Node/Player/PlayerBulletNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
-
-#include <Node/Enemy/EnemyNode.hpp>
 
 namespace ext::Node {
 
     void PlayerBulletNode::initImpl() {
-        if (auto const bulletCollider = getFirstChildOfType<rlf::Node::BoxColliderNode>()) {
+        if (auto const bulletCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>()) {
             bulletCollider.value()->setCollidedCallback([this](rlf::CollideInfo const& info) {
                 if (info.other && info.other->hasTag("Enemy")) {
-                    // Collision resolver
-                    setPosition(getPosition() + info.collidedNormal * info.collidedDepth);
-                    auto const& tangent     = info.collidedNormal;
-                    auto        newVelocity = Vector2Reflect(Vector2Normalize(getVelocity()), tangent);
-                    setVelocity(newVelocity);
                 }
             });
         }

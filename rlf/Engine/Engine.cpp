@@ -120,6 +120,11 @@ namespace rlf {
         mRootNode->init();
 
         while (!(WindowShouldClose() || mToQuit)) {
+            if (!mNextWorldToLoad.empty()) {
+                mRootNode->deserializeFromFile(mNextWorldToLoad);
+                mNextWorldToLoad.clear();
+            }
+
             if (mUpdateFunc) {
                 mUpdateFunc(mRootNode);
             }
@@ -161,12 +166,19 @@ namespace rlf {
         mToQuit = true;
     }
 
+    void Engine::setAssetsDirectory(std::filesystem::path const& assetsPath) {
+        std::filesystem::current_path(assetsPath);
+    }
+
+    std::string Engine::getAssetsDirectory() const {
+        return std::filesystem::current_path().string();
+    }
+
     void Engine::setInitialWorldToLoad(std::string const& filename) {
         mInitialWorldToLoad = filename;
     }
-
-    void Engine::setAssetsDirectory(std::filesystem::path const& assetsPath) {
-        std::filesystem::current_path(assetsPath);
+    void Engine::setNextWorldToLoad(std::string const& filename) {
+        mNextWorldToLoad = filename;
     }
 
     void Engine::setSetupFunc(std::function<void()> setupFunc) {
