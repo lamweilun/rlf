@@ -10,7 +10,6 @@ namespace rlf::Node {
     protected:
         void setupImpl() override;
         void shutdownImpl() override;
-        void updateImpl() override;
 
     private:
     };

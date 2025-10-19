@@ -117,6 +117,8 @@ namespace rlf::Node {
         Vector2                   getGlobalPosition() const;
         Vector2                   getGlobalScale() const;
         Quaternion                getGlobalRotation() const;
+        f32                       getGlobalRotationRad() const;
+        f32                       getGlobalRotationDeg() const;
 
         bool                                          hasParent() const;
         std::weak_ptr<BaseNode>                       getParent() const;

@@ -12,9 +12,4 @@ namespace rlf::Node {
         auto boxCollider = shared_from_this()->as<BoxColliderNode>();
         rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(boxCollider);
     }
-    void BoxColliderNode::updateImpl() {
-        auto boxCollider = shared_from_this()->as<BoxColliderNode>();
-        mCollisionInfos  = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->getCollisionInfos(boxCollider);
-        ColliderNode::updateImpl();
-    }
 }

@@ -5,11 +5,8 @@
 namespace ext::Node {
     void EnemyNode::initImpl() {
         if (auto const enemyCollider = getFirstChildOfType<rlf::Node::BoxColliderNode>()) {
-            enemyCollider.value()->setCollidedCallback([this](std::vector<rlf::CollideInfo> const& infos) {
-                for (auto const& info : infos) {
-                    if (info.other->hasTag("PlayerBullet")) {
-                        setToDestroy(true);
-                    }
+            enemyCollider.value()->setCollidedCallback([this](rlf::CollideInfo const& info) {
+                if (info.other && info.other->hasTag("PlayerBullet")) {
                 }
             });
         }

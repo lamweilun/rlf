@@ -1,28 +1,32 @@
 #include <Node/Physics/ColliderNode.hpp>
 
-#include <System/Physics/PhysicsSystem.hpp>
-
 namespace rlf::Node {
-    void ColliderNode::updateImpl() {
-        if (mCollidedCallback) {
-            mCollidedCallback(mCollisionInfos);
-        }
-    }
-
-    void ColliderNode::setCollidedCallback(std::function<void(std::vector<rlf::CollideInfo> const&)> callback) {
+    void ColliderNode::setCollidedCallback(std::function<void(rlf::CollideInfo const&)> const& callback) {
         mCollidedCallback = callback;
     }
 
-    void ColliderNode::addTag(std::string_view tag) {
-        mTags.insert(tag.data());
+    void ColliderNode::invokeCollidedCallback(rlf::CollideInfo const& info) const {
+        if (mCollidedCallback) {
+            mCollidedCallback(info);
+        }
     }
 
-    std::set<std::string> const& ColliderNode::getTags() const {
-        return mTags;
+    bool ColliderNode::hasCollidedCallback() const {
+        return mCollidedCallback != nullptr;
     }
 
-    bool ColliderNode::hasTag(std::string_view tag) const {
-        return mTags.contains(tag.data());
+    void ColliderNode::addTag(std::string_view const tag) {
+        auto tags = std::set(std::begin(mTags), std::end(mTags));
+        tags.insert(tag.data());
+        mTags = {std::begin(tags), std::end(tags)};
+    }
+
+    std::set<std::string> ColliderNode::getTags() const {
+        return std::set(std::begin(mTags), std::end(mTags));
+    }
+
+    bool ColliderNode::hasTag(std::string_view const tag) const {
+        return std::set(std::begin(mTags), std::end(mTags)).contains(tag.data());
     }
 
     bool ColliderNode::hasAnyOfTags(std::set<std::string> const& tags) const {

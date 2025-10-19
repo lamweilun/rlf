@@ -15,6 +15,7 @@
 #include <string_view>
 #include <sstream>
 #include <set>
+#include <tuple>
 
 namespace rlf::acc {
     class ImGuiAccessor {
@@ -131,10 +132,24 @@ namespace rlf::acc {
             auto const childName = std::string(name) + "##" + getAddressAsString(&p);
             ImGui::BeginChild(childName.c_str(), ImVec2(0, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_AutoResizeY);
             ImGui::Text("%s", name.data());
-            auto const firstName  = std::string("first##") + getAddressAsString(&p.first);
-            auto const secondName = std::string("second##") + getAddressAsString(&p.second);
+            auto const firstName  = std::string(name.data()) + std::string("first##") + getAddressAsString(&p.first);
+            auto const secondName = std::string(name.data()) + std::string("second##") + getAddressAsString(&p.second);
             (*this)(firstName, p.first);
             (*this)(secondName, p.second);
+            ImGui::EndChild();
+        }
+
+        // std::tuple support
+        template <class... Ts>
+        void operator()(std::string_view name, std::tuple<Ts...>& tup) {
+            auto const childName = std::string(name) + "##" + getAddressAsString(&tup);
+            ImGui::BeginChild(childName.c_str(), ImVec2(0, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_AutoResizeY);
+            ImGui::Text("%s", name.data());
+            std::apply([this, name](Ts&... t) {
+                size_t i = 0;
+                ((*this)(std::string(name.data()) + ' ' + std::to_string(i++) + "##" + getAddressAsString(&t), t), ...);
+            },
+                       tup);
             ImGui::EndChild();
         }
 
@@ -152,42 +167,36 @@ namespace rlf::acc {
         // std::vector support
         template <class T>
         void operator()(std::string_view name, std::vector<T>& vec) {
-            std::vector<T> vec2;
-            vec2.reserve(vec.size() + 1);
-            vec2.resize(vec.size());
-            for (u32 i = 0; i < vec.size(); ++i) {
-                vec2[i] = vec[i];
-            }
-
             if (ImGui::CollapsingHeader(name.data(), ImGuiTreeNodeFlags_DefaultOpen)) {
-                for (u32 i = 0; i < vec2.size(); ++i) {
+                for (u32 i = 0; i < vec.size(); ++i) {
                     std::string indexedName = std::string(name) + ' ' + std::to_string(i);
-                    (*this)(indexedName, vec2[i]);
+                    (*this)(indexedName, vec[i]);
 
                     ImGui::SameLine();
 
-                    auto const removeEntryButton = std::string("-##") + getAddressAsString(&vec2[i]);
+                    auto const removeEntryButton = std::string("-##") + getAddressAsString(&vec[i]);
                     if (ImGui::Button(removeEntryButton.c_str())) {
-                        vec2.erase(std::begin(vec2) + static_cast<i32>(i));
+                        auto itr = std::begin(vec);
+                        std::advance(itr, i);
+                        vec.erase(itr);
                         break;
                     }
                 }
                 {
-                    auto const addVecButton = std::string("+##") + getAddressAsString(&vec2);
+                    auto const addVecButton = std::string("+##") + getAddressAsString(&vec);
                     if (ImGui::Button(addVecButton.c_str())) {
-                        vec2.resize(vec2.size() + 1);
+                        vec.emplace_back();
                     }
                 }
             }
-            vec = vec2;
         }
 
         // std::set support
         template <class T>
         void operator()(std::string_view name, std::set<T>& s) {
-            std::vector<T> vec(std::begin(s), std::end(s));
+            std::vector vec(std::begin(s), std::end(s));
             (*this)(name, vec);
-            s = std::set<T>(std::begin(vec), std::end(vec));
+            s = std::set(std::begin(vec), std::end(vec));
         }
 
         // std::map support

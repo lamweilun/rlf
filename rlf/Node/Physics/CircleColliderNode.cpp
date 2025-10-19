@@ -12,11 +12,4 @@ namespace rlf::Node {
         auto circleCollider = shared_from_this()->as<CircleColliderNode>();
         rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(circleCollider);
     }
-
-    void CircleColliderNode::updateImpl() {
-        auto circleCollider = shared_from_this()->as<CircleColliderNode>();
-        auto infos          = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->getCollisionInfos(circleCollider);
-        mCollisionInfos = infos;
-        ColliderNode::updateImpl();
-    }
 }

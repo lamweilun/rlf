@@ -16,7 +16,6 @@ namespace rlf::Node {
     protected:
         void setupImpl() override;
         void shutdownImpl() override;
-        void updateImpl() override;
 
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(ColliderNode)

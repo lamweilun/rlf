@@ -45,7 +45,7 @@ namespace rlf {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
         InitWindow(static_cast<int>(width), static_cast<int>(height), title);
         SetWindowMonitor(0);
-        SetTargetFPS(GetMonitorRefreshRate(0));
+        // SetTargetFPS(GetMonitorRefreshRate(0));
         SetExitKey(KEY_NULL);
 
 #ifdef RLF_EDITOR
@@ -138,6 +138,8 @@ namespace rlf {
             for (auto& system : mSystems) {
                 system->render();
             }
+
+            DrawFPS(10, 10);
 
             EndDrawing();
         }

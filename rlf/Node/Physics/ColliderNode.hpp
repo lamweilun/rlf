@@ -10,18 +10,18 @@ namespace rlf::Node {
     class ColliderNode : public BaseNode {
     public:
         RLF_TYPE_REGISTER_QUICK(ColliderNode)
-        void setCollidedCallback(std::function<void(std::vector<rlf::CollideInfo> const&)> callback);
 
-        void                         addTag(std::string_view tag);
-        std::set<std::string> const& getTags() const;
-        bool                         hasTag(std::string_view tag) const;
-        bool                         hasAnyOfTags(std::set<std::string> const& tags) const;
+        void setCollidedCallback(std::function<void(rlf::CollideInfo const&)> const& callback);
+        void invokeCollidedCallback(rlf::CollideInfo const& info) const;
+        bool hasCollidedCallback() const;
+
+        void                  addTag(std::string_view const tag);
+        std::set<std::string> getTags() const;
+        bool                  hasTag(std::string_view const tag) const;
+        bool                  hasAnyOfTags(std::set<std::string> const& tags) const;
 
     protected:
-        void updateImpl() override;
-
-        std::vector<rlf::CollideInfo>                             mCollisionInfos;
-        std::function<void(std::vector<rlf::CollideInfo> const&)> mCollidedCallback;
+        std::function<void(rlf::CollideInfo const&)> mCollidedCallback;
 
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)
@@ -29,6 +29,6 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_END
 
     private:
-        std::set<std::string> mTags;
+        std::vector<std::string> mTags;
     };
 }

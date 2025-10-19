@@ -400,7 +400,7 @@
               "type": "CircleRenderNode",
               "data": {
                 "active": true,
-                "name": "BulletRender",
+                "name": "PlayerBulletRender",
                 "position": {
                   "x": 0.0,
                   "y": 0.0
@@ -423,14 +423,14 @@
               "type": "CircleColliderNode",
               "data": {
                 "active": true,
-                "name": "BulletCollider",
+                "name": "New CircleColliderNode",
                 "position": {
                   "x": 0.0,
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 5.0,
-                  "y": 5.0
+                  "x": 1.0,
+                  "y": 1.0
                 },
                 "rotation": 0.0,
                 "tags": [
@@ -459,45 +459,45 @@
           "Enemy HP": 1,
           "children": [
             {
-              "type": "QuadRenderNode",
-              "data": {
-                "active": true,
-                "name": "EnemyRenderNode",
-                "position": {
-                  "x": 0.0,
-                  "y": 0.0
-                },
-                "scale": {
-                  "x": 20.0,
-                  "y": 20.0
-                },
-                "rotation": 0.0,
-                "tint": {
-                  "r": 255,
-                  "g": 0,
-                  "b": 0,
-                  "a": 255
-                },
-                "layer": 0
-              }
-            },
-            {
               "type": "BoxColliderNode",
               "data": {
                 "active": true,
-                "name": "EnemyCollider",
+                "name": "New BoxColliderNode",
                 "position": {
                   "x": 0.0,
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 20.0,
-                  "y": 20.0
+                  "x": 10.0,
+                  "y": 10.0
                 },
                 "rotation": 0.0,
                 "tags": [
                   "Enemy"
                 ]
+              }
+            },
+            {
+              "type": "QuadRenderNode",
+              "data": {
+                "active": true,
+                "name": "New QuadRenderNode",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 10.0,
+                  "y": 10.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0
               }
             }
           ]

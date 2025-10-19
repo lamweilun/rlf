@@ -27,10 +27,4 @@ namespace rlf::Node {
         auto lineCollider = shared_from_this()->as<LineColliderNode>();
         rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(lineCollider);
     }
-
-    void LineColliderNode::updateImpl() {
-        auto lineCollider = shared_from_this()->as<LineColliderNode>();
-        mCollisionInfos   = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->getCollisionInfos(lineCollider);
-        ColliderNode::updateImpl();
-    }
 }

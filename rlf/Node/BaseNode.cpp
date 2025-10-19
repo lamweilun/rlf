@@ -201,6 +201,14 @@ namespace rlf::Node {
         return QuaternionFromMatrix(globalMat);
     }
 
+    f32 BaseNode::getGlobalRotationRad() const {
+        auto const& globalRot = getGlobalRotation();
+        return QuaternionToEuler(globalRot).z;
+    }
+    f32 BaseNode::getGlobalRotationDeg() const {
+        return getGlobalRotationRad() * RAD2DEG;
+    }
+
     bool BaseNode::hasParent() const {
         return getParent().lock() != nullptr;
     }
@@ -294,7 +302,7 @@ namespace rlf::Node {
             auto child = childQueue.front();
             allChildren.push_back(child);
             childQueue.pop();
-            for (auto grandChild : child->getChildren()) {
+            for (auto const& grandChild : child->getChildren()) {
                 childQueue.push(grandChild);
             }
         }
