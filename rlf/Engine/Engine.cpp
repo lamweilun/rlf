@@ -41,9 +41,9 @@ namespace rlf {
         return engine;
     }
 
-    Engine::Engine(u32 const width, u32 const height, char const* title) {
-        SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
-        InitWindow(static_cast<int>(width), static_cast<int>(height), title);
+    void Engine::run(Config const& config) {
+        SetConfigFlags(FLAG_MSAA_4X_HINT);
+        InitWindow(static_cast<int>(config.width), static_cast<int>(config.height), config.title.data());
         SetWindowMonitor(0);
         // SetTargetFPS(GetMonitorRefreshRate(0));
         SetExitKey(KEY_NULL);
@@ -62,13 +62,7 @@ namespace rlf {
 #ifdef RLF_EDITOR
         addSystem<rlf::System::EditorSystem>();
 #endif
-    }
 
-    Engine::~Engine() {
-        CloseWindow();
-    }
-
-    void Engine::run() {
         // Register Types here
         rlf::TypeManager::getInstance().registerType<rlf::Node::BaseNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::SoundNode>();
@@ -95,6 +89,7 @@ namespace rlf {
         rlf::TypeManager::getInstance().registerType<rlf::Node::UISpriteNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::UITextNode>();
 
+        // Run custom setup func, for registering of app node types
         if (mSetupFunc) {
             mSetupFunc();
         }
@@ -120,6 +115,14 @@ namespace rlf {
         mRootNode->init();
 
         while (!(WindowShouldClose() || mToQuit)) {
+#ifndef RLF_EDITOR
+            // Alt + Enter to toggle Borderless Fullscreen
+            if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)) {
+                ToggleBorderlessWindowed();
+            }
+#endif
+
+            // Checks if there's a next world to load before doing any updates
             if (!mNextWorldToLoad.empty()) {
                 mRootNode->deserializeFromFile(mNextWorldToLoad);
                 mNextWorldToLoad.clear();
@@ -144,7 +147,10 @@ namespace rlf {
                 system->render();
             }
 
+#if defined(RLF_DEBUG) && !defined(RLF_EDITOR)
+            // Draw FPS counter
             DrawFPS(10, 10);
+#endif
 
             EndDrawing();
         }
@@ -160,6 +166,8 @@ namespace rlf {
         for (auto const& system : mSystems) {
             system->shutdown();
         }
+
+        CloseWindow();
     }
 
     void Engine::setToQuit() {

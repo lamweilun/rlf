@@ -12,16 +12,22 @@ namespace rlf {
 
     class Engine {
     public:
+        struct Config {
+            u32              width  = 1280;
+            u32              height = 720;
+            std::string_view title  = "Hello rlf";
+        };
+
         static Engine &getInstance();
 
-        Engine(u32 const width = 1280, u32 const height = 720, char const *title = "");
-        ~Engine();
+        Engine()                          = default;
+        ~Engine()                         = default;
         Engine(Engine const &)            = delete;
         Engine(Engine &&)                 = delete;
         Engine &operator=(Engine const &) = delete;
         Engine &operator=(Engine &&)      = delete;
 
-        void run();
+        void run(Config const &config = Config(1280, 720, "Hello rlf"));
         void setToQuit();
 
         void        setAssetsDirectory(std::filesystem::path const &assetsPath);

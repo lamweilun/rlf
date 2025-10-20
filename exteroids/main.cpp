@@ -62,5 +62,6 @@ int main() {
 #endif
 
     // Run the engine
-    engine.run();
+    rlf::Engine::Config config{1920, 1080, "Exteroids"};
+    engine.run(config);
 }
