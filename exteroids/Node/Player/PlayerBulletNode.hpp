@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Node/Render/BurstParticleRenderNode.hpp>
+
 #include <Node/Physics/RigidbodyNode.hpp>
 
 namespace ext::Node {
@@ -12,5 +14,6 @@ namespace ext::Node {
         void updateImpl() override;
 
     private:
+        std::shared_ptr<rlf::Node::BurstParticleRenderNode> mBulletParticle;
     };
 }

@@ -11,10 +11,6 @@ namespace rlf::Node {
         void setupImpl() override;
         void shutdownImpl() override;
 
-        RLF_NODE_ACCESS_START
-        RLF_NODE_ACCESS_PARENT(ColliderNode)
-        RLF_NODE_ACCESS_END
-
     private:
     };
 }

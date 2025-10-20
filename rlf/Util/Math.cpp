@@ -62,3 +62,18 @@ void from_json(rlf::Json const& j, Vector4& v) {
 Vector2 operator-(Vector2 const& v) {
     return Vector2(-v.x, -v.y);
 }
+
+Vector2 Vector2FromAngleRad(f32 const angleRad) {
+    return Vector2Normalize(Vector2(std::cosf(angleRad), std::sinf(angleRad)));
+}
+
+Vector2 Vector2FromAngleDeg(f32 const angleDeg) {
+    return Vector2FromAngleRad(angleDeg * DEG2RAD);
+}
+
+f32 AngleRadFromVector2(Vector2 const& v) {
+    return Vector2Angle(Vector2{1.0f, 0.0f}, Vector2Normalize(v));
+}
+f32 AngleDegFromVector2(Vector2 const& v) {
+    return AngleRadFromVector2(v) * RAD2DEG;
+}

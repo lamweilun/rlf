@@ -147,10 +147,10 @@ namespace rlf {
                 system->render();
             }
 
-#if defined(RLF_DEBUG) && !defined(RLF_EDITOR)
+            // #if defined(RLF_DEBUG) && !defined(RLF_EDITOR)
             // Draw FPS counter
             DrawFPS(10, 10);
-#endif
+            // #endif
 
             EndDrawing();
         }

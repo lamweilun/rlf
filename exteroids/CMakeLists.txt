@@ -8,11 +8,13 @@ add_executable(
         Node/Game/MainMenuManagerNode.cpp
         Node/Game/GameManagerNode.cpp
 
+        Node/Asteroid/AsteroidNode.cpp
+
         Node/Player/PlayerNode.cpp
         Node/Player/PlayerBulletNode.cpp
 
         main.cpp
 )
 add_warning_flags(${PROJECT_NAME})
-target_include_directories(${PROJECT_NAME} PUBLIC ./)
-target_link_libraries(${PROJECT_NAME} PUBLIC rlf)
+target_include_directories(${PROJECT_NAME} PRIVATE ./)
+target_link_libraries(${PROJECT_NAME} PRIVATE rlf)

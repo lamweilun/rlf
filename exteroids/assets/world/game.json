@@ -79,6 +79,7 @@
             "y": 1.0
           },
           "rotation": 0.0,
+          "Asteroid Spawn Timer": 1.0,
           "children": [
             {
               "type": "BaseNode",
@@ -98,7 +99,7 @@
                   {
                     "type": "UITextNode",
                     "data": {
-                      "active": true,
+                      "active": false,
                       "name": "Score",
                       "position": {
                         "x": 0.0,
@@ -146,7 +147,7 @@
           "speed": 300.0,
           "children": [
             {
-              "type": "QuadRenderNode",
+              "type": "SpriteRenderNode",
               "data": {
                 "active": true,
                 "name": "PlayerRenderNode",
@@ -155,26 +156,27 @@
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 20.0,
-                  "y": 20.0
+                  "x": 0.5,
+                  "y": 0.5
                 },
-                "rotation": 0.0,
+                "rotation": 90.0,
                 "tint": {
                   "r": 255,
                   "g": 255,
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0
+                "layer": 0,
+                "Texture": "sprites/ship/playerShip2_blue.png"
               }
             },
             {
               "type": "QuadRenderNode",
               "data": {
-                "active": true,
+                "active": false,
                 "name": "PlayerFirePoint",
                 "position": {
-                  "x": 15.0,
+                  "x": 20.0,
                   "y": 0.0
                 },
                 "scale": {
@@ -189,6 +191,25 @@
                   "a": 255
                 },
                 "layer": 0
+              }
+            },
+            {
+              "type": "SoundNode",
+              "data": {
+                "active": true,
+                "name": "PlayerFireSound",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "Sound": "sounds/laserSmall_001.ogg",
+                "Play On Init": false,
+                "Pause On Inactive": true
               }
             }
           ]
@@ -211,26 +232,27 @@
           "speed": 1000.0,
           "children": [
             {
-              "type": "CircleRenderNode",
+              "type": "SpriteRenderNode",
               "data": {
                 "active": true,
-                "name": "New CircleRenderNode",
+                "name": "New SpriteRenderNode",
                 "position": {
-                  "x": 0.0,
+                  "x": 11.0,
                   "y": 0.0
                 },
                 "scale": {
-                  "x": 5.0,
-                  "y": 5.0
+                  "x": 1.0,
+                  "y": 1.0
                 },
-                "rotation": 0.0,
+                "rotation": 90.0,
                 "tint": {
                   "r": 255,
                   "g": 255,
                   "b": 255,
                   "a": 255
                 },
-                "layer": 0
+                "layer": 0,
+                "Texture": "sprites/bullet/laserBlue06.png"
               }
             },
             {
@@ -239,7 +261,7 @@
                 "active": true,
                 "name": "New CircleColliderNode",
                 "position": {
-                  "x": 0.0,
+                  "x": 25.0,
                   "y": 0.0
                 },
                 "scale": {
@@ -247,7 +269,286 @@
                   "y": 5.0
                 },
                 "rotation": 0.0,
-                "tags": []
+                "tags": [
+                  "PlayerBullet"
+                ]
+              }
+            },
+            {
+              "type": "BurstParticleRenderNode",
+              "data": {
+                "Burst Count": 1,
+                "Burst Particle Count": 10,
+                "To Destroy After Burst": true,
+                "active": false,
+                "name": "BulletParticle",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0,
+                "Max Count": 10,
+                "Spawn Rate": 0.0,
+                "Lifetime Range": {
+                  "min": 0.25,
+                  "max": 0.5
+                },
+                "Spawn Angle Range": {
+                  "min": 0.0,
+                  "max": 359.0
+                },
+                "Start Scale Range": {
+                  "min": 2.0,
+                  "max": 5.0
+                },
+                "End Scale Range": {
+                  "min": 0.0,
+                  "max": 0.0
+                },
+                "Start Speed Range": {
+                  "min": 200.0,
+                  "max": 300.0
+                },
+                "End Speed Range": {
+                  "min": 0.0,
+                  "max": 0.0
+                },
+                "Start Rotation Range": {
+                  "min": 0.0,
+                  "max": 0.0
+                },
+                "End Rotation Range": {
+                  "min": 0.0,
+                  "max": 0.0
+                },
+                "Start Color Range": {
+                  "min": {
+                    "r": 0.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  },
+                  "max": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                },
+                "End Color Range": {
+                  "min": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  },
+                  "max": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "AsteroidNode",
+        "data": {
+          "active": false,
+          "name": "BigAsteroid",
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "speed": 0.0,
+          "HP": 1,
+          "children": [
+            {
+              "type": "SpriteRenderNode",
+              "data": {
+                "active": true,
+                "name": "BigAsteroidRender",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0,
+                "Texture": "sprites/asteroid/meteorBrown_big3.png"
+              }
+            },
+            {
+              "type": "CircleColliderNode",
+              "data": {
+                "active": true,
+                "name": "BigAsteroidCollider",
+                "position": {
+                  "x": 0.0,
+                  "y": 1.0
+                },
+                "scale": {
+                  "x": 40.0,
+                  "y": 40.0
+                },
+                "rotation": 0.0,
+                "tags": [
+                  "Asteroid"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "AsteroidNode",
+        "data": {
+          "active": false,
+          "name": "MediumAsteroid",
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "speed": 0.0,
+          "HP": 1,
+          "children": [
+            {
+              "type": "SpriteRenderNode",
+              "data": {
+                "active": true,
+                "name": "MediumAsteroidRender",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0,
+                "Texture": "sprites/asteroid/meteorBrown_med1.png"
+              }
+            },
+            {
+              "type": "CircleColliderNode",
+              "data": {
+                "active": true,
+                "name": "MediumAsteroidCollider",
+                "position": {
+                  "x": 0.0,
+                  "y": 1.0
+                },
+                "scale": {
+                  "x": 20.0,
+                  "y": 20.0
+                },
+                "rotation": 0.0,
+                "tags": [
+                  "Asteroid"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "AsteroidNode",
+        "data": {
+          "active": false,
+          "name": "SmallAsteroid",
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "rotation": 0.0,
+          "speed": 0.0,
+          "HP": 1,
+          "children": [
+            {
+              "type": "SpriteRenderNode",
+              "data": {
+                "active": true,
+                "name": "SmallAsteroidRender",
+                "position": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "scale": {
+                  "x": 1.0,
+                  "y": 1.0
+                },
+                "rotation": 0.0,
+                "tint": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 255
+                },
+                "layer": 0,
+                "Texture": "sprites/asteroid/meteorBrown_small1.png"
+              }
+            },
+            {
+              "type": "CircleColliderNode",
+              "data": {
+                "active": true,
+                "name": "SmallAsteroidCollider",
+                "position": {
+                  "x": 0.0,
+                  "y": 1.0
+                },
+                "scale": {
+                  "x": 13.0,
+                  "y": 13.0
+                },
+                "rotation": 0.0,
+                "tags": [
+                  "Asteroid"
+                ]
               }
             }
           ]

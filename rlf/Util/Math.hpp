@@ -20,3 +20,9 @@ namespace rlf {
     static inline constexpr auto pi   = std::numbers::pi_v<f32>;
     static inline constexpr auto pi_d = std::numbers::pi_v<f64>;
 }
+
+Vector2 Vector2FromAngleRad(f32 const angleRad);
+Vector2 Vector2FromAngleDeg(f32 const angleDeg);
+
+f32 AngleRadFromVector2(Vector2 const& v);
+f32 AngleDegFromVector2(Vector2 const& v);

@@ -40,8 +40,8 @@ namespace rlf::Node {
         rlf::Range<f32> const& getEndRotationRange() const;
         void                   setEndRotationRange(rlf::Range<f32> const& endRotationRange);
 
-        rlf::Range<Vector2> const& getDirectionRange() const;
-        void                       setDirectionRange(rlf::Range<Vector2> const& directionRange);
+        rlf::Range<f32> const& getSpawnAngleDegRange() const;
+        void                   setSpawnAngleDegRange(rlf::Range<f32> const& spawnAngleDegRange);
 
         rlf::Range<Color4F> const& getStartColorRange() const;
         void                       setStartColorRange(rlf::Range<Color4F> const& startColor);
@@ -65,7 +65,7 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_MEMBER_GET_SET("Max Count", getMaxCount, setMaxCount)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Spawn Rate", getSpawnRate, setSpawnRate)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Lifetime Range", getLifeTimeRange, setLifeTimeRange)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("Direction Range", getDirectionRange, setDirectionRange)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Spawn Angle Range", getSpawnAngleDegRange, setSpawnAngleDegRange)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Start Scale Range", getStartScaleRange, setStartScaleRange)
         RLF_NODE_ACCESS_MEMBER_GET_SET("End Scale Range", getEndScaleRange, setEndScaleRange)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Start Speed Range", getStartSpeedRange, setStartSpeedRange)
@@ -91,12 +91,9 @@ namespace rlf::Node {
         rlf::Range<f32>     mEndSpeedRange      = {0.0f, 0.0f};
         rlf::Range<f32>     mStartRotationRange = {0.0f, 0.0f};
         rlf::Range<f32>     mEndRotationRange   = {0.0f, 0.0f};
-        rlf::Range<Vector2> mDirectionRange     = {
-            Vector2{-1.0f, -1.0f},
-            Vector2Ones
-        };
-        rlf::Range<Color4F> mStartColorRange = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
-        rlf::Range<Color4F> mEndColorRange   = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
+        rlf::Range<f32>     mSpawnAngleDegRange = {0.0f, 359.0f};
+        rlf::Range<Color4F> mStartColorRange    = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
+        rlf::Range<Color4F> mEndColorRange      = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
 
         // Runtime params (Resize the vector params in resizeParams)
         std::vector<f32>     mLifeTimes;

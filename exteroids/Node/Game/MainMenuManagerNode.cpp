@@ -15,4 +15,11 @@ namespace ext::Node {
             rlf::Engine::getInstance().setToQuit();
         });
     }
+
+    void MainMenuManagerNode::updateImpl() {
+        if (IsKeyPressed(KEY_ESCAPE)) {
+            rlf::Engine::getInstance().setToQuit();
+        }
+    }
+
 }

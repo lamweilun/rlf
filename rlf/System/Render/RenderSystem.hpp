@@ -36,6 +36,8 @@ namespace rlf::System {
         Vector2 getMousePosition() const;
         Vector2 getUIMousePosition() const;
 
+        Vector2 getScreenSize() const;
+
         void render() override;
 
     private:

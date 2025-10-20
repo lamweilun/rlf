@@ -7,6 +7,7 @@ namespace ext::Node {
 
     void PlayerNode::initImpl() {
         mPlayerBulletNode = getRootNode()->getFirstChildOfName<ext::Node::PlayerBulletNode>("PlayerBulletNode").value();
+        mFireSoudNode     = getFirstChildOfType<rlf::Node::SoundNode>().value();
     }
 
     void PlayerNode::updateImpl() {
@@ -16,11 +17,21 @@ namespace ext::Node {
         setRotation(std::atan2f(direction.y, direction.x));
 
         // Spawn bullet
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            auto newBullet = mPlayerBulletNode->clone()->as<ext::Node::PlayerBulletNode>();
-            newBullet->setPosition(getPosition());
-            newBullet->setVelocity(direction);
-            newBullet->setActive(true);
+        mCurrentFireRate -= GetFrameTime();
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+            if (mCurrentFireRate < 0.0f) {
+                mCurrentFireRate = mFireRate;
+
+                // Play Sound
+                mFireSoudNode->play();
+
+                // Spawn a bullet
+                auto newBullet = mPlayerBulletNode->clone()->as<ext::Node::PlayerBulletNode>();
+                newBullet->setRotation(getRotation());
+                newBullet->setPosition(getPosition());
+                newBullet->setVelocity(direction);
+                newBullet->setActive(true);
+            }
         }
 
         // Movement controls

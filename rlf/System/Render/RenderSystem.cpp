@@ -111,6 +111,13 @@ namespace rlf::System {
         return mousePos;
     }
 
+    Vector2 RenderSystem::getScreenSize() const {
+        if (auto activeCameraNode = getActiveCameraNode()) {
+            return activeCameraNode->getReferenceResolution();
+        }
+        return Vector2{static_cast<f32>(GetScreenWidth()), static_cast<f32>(GetScreenHeight())};
+    }
+
     void RenderSystem::render() {
         if (mActiveCameraNode && mActiveCameraNode->getActive()) {
             Camera2D camera = mActiveCameraNode->getAsCamera2D();

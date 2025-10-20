@@ -10,6 +10,7 @@ namespace ext::Node {
 
     protected:
         void initImpl() override;
+        void updateImpl() override;
 
     private:
         std::shared_ptr<rlf::Node::UIButtonNode> mStartButton;

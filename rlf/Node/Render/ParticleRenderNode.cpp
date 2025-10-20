@@ -152,11 +152,11 @@ namespace rlf::Node {
         mEndRotationRange = endRotationRange;
     }
 
-    rlf::Range<Vector2> const& ParticleRenderNode::getDirectionRange() const {
-        return mDirectionRange;
+    rlf::Range<f32> const& ParticleRenderNode::getSpawnAngleDegRange() const {
+        return mSpawnAngleDegRange;
     }
-    void ParticleRenderNode::setDirectionRange(rlf::Range<Vector2> const& directionRange) {
-        mDirectionRange = directionRange;
+    void ParticleRenderNode::setSpawnAngleDegRange(rlf::Range<f32> const& spawnAngleDegRange) {
+        mSpawnAngleDegRange = spawnAngleDegRange;
     }
 
     rlf::Range<Color4F> const& ParticleRenderNode::getStartColorRange() const {
@@ -205,8 +205,8 @@ namespace rlf::Node {
         mSpeedDeltas[index]   = (endSpeed - startSpeed) / lifeTime;
 
         // Setup direction
-        auto const direction = mDirectionRange.getValue();
-        mDirections[index]   = Vector2Normalize(direction);
+        auto const spawnAngle = mSpawnAngleDegRange.getValue();
+        mDirections[index]    = Vector2FromAngleDeg(spawnAngle);
 
         mPositions[index] = Vector2Zeros;
 

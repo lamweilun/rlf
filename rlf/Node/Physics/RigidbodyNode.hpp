@@ -9,6 +9,8 @@ namespace rlf::Node {
 
         void           setVelocity(Vector2 const& velocity);
         Vector2 const& getVelocity() const;
+        void           setVelocityFromAngleRad(f32 const angleRad);
+        void           setVelocityFromAngleDeg(f32 const angleDeg);
 
         void setSpeed(f32 const speed);
         f32  getSpeed() const;
