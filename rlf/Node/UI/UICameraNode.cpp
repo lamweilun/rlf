@@ -6,12 +6,10 @@
 namespace rlf::Node {
 
     void UICameraNode::setupImpl() {
-        auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
-        renderSys->addUICameraNode(shared_from_this()->as<UICameraNode>());
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addUICameraNode(as<UICameraNode>());
     }
     void UICameraNode::shutdownImpl() {
-        auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
-        renderSys->eraseUICameraNode(shared_from_this()->as<UICameraNode>());
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->eraseUICameraNode(as<UICameraNode>());
     }
 
     Vector2 const& UICameraNode::getReferenceResolution() const {

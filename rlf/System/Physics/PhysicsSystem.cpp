@@ -11,8 +11,8 @@ namespace rlf::System {
         mBoxColliderNodes.insert(boxColliderNode);
     }
 
-    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
-        mCircleColliderNodes.insert(sphereColliderNode);
+    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider) {
+        mCircleColliderNodes.insert(circleCollider);
     }
 
     void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode) {
@@ -23,8 +23,8 @@ namespace rlf::System {
         mBoxColliderNodes.erase(boxColliderNode);
     }
 
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode) {
-        mCircleColliderNodes.erase(sphereColliderNode);
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider) {
+        mCircleColliderNodes.erase(circleCollider);
     }
 
     void PhysicsSystem::update() {

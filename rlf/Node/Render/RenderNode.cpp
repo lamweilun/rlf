@@ -1,4 +1,5 @@
 #include <Node/Render/RenderNode.hpp>
+#include <Node/Physics/BoxColliderNode.hpp>
 
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
@@ -13,10 +14,10 @@ namespace rlf::Node {
     }
 
     void RenderNode::setupImpl() {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(as<RenderNode>());
     }
     void RenderNode::shutdownImpl() {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(as<RenderNode>());
     }
 
     void RenderNode::renderImpl() {

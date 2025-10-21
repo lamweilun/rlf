@@ -12,11 +12,11 @@ namespace rlf::System {
     public:
         void addColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode);
         void addColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode);
-        void addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode);
+        void addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider);
 
         void removeColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode);
         void removeColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode);
-        void removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> sphereColliderNode);
+        void removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider);
 
         void update() override;
 

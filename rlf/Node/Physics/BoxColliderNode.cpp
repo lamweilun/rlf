@@ -5,11 +5,9 @@
 
 namespace rlf::Node {
     void BoxColliderNode::setupImpl() {
-        auto boxCollider = shared_from_this()->as<BoxColliderNode>();
-        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(boxCollider);
+        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->addColliderNode(as<BoxColliderNode>());
     }
     void BoxColliderNode::shutdownImpl() {
-        auto boxCollider = shared_from_this()->as<BoxColliderNode>();
-        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(boxCollider);
+        rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>()->removeColliderNode(as<BoxColliderNode>());
     }
 }

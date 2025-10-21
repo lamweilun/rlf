@@ -8,37 +8,37 @@
 #endif
 
 namespace rlf::System {
-    void RenderSystem::addRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode) {
+    void RenderSystem::addRenderNode(std::shared_ptr<rlf::Node::RenderNode> const& renderNode) {
         mRenderNodes[renderNode->getLayer()].insert(renderNode);
     }
-    void RenderSystem::removeRenderNode(std::shared_ptr<rlf::Node::RenderNode> renderNode) {
+    void RenderSystem::removeRenderNode(std::shared_ptr<rlf::Node::RenderNode> const& renderNode) {
         mRenderNodes[renderNode->getLayer()].erase(renderNode);
     }
 
-    void RenderSystem::addParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> renderNode) {
+    void RenderSystem::addParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> const& renderNode) {
         mParticleRenderNodes[renderNode->getLayer()].insert(renderNode);
     }
-    void RenderSystem::removeParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> renderNode) {
+    void RenderSystem::removeParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> const& renderNode) {
         mParticleRenderNodes[renderNode->getLayer()].erase(renderNode);
     }
 
-    void RenderSystem::addUINode(std::shared_ptr<rlf::Node::UINode> uiNode) {
+    void RenderSystem::addUINode(std::shared_ptr<rlf::Node::UINode> const& uiNode) {
         mUINodes[uiNode->getLayer()].insert(uiNode);
     }
-    void RenderSystem::removeUINode(std::shared_ptr<rlf::Node::UINode> uiNode) {
+    void RenderSystem::removeUINode(std::shared_ptr<rlf::Node::UINode> const& uiNode) {
         mUINodes[uiNode->getLayer()].erase(uiNode);
     }
 
-    void RenderSystem::addCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode) {
+    void RenderSystem::addCameraNode(std::shared_ptr<rlf::Node::CameraNode> const& cameraNode) {
         mCameraNodes.insert(cameraNode);
     }
-    void RenderSystem::eraseCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode) {
+    void RenderSystem::eraseCameraNode(std::shared_ptr<rlf::Node::CameraNode> const& cameraNode) {
         mCameraNodes.erase(cameraNode);
         if (mActiveCameraNode == cameraNode) {
             mActiveCameraNode = nullptr;
         }
     }
-    void RenderSystem::setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> cameraNode) {
+    void RenderSystem::setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> const& cameraNode) {
         if (cameraNode == nullptr) {
             mActiveCameraNode = nullptr;
             return;
@@ -56,16 +56,16 @@ namespace rlf::System {
         return mActiveCameraNode;
     }
 
-    void RenderSystem::addUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> uiCameraNode) {
+    void RenderSystem::addUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> const& uiCameraNode) {
         mUICameraNodes.insert(uiCameraNode);
     }
-    void RenderSystem::eraseUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> uiCameraNode) {
+    void RenderSystem::eraseUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> const& uiCameraNode) {
         mUICameraNodes.erase(uiCameraNode);
         if (mActiveUICameraNode == uiCameraNode) {
             mActiveUICameraNode = nullptr;
         }
     }
-    void RenderSystem::setActiveUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> uiCameraNode) {
+    void RenderSystem::setActiveUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> const& uiCameraNode) {
         if (uiCameraNode == nullptr) {
             mActiveUICameraNode = nullptr;
             return;
