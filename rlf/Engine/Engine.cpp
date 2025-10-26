@@ -43,7 +43,12 @@ namespace rlf {
     }
 
     void Engine::run(Config const& config) {
-        SetConfigFlags(FLAG_MSAA_4X_HINT);
+#ifdef RLF_EDITOR
+        unsigned int windowFlag = FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE;
+#else
+        unsigned int windowFlag = FLAG_MSAA_4X_HINT;
+#endif
+        SetConfigFlags(windowFlag);
         InitWindow(static_cast<int>(config.width), static_cast<int>(config.height), config.title.data());
         SetWindowMonitor(0);
         // SetTargetFPS(GetMonitorRefreshRate(0));

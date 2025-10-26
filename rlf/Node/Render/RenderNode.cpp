@@ -1,5 +1,4 @@
 #include <Node/Render/RenderNode.hpp>
-#include <Node/Physics/BoxColliderNode.hpp>
 
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
@@ -7,9 +6,9 @@
 namespace rlf::Node {
     void RenderNode::setActiveImpl([[maybe_unused]] bool const selfActive) {
         if (getActive()) {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(as<RenderNode>());
         } else {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(as<RenderNode>());
         }
     }
 
