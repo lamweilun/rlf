@@ -30,7 +30,7 @@ namespace rlf::Node {
     void UIButtonNode::preUpdateImpl() {
         // Trigger callback based on last frame behaviour
         if (mIsHovering && mIsDown) {
-            if (mClickedCallback && IsMouseButtonReleased(0)) {
+            if (mClickedCallback && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
                 mClickedCallback();
             }
         }
@@ -60,7 +60,7 @@ namespace rlf::Node {
 
         // Check if mouse is clicking
         mIsHovering = CheckCollisionPointRec(mouseWorldPos, buttonRec);
-        mIsDown     = IsMouseButtonDown(0);
+        mIsDown     = IsMouseButtonDown(MOUSE_BUTTON_LEFT);
         if (mIsHovering) {
             if (!mIsDown) {
                 mTextureInUse = mHoveredTexture;
@@ -86,13 +86,6 @@ namespace rlf::Node {
         mHoveredTexture = textureRsc;
     }
 
-    void UIButtonNode::setHoveredTint(Color const& tint) {
-        mHoveredTint = tint;
-    }
-    Color const& UIButtonNode::getHoveredTint() const {
-        return mHoveredTint;
-    }
-
     rlf::TextureResource const& UIButtonNode::getClickedTexture() const {
         return mClickedTexture;
     }
@@ -100,11 +93,18 @@ namespace rlf::Node {
         mClickedTexture = textureRsc;
     }
 
-    void UIButtonNode::setClickedTint(Color const& tint) {
-        mClickedTint = tint;
+    Color const& UIButtonNode::getHoveredTint() const {
+        return mHoveredTint;
     }
+    void UIButtonNode::setHoveredTint(Color const& tint) {
+        mHoveredTint = tint;
+    }
+
     Color const& UIButtonNode::getClickedTint() const {
         return mClickedTint;
+    }
+    void UIButtonNode::setClickedTint(Color const& tint) {
+        mClickedTint = tint;
     }
 
     void UIButtonNode::setClickedCallback(std::function<void()> callback) {

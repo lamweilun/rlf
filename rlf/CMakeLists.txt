@@ -59,6 +59,7 @@ add_library(
         Node/UI/UIButtonNode.cpp
         Node/UI/UISpriteNode.cpp
         Node/UI/UITextNode.cpp
+        Node/UI/UISliderNode.cpp
 
         Node/BaseNode.cpp
 

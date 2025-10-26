@@ -29,6 +29,7 @@
 #include <Node/UI/UIButtonNode.hpp>
 #include <Node/UI/UISpriteNode.hpp>
 #include <Node/UI/UITextNode.hpp>
+#include <Node/UI/UISliderNode.hpp>
 
 #include <Node/BaseNode.cpp>
 
@@ -97,6 +98,7 @@ namespace rlf {
         rlf::TypeManager::getInstance().registerType<rlf::Node::UIButtonNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::UISpriteNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::UITextNode>();
+        rlf::TypeManager::getInstance().registerType<rlf::Node::UISliderNode>();
 
         // Run custom setup func, for registering of app node types
         if (mSetupFunc) {
