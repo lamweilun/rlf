@@ -3,7 +3,7 @@
 namespace rlf::System {
 
     TextureResource ResourceSystem::getTextureResource(std::string const& filePath) {
-        TextureResource          rsc;
+        TextureResource rsc;
         if (filePath.empty()) {
             return rsc;
         }
@@ -25,7 +25,7 @@ namespace rlf::System {
     }
 
     SoundResource ResourceSystem::getSoundResource(std::string const& filePath) {
-        SoundResource          rsc;
+        SoundResource rsc;
         if (filePath.empty()) {
             return rsc;
         }
@@ -46,8 +46,30 @@ namespace rlf::System {
         return rsc;
     }
 
+    MusicResource ResourceSystem::getMusicResource(std::string const& filePath) {
+        MusicResource rsc;
+        if (filePath.empty()) {
+            return rsc;
+        }
+        std::shared_ptr<Music> music;
+
+        // If sound cannot be found, create and load it in
+        if (!mLoadedMusic.contains(filePath)) {
+            auto newMusic = LoadMusicStream(filePath.c_str());
+            if (IsMusicValid(newMusic)) {
+                music                  = std::shared_ptr<Music>(new Music{}, [](Music* s) { UnloadMusicStream(*s); delete s; });
+                *music                 = newMusic;
+                mLoadedMusic[filePath] = music;
+            }
+        } else {
+            music = mLoadedMusic.at(filePath).lock();
+        }
+        rsc.setMusicStream(music);
+        return rsc;
+    }
+
     FontResource ResourceSystem::getFontResource(std::string const& filePath) {
-        FontResource          rsc;
+        FontResource rsc;
         if (filePath.empty()) {
             return rsc;
         }

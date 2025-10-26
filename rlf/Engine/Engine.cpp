@@ -6,6 +6,7 @@
 #include <System/Resource/ResourceSystem.hpp>
 
 // All Node Types here
+#include <Node/Audio/MusicNode.hpp>
 #include <Node/Audio/SoundNode.cpp>
 
 #include <Node/Physics/ColliderNode.cpp>
@@ -65,7 +66,10 @@ namespace rlf {
 
         // Register Types here
         rlf::TypeManager::getInstance().registerType<rlf::Node::BaseNode>();
+
+        rlf::TypeManager::getInstance().registerType<rlf::Node::MusicNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::SoundNode>();
+
         rlf::TypeManager::getInstance().registerType<rlf::Node::ColliderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::LineColliderNode>();
         rlf::TypeManager::getInstance().registerType<rlf::Node::BoxColliderNode>();
