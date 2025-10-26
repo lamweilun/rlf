@@ -27,5 +27,10 @@ namespace ext::Node {
         std::shared_ptr<ark::Node::PlayerNode> mPlayerNode;
 
         std::shared_ptr<ark::Node::BallNode> mBallNode;
+
+        std::shared_ptr<rlf::Node::BaseNode>              mBlockGroup;
+        std::vector<std::shared_ptr<rlf::Node::BaseNode>> mBlockGroups;
+        f32                                               mTimer        = 3.0f;
+        f32                                               mCurrentTimer = 0.0f;
     };
 }

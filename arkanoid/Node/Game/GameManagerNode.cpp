@@ -17,7 +17,10 @@ namespace ext::Node {
 
         mBallNode = getRootNode()->getFirstChildOfName<ark::Node::BallNode>("BallNode").value();
 
+        mBlockGroup = getRootNode()->getFirstChildOfName<rlf::Node::BaseNode>("BlockGroup").value();
+
         mPlayerNode->setActive(true);
+        mBlockGroup->setActive(false);
     }
 
     void GameManagerNode::updateImpl() {
@@ -27,6 +30,17 @@ namespace ext::Node {
 
         if (mBallNode->getPosition().y > 400.0f) {
             mGameOverText->setActive(true);
+        }
+
+        mCurrentTimer -= GetFrameTime();
+        if (mCurrentTimer < 0.0f) {
+            mCurrentTimer    = mTimer;
+            auto clonedGroup = mBlockGroup->clone();
+            clonedGroup->setActive(true);
+            for (auto childBlock : mBlockGroups) {
+                childBlock->setPosition(childBlock->getPosition() + Vector2{0.0f, 25.0f});
+            }
+            mBlockGroups.push_back(clonedGroup);
         }
     }
 }
