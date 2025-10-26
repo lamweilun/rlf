@@ -492,6 +492,25 @@ namespace rlf::Node {
     void BaseNode::postUpdateImpl() {
     }
 
+    rlf::Json BaseNode::serializeImpl() {
+        rlf::acc::JsonSerializer js;
+        access(js);
+        return js.getJson();
+    }
+
+    void BaseNode::deserializeImpl(rlf::Json const& j) {
+        rlf::acc::JsonDeserializer jd;
+        jd.setJson(j);
+        access(jd);
+    }
+
+#ifdef RLF_EDITOR
+    void BaseNode::imguiAccessImpl() {
+        rlf::acc::ImGuiAccessor imguiAcc;
+        access(imguiAcc);
+    }
+#endif
+
     void BaseNode::markGlobalDirty() {
         mGlobalDirty = true;
         for (auto& child : getChildren()) {

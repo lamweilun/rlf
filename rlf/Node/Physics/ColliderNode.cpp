@@ -15,27 +15,10 @@ namespace rlf::Node {
         return mCollidedCallback != nullptr;
     }
 
-    void ColliderNode::addTag(std::string_view const tag) {
-        auto tags = std::set(std::begin(mTags), std::end(mTags));
-        tags.insert(tag.data());
-        mTags = {std::begin(tags), std::end(tags)};
+    std::string const& ColliderNode::getTag() const {
+        return mTag;
     }
-
-    std::set<std::string> ColliderNode::getTags() const {
-        return std::set(std::begin(mTags), std::end(mTags));
-    }
-
-    bool ColliderNode::hasTag(std::string_view const tag) const {
-        return std::set(std::begin(mTags), std::end(mTags)).contains(tag.data());
-    }
-
-    bool ColliderNode::hasAnyOfTags(std::set<std::string> const& tags) const {
-        for (auto const& tag : mTags) {
-            if (tags.contains(tag)) {
-                return true;
-            }
-        }
-
-        return false;
+    void ColliderNode::setTag(std::string const& tag) {
+        mTag = tag;
     }
 }

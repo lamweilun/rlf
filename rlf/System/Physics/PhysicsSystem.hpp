@@ -1,7 +1,6 @@
 #pragma once
 
 #include <System/ISystem.hpp>
-#include <Node/Physics/LineColliderNode.hpp>
 #include <Node/Physics/BoxColliderNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
 
@@ -10,11 +9,9 @@
 namespace rlf::System {
     class PhysicsSystem : public ISystem {
     public:
-        void addColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode);
         void addColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode);
         void addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider);
 
-        void removeColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode);
         void removeColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode);
         void removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider);
 
@@ -67,7 +64,6 @@ namespace rlf::System {
             }
         };
 
-        Table<rlf::Node::LineColliderNode>   mLineColliderNodes;
         Table<rlf::Node::BoxColliderNode>    mBoxColliderNodes;
         Table<rlf::Node::CircleColliderNode> mCircleColliderNodes;
     };

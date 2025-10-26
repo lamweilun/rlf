@@ -185,24 +185,13 @@ namespace rlf::Node {
             RLF_NODE_ACCESS_MEMBER_GET_SET("rotation", getRotationDeg, setRotationDeg);
         }
 
-        inline virtual rlf::Json serializeImpl() {
-            rlf::acc::JsonSerializer js;
-            access(js);
-            return js.getJson();
-        }
-        inline virtual void deserializeImpl(rlf::Json const& j) {
-            rlf::acc::JsonDeserializer jd;
-            jd.setJson(j);
-            access(jd);
-        }
+        virtual rlf::Json serializeImpl();
+        virtual void      deserializeImpl(rlf::Json const& j);
 #ifdef RLF_EDITOR
         friend class rlf::System::EditorSystem;
-        inline virtual void imguiAccessImpl() {
-            rlf::acc::ImGuiAccessor imguiAcc;
-            access(imguiAcc);
-        }
-        bool mToShiftDown = false;
-        bool mToShiftUp   = false;
+        virtual void imguiAccessImpl();
+        bool         mToShiftDown = false;
+        bool         mToShiftUp   = false;
 #endif
     };
 }

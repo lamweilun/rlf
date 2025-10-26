@@ -15,20 +15,17 @@ namespace rlf::Node {
         void invokeCollidedCallback(rlf::CollideInfo const& info) const;
         bool hasCollidedCallback() const;
 
-        void                  addTag(std::string_view const tag);
-        std::set<std::string> getTags() const;
-        bool                  hasTag(std::string_view const tag) const;
-        bool                  hasAnyOfTags(std::set<std::string> const& tags) const;
+        std::string const& getTag() const;
+        void               setTag(std::string const& tag);
 
     protected:
-        std::function<void(rlf::CollideInfo const&)> mCollidedCallback;
-
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)
-        RLF_NODE_ACCESS_MEMBER("tags", mTags)
+        RLF_NODE_ACCESS_MEMBER_GET_SET("tag", getTag, setTag);
         RLF_NODE_ACCESS_END
 
     private:
-        std::vector<std::string> mTags;
+        std::function<void(rlf::CollideInfo const&)> mCollidedCallback;
+        std::string                                  mTag;
     };
 }

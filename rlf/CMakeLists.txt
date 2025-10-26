@@ -40,7 +40,6 @@ add_library(
         Node/Audio/SoundNode.cpp
 
         Node/Physics/ColliderNode.cpp
-        Node/Physics/LineColliderNode.cpp
         Node/Physics/BoxColliderNode.cpp
         Node/Physics/CircleColliderNode.cpp
         Node/Physics/RigidbodyNode.cpp

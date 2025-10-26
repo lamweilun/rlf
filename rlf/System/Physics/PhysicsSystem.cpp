@@ -4,19 +4,12 @@
 #include <Util/Physics/CollisionDetection.hpp>
 
 namespace rlf::System {
-    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode) {
-        mLineColliderNodes.insert(lineColliderNode);
-    }
     void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode) {
         mBoxColliderNodes.insert(boxColliderNode);
     }
 
     void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider) {
         mCircleColliderNodes.insert(circleCollider);
-    }
-
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::LineColliderNode> lineColliderNode) {
-        mLineColliderNodes.erase(lineColliderNode);
     }
 
     void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode) {
@@ -43,6 +36,9 @@ namespace rlf::System {
             // Check against other circle colliders
             for (auto const& cc2 : mCircleColliderNodes) {
                 if (collidedMap[cc1.get()].contains(cc2.get())) {
+                    continue;
+                }
+                if (cc1->getTag() == cc2->getTag()) {
                     continue;
                 }
                 if (!cc2->getActive()) {
@@ -82,6 +78,9 @@ namespace rlf::System {
             // Check against other BoxCollider
             for (auto const& bc : mBoxColliderNodes) {
                 if (collidedMap[cc1.get()].contains(bc.get())) {
+                    continue;
+                }
+                if (cc1->getTag() == bc->getTag()) {
                     continue;
                 }
                 if (!bc->getActive()) {
@@ -148,6 +147,9 @@ namespace rlf::System {
                 if (!bc2->getActive()) {
                     continue;
                 }
+                if (bc1->getTag() == bc2->getTag()) {
+                    continue;
+                }
                 if (collidedMap[bc1.get()].contains(bc2.get())) {
                     continue;
                 }
@@ -206,20 +208,6 @@ namespace rlf::System {
 
 #ifdef RLF_EDITOR
     void PhysicsSystem::editorRender() {
-        for (auto const& node : mLineColliderNodes) {
-            if (!node->getActive()) {
-                continue;
-            }
-
-            auto matF = MatrixToFloatV(node->getGlobalTransform());
-            rlPushMatrix();
-            rlMultMatrixf(matF.v);
-
-            DrawLineEx(node->getStartPoint(), node->getEndPoint(), 1.0f, GREEN);
-
-            rlPopMatrix();
-        }
-
         for (auto const& node : mBoxColliderNodes) {
             if (!node->getActive()) {
                 continue;

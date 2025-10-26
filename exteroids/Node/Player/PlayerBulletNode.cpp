@@ -11,7 +11,7 @@ namespace ext::Node {
 
         if (auto const bulletCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>()) {
             bulletCollider.value()->setCollidedCallback([this](rlf::CollideInfo const& info) {
-                if (info.other && info.other->hasTag("Asteroid")) {
+                if (info.other && info.other->getTag() == "Asteroid") {
                     mBulletParticle->setParent(getRootNode());
                     mBulletParticle->setPosition(info.self->getGlobalPosition());
 

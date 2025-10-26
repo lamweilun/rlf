@@ -167,7 +167,10 @@
                   "a": 255
                 },
                 "layer": 0,
-                "Texture": "sprites/ship/playerShip2_blue.png"
+                "Texture": "sprites/ship/playerShip2_blue.png",
+                "X Frames": 1,
+                "Y Frames": 1,
+                "Frame Index": 0
               }
             },
             {
@@ -252,7 +255,10 @@
                   "a": 255
                 },
                 "layer": 0,
-                "Texture": "sprites/bullet/laserBlue06.png"
+                "Texture": "sprites/bullet/laserBlue06.png",
+                "X Frames": 1,
+                "Y Frames": 1,
+                "Frame Index": 0
               }
             },
             {
@@ -269,9 +275,7 @@
                   "y": 5.0
                 },
                 "rotation": 0.0,
-                "tags": [
-                  "PlayerBullet"
-                ]
+                "tag": "PlayerBullet"
               }
             },
             {
@@ -403,7 +407,10 @@
                   "a": 255
                 },
                 "layer": 0,
-                "Texture": "sprites/asteroid/meteorBrown_big3.png"
+                "Texture": "sprites/asteroid/meteorBrown_big3.png",
+                "X Frames": 1,
+                "Y Frames": 1,
+                "Frame Index": 0
               }
             },
             {
@@ -420,9 +427,7 @@
                   "y": 40.0
                 },
                 "rotation": 0.0,
-                "tags": [
-                  "Asteroid"
-                ]
+                "tag": "Asteroid"
               }
             }
           ]
@@ -466,7 +471,10 @@
                   "a": 255
                 },
                 "layer": 0,
-                "Texture": "sprites/asteroid/meteorBrown_med1.png"
+                "Texture": "sprites/asteroid/meteorBrown_med1.png",
+                "X Frames": 1,
+                "Y Frames": 1,
+                "Frame Index": 0
               }
             },
             {
@@ -483,9 +491,7 @@
                   "y": 20.0
                 },
                 "rotation": 0.0,
-                "tags": [
-                  "Asteroid"
-                ]
+                "tag": "Asteroid"
               }
             }
           ]
@@ -529,7 +535,10 @@
                   "a": 255
                 },
                 "layer": 0,
-                "Texture": "sprites/asteroid/meteorBrown_small1.png"
+                "Texture": "sprites/asteroid/meteorBrown_small1.png",
+                "X Frames": 1,
+                "Y Frames": 1,
+                "Frame Index": 0
               }
             },
             {
@@ -546,9 +555,7 @@
                   "y": 13.0
                 },
                 "rotation": 0.0,
-                "tags": [
-                  "Asteroid"
-                ]
+                "tag": "Asteroid"
               }
             }
           ]

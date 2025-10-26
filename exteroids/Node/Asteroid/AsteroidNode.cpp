@@ -9,7 +9,7 @@ namespace ext::Node {
     void AsteroidNode::initImpl() {
         mAsteroidCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>().value();
         mAsteroidCollider->setCollidedCallback([this](rlf::CollideInfo const& info) {
-            if (info.other && info.other->hasTag("PlayerBullet")) {
+            if (info.other && info.other->getTag() == "PlayerBullet") {
                 setHP(getHP() - 1);
             }
         });
