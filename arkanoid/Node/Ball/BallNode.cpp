@@ -12,16 +12,19 @@ namespace ark::Node {
         collider = getFirstChildOfType<rlf::Node::CircleColliderNode>().value();
         collider->setCollidedCallback([this](rlf::CollideInfo const& info) {
             if (info.other->hasTag("Player") || info.other->hasTag("Block")) {
-                std::cout << info.collidedNormal << std::endl;
                 auto reflected = Vector2Reflect(getVelocity(), info.collidedNormal);
                 auto odds      = rlf::Range<f32>(0.0f, 1.0f).getValue();
                 if (odds > 0.5f) {
                     reflected.x = -reflected.x;
                 }
-                setVelocity(reflected);
+                auto angleDeg = AngleDegFromVector2(reflected);
+                angleDeg += rlf::Range<f32>(-20.0f, 20.0f).getValue();
+                setVelocity(Vector2FromAngleDeg(angleDeg));
 
-                ++score;
-                mScoreText->setText("Score: " + std::to_string(score));
+                if (info.other->hasTag("Block")) {
+                    ++score;
+                    mScoreText->setText("Score: " + std::to_string(score));
+                }
             }
         });
     }

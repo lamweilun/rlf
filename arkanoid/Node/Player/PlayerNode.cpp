@@ -28,7 +28,7 @@ namespace ark::Node {
             if (!mHasStarted) {
                 mHasStarted = true;
                 mBallNode->setSpeed(500.0f);
-                auto const angleRange = rlf::Range<f32>(-45, 45);
+                auto const angleRange = rlf::Range<f32>(45, 135);
                 mBallNode->setVelocity(Vector2FromAngleDeg(angleRange.getValue()));
             }
         }

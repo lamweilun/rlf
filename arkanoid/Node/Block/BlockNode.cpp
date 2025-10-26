@@ -8,7 +8,7 @@ namespace ark::Node {
         collider = getFirstChildOfType<rlf::Node::BoxColliderNode>().value();
         collider->setCollidedCallback([this](rlf::CollideInfo const& info) {
             if (info.other->hasTag("Ball")) {
-                setToDestroy(true);
+                // setToDestroy(true);
             }
         });
     }
