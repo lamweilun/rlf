@@ -34,6 +34,11 @@ namespace rlf::Node {
     }
 
     template <class T>
+    bool BaseNode::is() {
+        return std::dynamic_pointer_cast<T>(shared_from_this()) != nullptr;
+    }
+
+    template <class T>
     std::shared_ptr<T> BaseNode::as() {
         return std::static_pointer_cast<T>(shared_from_this());
     }

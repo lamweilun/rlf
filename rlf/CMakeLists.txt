@@ -86,7 +86,6 @@ add_library(
 if (RLF_EDITOR)
     target_sources(${PROJECT_NAME} PRIVATE
             System/Editor/EditorSystem.cpp
-            System/Editor/EditorSystem_Gizmo.cpp
             System/Editor/EditorSystem_FileBrowser.cpp
             System/Editor/EditorSystem_Hierarchy.cpp
     )

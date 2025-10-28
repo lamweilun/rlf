@@ -87,6 +87,9 @@ namespace rlf::Node {
         std::optional<std::shared_ptr<T>> getFirstChildOfName(std::string_view childName) const;
 
         template <class T>
+        bool is();
+
+        template <class T>
         std::shared_ptr<T> as();
         template <class T>
         std::shared_ptr<T> as() const;
