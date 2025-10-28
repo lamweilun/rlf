@@ -275,7 +275,7 @@
                   "y": 5.0
                 },
                 "rotation": 0.0,
-                "tag": "PlayerBullet"
+                "Tag": "PlayerBullet"
               }
             },
             {
@@ -427,7 +427,7 @@
                   "y": 40.0
                 },
                 "rotation": 0.0,
-                "tag": "Asteroid"
+                "Tag": "Asteroid"
               }
             }
           ]
@@ -491,7 +491,7 @@
                   "y": 20.0
                 },
                 "rotation": 0.0,
-                "tag": "Asteroid"
+                "Tag": "Asteroid"
               }
             }
           ]
@@ -555,7 +555,7 @@
                   "y": 13.0
                 },
                 "rotation": 0.0,
-                "tag": "Asteroid"
+                "Tag": "Asteroid"
               }
             }
           ]

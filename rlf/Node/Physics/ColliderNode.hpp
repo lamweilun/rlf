@@ -21,7 +21,7 @@ namespace rlf::Node {
     protected:
         RLF_NODE_ACCESS_START
         RLF_NODE_ACCESS_PARENT(BaseNode)
-        RLF_NODE_ACCESS_MEMBER_GET_SET("tag", getTag, setTag);
+        RLF_NODE_ACCESS_MEMBER_GET_SET("Tag", getTag, setTag);
         RLF_NODE_ACCESS_END
 
     private:
