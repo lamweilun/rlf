@@ -13,35 +13,42 @@
 #include <vector>
 
 #ifdef RLF_EDITOR
-#define RLF_NODE_ACCESS_START                                          \
-    inline virtual rlf::Json serializeImpl() override {                \
-        rlf::acc::JsonSerializer js;                                   \
-        access(js);                                                    \
-        return js.getJson();                                           \
-    }                                                                  \
-    inline virtual void deserializeImpl(rlf::Json const& j) override { \
-        rlf::acc::JsonDeserializer jd;                                 \
-        jd.setJson(j);                                                 \
-        access(jd);                                                    \
-    }                                                                  \
-    inline virtual void imguiAccessImpl() override {                   \
-        rlf::acc::ImGuiAccessor imguiAcc;                              \
-        access(imguiAcc);                                              \
-    }                                                                  \
-    inline void access(auto& acc) {
+#define RLF_NODE_ACCESS_START                                        \
+    inline virtual rlf::Json serializeImpl() override                \
+    {                                                                \
+        rlf::acc::JsonSerializer js;                                 \
+        access(js);                                                  \
+        return js.getJson();                                         \
+    }                                                                \
+    inline virtual void deserializeImpl(rlf::Json const& j) override \
+    {                                                                \
+        rlf::acc::JsonDeserializer jd;                               \
+        jd.setJson(j);                                               \
+        access(jd);                                                  \
+    }                                                                \
+    inline virtual void imguiAccessImpl() override                   \
+    {                                                                \
+        rlf::acc::ImGuiAccessor imguiAcc;                            \
+        access(imguiAcc);                                            \
+    }                                                                \
+    inline void access(auto& acc)                                    \
+    {
 #else
-#define RLF_NODE_ACCESS_START                                          \
-    inline virtual rlf::Json serializeImpl() override {                \
-        rlf::acc::JsonSerializer js;                                   \
-        access(js);                                                    \
-        return js.getJson();                                           \
-    }                                                                  \
-    inline virtual void deserializeImpl(rlf::Json const& j) override { \
-        rlf::acc::JsonDeserializer jd;                                 \
-        jd.setJson(j);                                                 \
-        access(jd);                                                    \
-    }                                                                  \
-    inline void access(auto& acc) {
+#define RLF_NODE_ACCESS_START                                        \
+    inline virtual rlf::Json serializeImpl() override                \
+    {                                                                \
+        rlf::acc::JsonSerializer js;                                 \
+        access(js);                                                  \
+        return js.getJson();                                         \
+    }                                                                \
+    inline virtual void deserializeImpl(rlf::Json const& j) override \
+    {                                                                \
+        rlf::acc::JsonDeserializer jd;                               \
+        jd.setJson(j);                                               \
+        access(jd);                                                  \
+    }                                                                \
+    inline void access(auto& acc)                                    \
+    {
 #endif
 
 #define RLF_NODE_ACCESS_END }
@@ -54,8 +61,10 @@
         acc(NAME, &T::GETTER, &T::SETTER, *this);            \
     }
 
-namespace rlf::Node {
-    class BaseNode : public std::enable_shared_from_this<BaseNode> {
+namespace rlf::Node
+{
+    class BaseNode : public std::enable_shared_from_this<BaseNode>
+    {
     public:
         BaseNode()                           = default;
         virtual ~BaseNode()                  = default;
@@ -64,10 +73,12 @@ namespace rlf::Node {
         BaseNode& operator=(BaseNode const&) = default;
         BaseNode& operator=(BaseNode&&)      = default;
 
-        static inline constexpr std::string_view getTypeName() {
+        static inline constexpr std::string_view getTypeName()
+        {
             return "BaseNode";
         }
-        inline virtual std::string_view getTypeNameImpl() const {
+        inline virtual std::string_view getTypeNameImpl() const
+        {
             return getTypeName();
         }
 
@@ -94,14 +105,14 @@ namespace rlf::Node {
         template <class T>
         std::shared_ptr<T> as() const;
 
-        Vector2 const& getPosition() const;
-        void           setPosition(Vector2 const& position);
-        Vector2 const& getScale() const;
-        void           setScale(Vector2 const& scale);
-        f32 const&     getRotation() const;
-        void           setRotation(f32 const rotation);
-        f32            getRotationDeg() const;
-        void           setRotationDeg(f32 const rotationDeg);
+        rlf::Vec2f const& getPosition() const;
+        void              setPosition(rlf::Vec2f const& position);
+        rlf::Vec2f const& getScale() const;
+        void              setScale(rlf::Vec2f const& scale);
+        f32 const&        getRotation() const;
+        void              setRotation(f32 const rotation);
+        f32               getRotationDeg() const;
+        void              setRotationDeg(f32 const rotationDeg);
 
         std::string const& getName() const;
         void               setName(std::string const& name);
@@ -116,9 +127,9 @@ namespace rlf::Node {
         std::shared_ptr<BaseNode> getRootNode();
         Matrix const&             getLocalTransform() const;
         Matrix const&             getGlobalTransform() const;
-        Vector2                   getGlobalRight() const;
-        Vector2                   getGlobalPosition() const;
-        Vector2                   getGlobalScale() const;
+        rlf::Vec2f                getGlobalRight() const;
+        rlf::Vec2f                getGlobalPosition() const;
+        rlf::Vec2f                getGlobalScale() const;
         Quaternion                getGlobalRotation() const;
         f32                       getGlobalRotationRad() const;
         f32                       getGlobalRotationDeg() const;
@@ -168,8 +179,8 @@ namespace rlf::Node {
 
         mutable Matrix mLocalTransform  = MatrixIdentity();
         mutable Matrix mGlobalTransform = MatrixIdentity();
-        Vector2        mPosition        = Vector2Zeros;
-        Vector2        mScale           = Vector2Ones;
+        rlf::Vec2f     mPosition        = rlf::Vec2f::Zero();
+        rlf::Vec2f     mScale           = rlf::Vec2f::One();
         f32            mRotation        = 0.0f;
         mutable bool   mLocalDirty      = true;
         mutable bool   mGlobalDirty     = true;
@@ -180,7 +191,8 @@ namespace rlf::Node {
         std::vector<std::shared_ptr<BaseNode>> mNewChildren;
 
     protected:
-        inline void access(auto& acc) {
+        inline void access(auto& acc)
+        {
             RLF_NODE_ACCESS_MEMBER_GET_SET("active", getActiveSelf, setActive);
             RLF_NODE_ACCESS_MEMBER_GET_SET("name", getName, setName);
             RLF_NODE_ACCESS_MEMBER_GET_SET("position", getPosition, setPosition);

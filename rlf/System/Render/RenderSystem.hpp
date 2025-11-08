@@ -11,8 +11,10 @@
 #include <memory>
 #include <unordered_set>
 
-namespace rlf::System {
-    class RenderSystem : public ISystem {
+namespace rlf::System
+{
+    class RenderSystem : public ISystem
+    {
     public:
         void addRenderNode(std::shared_ptr<rlf::Node::RenderNode> const& renderNode);
         void removeRenderNode(std::shared_ptr<rlf::Node::RenderNode> const& renderNode);
@@ -33,10 +35,10 @@ namespace rlf::System {
         void                                     setActiveUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> const& cameraNode);
         std::shared_ptr<rlf::Node::UICameraNode> getActiveUICameraNode() const;
 
-        Vector2 getMousePosition() const;
-        Vector2 getUIMousePosition() const;
+        rlf::Vec2f getMousePosition() const;
+        rlf::Vec2f getUIMousePosition() const;
 
-        Vector2 getScreenSize() const;
+        rlf::Vec2f getScreenSize() const;
 
         void render() override;
 

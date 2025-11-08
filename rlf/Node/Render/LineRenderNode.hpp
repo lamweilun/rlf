@@ -2,18 +2,20 @@
 
 #include <Node/Render/RenderNode.hpp>
 
-namespace rlf::Node {
-    class LineRenderNode : public RenderNode {
+namespace rlf::Node
+{
+    class LineRenderNode : public RenderNode
+    {
     public:
         RLF_TYPE_REGISTER_QUICK(LineRenderNode)
 
         void renderImpl() override;
 
-        Vector2 const& getStartPoint() const;
-        void           setStartPoint(Vector2 const& startPoint);
+        rlf::Vec2f const& getStartPoint() const;
+        void              setStartPoint(rlf::Vec2f const& startPoint);
 
-        Vector2 const& getEndPoint() const;
-        void           setEndPoint(Vector2 const& endPoint);
+        rlf::Vec2f const& getEndPoint() const;
+        void              setEndPoint(rlf::Vec2f const& endPoint);
 
     protected:
         RLF_NODE_ACCESS_START
@@ -23,7 +25,7 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_END
 
     private:
-        Vector2 mStartPoint;
-        Vector2 mEndPoint;
+        rlf::Vec2f mStartPoint;
+        rlf::Vec2f mEndPoint;
     };
 }

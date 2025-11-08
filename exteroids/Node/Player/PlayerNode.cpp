@@ -3,23 +3,28 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace ext::Node {
+namespace ext::Node
+{
 
-    void PlayerNode::initImpl() {
+    void PlayerNode::initImpl()
+    {
         mPlayerBulletNode = getRootNode()->getFirstChildOfName<ext::Node::PlayerBulletNode>("PlayerBulletNode").value();
         mFireSoudNode     = getFirstChildOfType<rlf::Node::SoundNode>().value();
     }
 
-    void PlayerNode::updateImpl() {
+    void PlayerNode::updateImpl()
+    {
         // Mouse Controls
         auto const mousePos  = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->getMousePosition();
-        auto const direction = Vector2Normalize(mousePos - getGlobalPosition());
+        auto const direction = rlf::Vec2f(mousePos - getGlobalPosition()).Normalized();
         setRotation(std::atan2f(direction.y, direction.x));
 
         // Spawn bullet
         mCurrentFireRate -= GetFrameTime();
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-            if (mCurrentFireRate < 0.0f) {
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+        {
+            if (mCurrentFireRate < 0.0f)
+            {
                 mCurrentFireRate = mFireRate;
 
                 // Play Sound
@@ -35,18 +40,24 @@ namespace ext::Node {
         }
 
         // Movement controls
-        Vector2 newVelocity = Vector2Zeros;
-        if (IsKeyDown(KEY_W)) {
+        rlf::Vec2f newVelocity = rlf::Vec2f::Zero();
+        if (IsKeyDown(KEY_W))
+        {
             newVelocity.y = -1.0f;
-        } else if (IsKeyDown(KEY_S)) {
+        }
+        else if (IsKeyDown(KEY_S))
+        {
             newVelocity.y = 1.0f;
         }
-        if (IsKeyDown(KEY_A)) {
+        if (IsKeyDown(KEY_A))
+        {
             newVelocity.x = -1.0f;
-        } else if (IsKeyDown(KEY_D)) {
+        }
+        else if (IsKeyDown(KEY_D))
+        {
             newVelocity.x = 1.0f;
         }
-        setVelocity(Vector2Normalize(newVelocity));
+        setVelocity(newVelocity.Normalized());
 
         rlf::Node::RigidbodyNode::updateImpl();
     }

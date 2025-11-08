@@ -2,17 +2,20 @@
 
 #include <memory>
 
-namespace rlf {
-    namespace Node {
+namespace rlf
+{
+    namespace Node
+    {
         class ColliderNode;
     }
 
-    struct CollideInfo {
+    struct CollideInfo
+    {
         std::shared_ptr<rlf::Node::ColliderNode> self;
         std::shared_ptr<rlf::Node::ColliderNode> other;
-        Vector2                                  collidedPoint   = Vector2Zeros;
-        Vector2                                  collidedNormal  = Vector2Zeros;
-        Vector2                                  collidedTangent = Vector2Zeros;
+        rlf::Vec2f                               collidedPoint   = rlf::Vec2f::Zero();
+        rlf::Vec2f                               collidedNormal  = rlf::Vec2f::Zero();
+        rlf::Vec2f                               collidedTangent = rlf::Vec2f::Zero();
         f32                                      collidedDepth   = 0.0f;
     };
 }

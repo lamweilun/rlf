@@ -78,8 +78,11 @@ add_library(
         Util/Accessor/JsonSerializer.cpp
         Util/Physics/CollisionDetection.cpp
         Util/Reflection/NamedValue.cpp
+
         Util/Color.cpp
-        Util/Math.cpp
+        
+        Util/Math/Angle.cpp
+        
         Util/Util.cpp
 )
 

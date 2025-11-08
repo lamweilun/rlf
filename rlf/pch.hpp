@@ -9,7 +9,7 @@
 #include <Util/Types.hpp>
 #include <Util/Json.hpp>
 #include <Util/Color.hpp>
-#include <Util/Math.hpp>
+#include <Util/Math/Math.hpp>
 
 #include <numbers>
 #include <string>

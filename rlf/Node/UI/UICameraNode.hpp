@@ -2,13 +2,15 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf::Node {
-    class UICameraNode : public BaseNode {
+namespace rlf::Node
+{
+    class UICameraNode : public BaseNode
+    {
     public:
         RLF_TYPE_REGISTER_QUICK(UICameraNode)
 
-        Vector2 const& getReferenceResolution() const;
-        void           setReferenceResolution(Vector2 const& referenceResolution);
+        rlf::Vec2f const& getReferenceResolution() const;
+        void              setReferenceResolution(rlf::Vec2f const& referenceResolution);
 
         f32  getZoom() const;
         void setZoom(f32 const zoom);
@@ -34,9 +36,9 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_END
 
     private:
-        Vector2 mReferenceResolution = Vector2{1280, 720};
-        f32     mZoom                = 1.0f;
-        bool    mZoomToWindowSize    = false;
-        bool    mIsActiveUICamera    = false;
+        rlf::Vec2f mReferenceResolution = rlf::Vec2f{1280, 720};
+        f32        mZoom                = 1.0f;
+        bool       mZoomToWindowSize    = false;
+        bool       mIsActiveUICamera    = false;
     };
 }

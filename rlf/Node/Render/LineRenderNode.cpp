@@ -1,22 +1,28 @@
 #include <Node/Render/LineRenderNode.hpp>
 
-namespace rlf::Node {
-    void LineRenderNode::renderImpl() {
-        DrawLineEx(mStartPoint, mEndPoint, 1.0f, getTint());
-        // DrawLine3D(Vector3{mStartPoint.x, mStartPoint.y, 0.0f}, Vector3{mEndPoint.x, mEndPoint.y, 0.0f}, getTint());
+namespace rlf::Node
+{
+    void LineRenderNode::renderImpl()
+    {
+        DrawLineEx({mStartPoint.x, mStartPoint.y}, {mEndPoint.x, mEndPoint.y}, 1.0f, getTint());
+        // DrawLine3D({mStartPoint.x, mStartPoint.y, 0.0f}, {mEndPoint.x, mEndPoint.y, 0.0f}, getTint());
     }
 
-    Vector2 const& LineRenderNode::getStartPoint() const {
+    rlf::Vec2f const& LineRenderNode::getStartPoint() const
+    {
         return mStartPoint;
     }
-    void LineRenderNode::setStartPoint(Vector2 const& startPoint) {
+    void LineRenderNode::setStartPoint(rlf::Vec2f const& startPoint)
+    {
         mStartPoint = startPoint;
     }
 
-    Vector2 const& LineRenderNode::getEndPoint() const {
+    rlf::Vec2f const& LineRenderNode::getEndPoint() const
+    {
         return mEndPoint;
     }
-    void LineRenderNode::setEndPoint(Vector2 const& endPoint) {
+    void LineRenderNode::setEndPoint(rlf::Vec2f const& endPoint)
+    {
         mEndPoint = endPoint;
     }
 }

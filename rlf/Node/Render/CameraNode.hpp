@@ -2,16 +2,18 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf::Node {
-    class CameraNode : public BaseNode {
+namespace rlf::Node
+{
+    class CameraNode : public BaseNode
+    {
     public:
         RLF_TYPE_REGISTER_QUICK(CameraNode)
 
         Color const& getClearColor() const;
         void         setClearColor(Color const& color);
 
-        Vector2 const& getReferenceResolution() const;
-        void           setReferenceResolution(Vector2 const& referenceResolution);
+        rlf::Vec2f const& getReferenceResolution() const;
+        void              setReferenceResolution(rlf::Vec2f const& referenceResolution);
 
         f32  getZoom() const;
         void setZoom(f32 const zoom);
@@ -38,10 +40,10 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_END
 
     private:
-        Color   mClearColor          = BLACK;
-        Vector2 mReferenceResolution = Vector2{1280, 720};
-        f32     mZoom                = 1.0f;
-        bool    mZoomToWindowSize    = false;
-        bool    mIsActiveCamera      = false;
+        Color      mClearColor          = BLACK;
+        rlf::Vec2f mReferenceResolution = rlf::Vec2f{1280, 720};
+        f32        mZoom                = 1.0f;
+        bool       mZoomToWindowSize    = false;
+        bool       mIsActiveCamera      = false;
     };
 }

@@ -2,15 +2,17 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf::Node {
-    class RigidbodyNode : public BaseNode {
+namespace rlf::Node
+{
+    class RigidbodyNode : public BaseNode
+    {
     public:
         RLF_TYPE_REGISTER_QUICK(RigidbodyNode)
 
-        void           setVelocity(Vector2 const& velocity);
-        Vector2 const& getVelocity() const;
-        void           setVelocityFromAngleRad(f32 const angleRad);
-        void           setVelocityFromAngleDeg(f32 const angleDeg);
+        void              setVelocity(rlf::Vec2f const& velocity);
+        rlf::Vec2f const& getVelocity() const;
+        void              setVelocityFromAngleRad(f32 const angleRad);
+        void              setVelocityFromAngleDeg(f32 const angleDeg);
 
         void setSpeed(f32 const speed);
         f32  getSpeed() const;
@@ -24,7 +26,7 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_END
 
     private:
-        Vector2 mVelocity = Vector2Zeros;
-        f32     mSpeed    = 0.0f;
+        rlf::Vec2f mVelocity = rlf::Vec2f::Zero();
+        f32        mSpeed    = 0.0f;
     };
 }

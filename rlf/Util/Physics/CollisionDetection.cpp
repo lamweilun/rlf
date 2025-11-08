@@ -5,56 +5,62 @@
 #define SIGN(x) ((x) > 0 ? 1.0f : ((x) < 0 ? -1.0f : 0.0f))
 #endif
 
-namespace {
+namespace
+{
     // Assuming BoundingBox is defined similar to raylib's BoundingBox,
     // but for 2D, or we can adapt it. Let's use a custom struct for 2D.
     // This assumes `min` and `max` define the AABB of the box *before* rotation.
-    struct BoundingBox2D {
-        Vector2 min;
-        Vector2 max;
+    struct BoundingBox2D
+    {
+        rlf::Vec2f min;
+        rlf::Vec2f max;
     };
 
     // Helper function to transform a point from world space to box's local space
-    Vector2 WorldToLocal(Vector2 const& point,
-                         Vector2 const& boxCenter,
-                         f32 const      rotationRad) {
+    rlf::Vec2f WorldToLocal(rlf::Vec2f const& point,
+                            rlf::Vec2f const& boxCenter,
+                            f32 const         rotationRad)
+    {
         // Translate point to origin
-        Vector2 const translatedPoint = point - boxCenter;
+        rlf::Vec2f const translatedPoint = point - boxCenter;
         // Rotate point inversely
         f32 const cosRot = std::cosf(-rotationRad);
         f32 const sinRot = std::sinf(-rotationRad);
-        return Vector2{translatedPoint.x * cosRot - translatedPoint.y * sinRot, translatedPoint.x * sinRot + translatedPoint.y * cosRot};
+        return rlf::Vec2f{translatedPoint.x * cosRot - translatedPoint.y * sinRot, translatedPoint.x * sinRot + translatedPoint.y * cosRot};
     }
 
     // Helper function to transform a point from box's local space to world space
-    Vector2 LocalToWorld(Vector2 const& point,
-                         Vector2 const& boxCenter,
-                         f32 const      rotationRad) {
+    rlf::Vec2f LocalToWorld(rlf::Vec2f const& point,
+                            rlf::Vec2f const& boxCenter,
+                            f32 const         rotationRad)
+    {
         // Rotate and Translate
-        f32 const     cosRot       = std::cosf(rotationRad);
-        f32 const     sinRot       = std::sinf(rotationRad);
-        Vector2 const rotatedPoint = Vector2{point.x * cosRot - point.y * sinRot, point.x * sinRot + point.y * cosRot};
+        f32 const        cosRot       = std::cosf(rotationRad);
+        f32 const        sinRot       = std::sinf(rotationRad);
+        rlf::Vec2f const rotatedPoint = rlf::Vec2f{point.x * cosRot - point.y * sinRot, point.x * sinRot + point.y * cosRot};
         return rotatedPoint + boxCenter;
     }
 
-    std::vector<Vector2> GetRotatedBoxCorners(BoundingBox const& box,
-                                              f32 const          rotationRad) {
-        Vector2 const center   = {(box.min.x + box.max.x) * 0.5f, (box.min.y + box.max.y) * 0.5f};
-        Vector2 const halfSize = {(box.max.x - box.min.x) * 0.5f, (box.max.y - box.min.y) * 0.5f};
+    std::vector<rlf::Vec2f> GetRotatedBoxCorners(BoundingBox const& box,
+                                                 f32 const          rotationRad)
+    {
+        rlf::Vec2f const center   = {(box.min.x + box.max.x) * 0.5f, (box.min.y + box.max.y) * 0.5f};
+        rlf::Vec2f const halfSize = {(box.max.x - box.min.x) * 0.5f, (box.max.y - box.min.y) * 0.5f};
 
-        std::vector<Vector2> corners(4);
+        std::vector<rlf::Vec2f> corners(4);
         // Local coordinates of corners relative to center
         std::array const localCorners = {
-            Vector2{-halfSize.x, -halfSize.y},
-            Vector2{ halfSize.x, -halfSize.y},
-            Vector2{ halfSize.x,  halfSize.y},
-            Vector2{-halfSize.x,  halfSize.y}
+            rlf::Vec2f{-halfSize.x, -halfSize.y},
+            rlf::Vec2f{ halfSize.x, -halfSize.y},
+            rlf::Vec2f{ halfSize.x,  halfSize.y},
+            rlf::Vec2f{-halfSize.x,  halfSize.y}
         };
 
         f32 const cosRot = std::cosf(rotationRad);
         f32 const sinRot = std::sinf(rotationRad);
 
-        for (size_t i = 0; i < 4; ++i) {
+        for (size_t i = 0; i < 4; ++i)
+        {
             // Rotate and translate to world space
             corners[i].x = center.x + (localCorners[i].x * cosRot - localCorners[i].y * sinRot);
             corners[i].y = center.y + (localCorners[i].x * sinRot + localCorners[i].y * cosRot);
@@ -63,27 +69,33 @@ namespace {
     }
 
     // Helper function to project a polygon onto an axis
-    void ProjectPolygon(std::vector<Vector2> const& corners,
-                        Vector2 const&              axis,
-                        f32&                        minProjection,
-                        f32&                        maxProjection) {
-        minProjection = Vector2DotProduct(corners[0], axis);
+    void ProjectPolygon(std::vector<rlf::Vec2f> const& corners,
+                        rlf::Vec2f const&              axis,
+                        f32&                           minProjection,
+                        f32&                           maxProjection)
+    {
+        minProjection = corners[0].Dot(axis);
         maxProjection = minProjection;
 
-        for (size_t i = 1; i < corners.size(); ++i) {
-            f32 const projection = Vector2DotProduct(corners[i], axis);
-            if (projection < minProjection) {
+        for (size_t i = 1; i < corners.size(); ++i)
+        {
+            f32 const projection = corners[i].Dot(axis);
+            if (projection < minProjection)
+            {
                 minProjection = projection;
             }
-            if (projection > maxProjection) {
+            if (projection > maxProjection)
+            {
                 maxProjection = projection;
             }
         }
     }
 
     // Helper function to check for overlap of two 1D intervals
-    bool CheckOverlap(f32 const min1, f32 const max1, f32 const min2, f32 const max2, f32& overlap) {
-        if (max1 < min2 || max2 < min1) {
+    bool CheckOverlap(f32 const min1, f32 const max1, f32 const min2, f32 const max2, f32& overlap)
+    {
+        if (max1 < min2 || max2 < min1)
+        {
             return false;  // No overlap
         }
         overlap = std::min(max1, max2) - std::max(min1, min2);
@@ -91,45 +103,50 @@ namespace {
     }
 
     // Helper to get the 4 normalized edge normals (axes of separation) for a box
-    std::vector<Vector2> GetBoxNormals(std::vector<Vector2> const& corners) {
-        std::vector<Vector2> normals;
-        for (size_t i = 0; i < 4; ++i) {
-            Vector2 const p1     = corners[i];
-            Vector2 const p2     = corners[(i + 1) % 4];
-            Vector2 const edge   = p2 - p1;
-            Vector2       normal = Vector2Normalize(Vector2{-edge.y, edge.x});
+    std::vector<rlf::Vec2f> GetBoxNormals(std::vector<rlf::Vec2f> const& corners)
+    {
+        std::vector<rlf::Vec2f> normals;
+        for (size_t i = 0; i < 4; ++i)
+        {
+            rlf::Vec2f const p1     = corners[i];
+            rlf::Vec2f const p2     = corners[(i + 1) % 4];
+            rlf::Vec2f const edge   = p2 - p1;
+            rlf::Vec2f       normal = rlf::Vec2f{-edge.y, edge.x}.Normalized();
             normals.push_back(normal);
         }
         return normals;
     }
 }
 
-namespace rlf::phys {
+namespace rlf::phys
+{
     bool CheckCollisionBoxCircle(BoundingBox const& box,
                                  f32 const          rotationRad,
-                                 Vector2 const&     circlePosition,
+                                 rlf::Vec2f const&  circlePosition,
                                  f32 const&         circleRadius,
-                                 Vector2&           collidedPoint,
-                                 Vector2&           collidedNormal,
-                                 Vector2&           collidedTangent,
-                                 f32&               penetratingDepth) {
-        Vector2 const boxCenter   = {(box.min.x + box.max.x) * 0.5f, (box.min.y + box.max.y) * 0.5f};
-        Vector2 const boxHalfSize = {(box.max.x - box.min.x) * 0.5f, (box.max.y - box.min.y) * 0.5f};
+                                 rlf::Vec2f&        collidedPoint,
+                                 rlf::Vec2f&        collidedNormal,
+                                 rlf::Vec2f&        collidedTangent,
+                                 f32&               penetratingDepth)
+    {
+        rlf::Vec2f const boxCenter   = {(box.min.x + box.max.x) * 0.5f, (box.min.y + box.max.y) * 0.5f};
+        rlf::Vec2f const boxHalfSize = {(box.max.x - box.min.x) * 0.5f, (box.max.y - box.min.y) * 0.5f};
 
         // Transform the circle's position into the box's local space
-        Vector2 const localCirclePos = WorldToLocal(circlePosition, boxCenter, rotationRad);
+        rlf::Vec2f const localCirclePos = WorldToLocal(circlePosition, boxCenter, rotationRad);
 
         // Find the closest point on the AABB (in local space) to the circle center
-        Vector2 closestPointLocal = localCirclePos;
-        closestPointLocal.x       = std::max(-boxHalfSize.x, std::min(closestPointLocal.x, boxHalfSize.x));
-        closestPointLocal.y       = std::max(-boxHalfSize.y, std::min(closestPointLocal.y, boxHalfSize.y));
+        rlf::Vec2f closestPointLocal = localCirclePos;
+        closestPointLocal.x          = std::max(-boxHalfSize.x, std::min(closestPointLocal.x, boxHalfSize.x));
+        closestPointLocal.y          = std::max(-boxHalfSize.y, std::min(closestPointLocal.y, boxHalfSize.y));
 
         // Calculate the distance squared from the circle center to this closest point
-        Vector2 const diff       = localCirclePos - closestPointLocal;
-        f32 const     distanceSq = Vector2LengthSqr(diff);
+        rlf::Vec2f const diff       = localCirclePos - closestPointLocal;
+        f32 const        distanceSq = diff.LengthSq();
 
         // Check if collision occurred
-        if (distanceSq > (circleRadius * circleRadius)) {
+        if (distanceSq > (circleRadius * circleRadius))
+        {
             return false;  // No collision
         }
 
@@ -140,22 +157,28 @@ namespace rlf::phys {
         collidedPoint = LocalToWorld(closestPointLocal, boxCenter, rotationRad);
 
         // Calculate the normal in local space
-        Vector2 localNormal;
-        if (FloatEquals(distanceSq, 0.0f)) {
+        rlf::Vec2f localNormal;
+        if (FloatEquals(distanceSq, 0.0f))
+        {
             // Circle center is inside the box. We need to find the minimum penetration axis.
             // This is a special case: project circle center onto each face plane.
             f32 const dx = std::abs(localCirclePos.x) - boxHalfSize.x;
             f32 const dy = std::abs(localCirclePos.y) - boxHalfSize.y;
 
-            if (dx > dy) {  // Penetrating more horizontally
-                localNormal      = Vector2{SIGN(localCirclePos.x), 0.0f};
+            if (dx > dy)
+            {  // Penetrating more horizontally
+                localNormal      = rlf::Vec2f{SIGN(localCirclePos.x), 0.0f};
                 penetratingDepth = circleRadius + dx;
-            } else {  // Penetrating more vertically
-                localNormal      = Vector2{0.0f, SIGN(localCirclePos.y)};
+            }
+            else
+            {  // Penetrating more vertically
+                localNormal      = rlf::Vec2f{0.0f, SIGN(localCirclePos.y)};
                 penetratingDepth = circleRadius + dy;
             }
-        } else {
-            localNormal = Vector2Normalize(localCirclePos - closestPointLocal);
+        }
+        else
+        {
+            localNormal = rlf::Vec2f(localCirclePos - closestPointLocal).Normalized();
             // Penetrating depth
             penetratingDepth = circleRadius - std::sqrtf(distanceSq);
         }
@@ -164,7 +187,7 @@ namespace rlf::phys {
         collidedNormal = LocalToWorld(localNormal, {0, 0}, rotationRad);  // Only rotate the normal
 
         // Calculate tangent (perpendicular to normal)
-        collidedTangent = Vector2{-collidedNormal.y, collidedNormal.x};
+        collidedTangent = rlf::Vec2f{-collidedNormal.y, collidedNormal.x};
 
         return true;
     }
@@ -173,33 +196,36 @@ namespace rlf::phys {
                                 f32 const          box1RotationRad,
                                 BoundingBox const& box2,
                                 f32 const          box2RotationRad,
-                                Vector2&           collidedPoint,
-                                Vector2&           collidedNormal,
-                                Vector2&           collidedTangent,
-                                f32&               penetratingDepth) {
+                                rlf::Vec2f&        collidedPoint,
+                                rlf::Vec2f&        collidedNormal,
+                                rlf::Vec2f&        collidedTangent,
+                                f32&               penetratingDepth)
+    {
         // Get the corners of both rotated boxes in world space
-        std::vector<Vector2> const corners1 = GetRotatedBoxCorners(box1, box1RotationRad);
-        std::vector<Vector2> const corners2 = GetRotatedBoxCorners(box2, box2RotationRad);
+        std::vector<rlf::Vec2f> const corners1 = GetRotatedBoxCorners(box1, box1RotationRad);
+        std::vector<rlf::Vec2f> const corners2 = GetRotatedBoxCorners(box2, box2RotationRad);
 
         // Get the potential separation axes (normals of each box's edges)
-        std::vector<Vector2> axes;
-        std::vector<Vector2> normals1 = GetBoxNormals(corners1);
-        std::vector<Vector2> normals2 = GetBoxNormals(corners2);
+        std::vector<rlf::Vec2f> axes;
+        std::vector<rlf::Vec2f> normals1 = GetBoxNormals(corners1);
+        std::vector<rlf::Vec2f> normals2 = GetBoxNormals(corners2);
         axes.insert(axes.end(), normals1.begin(), normals1.end());
         axes.insert(axes.end(), normals2.begin(), normals2.end());
 
-        f32     minOverlap     = std::numeric_limits<f32>::max();
-        Vector2 minOverlapAxis = {0.0f, 0.0f};
-        bool    collisionFound = true;  // Assume collision until a separating axis is found
+        f32        minOverlap     = std::numeric_limits<f32>::max();
+        rlf::Vec2f minOverlapAxis = {0.0f, 0.0f};
+        bool       collisionFound = true;  // Assume collision until a separating axis is found
 
         // Use SAT (Separating Axis Theorem)
-        for (auto const& axis : axes) {
+        for (auto const& axis : axes)
+        {
             f32 min1, max1, min2, max2;
             ProjectPolygon(corners1, axis, min1, max1);
             ProjectPolygon(corners2, axis, min2, max2);
 
             f32 overlap;
-            if (!CheckOverlap(min1, max1, min2, max2, overlap)) {
+            if (!CheckOverlap(min1, max1, min2, max2, overlap))
+            {
                 collisionFound = false;  // Found a separating axis
                 break;
             }
@@ -208,10 +234,11 @@ namespace rlf::phys {
             // we might need to flip the axis for consistent normal direction.
             // We ensure the normal always points from box2 *to* box1 in terms
             // of calculating the overlap distance.
-            Vector2 const box1Center = {(box1.min.x + box1.max.x) * 0.5f, (box1.min.y + box1.max.y) * 0.5f};
-            Vector2 const box2Center = {(box2.min.x + box2.max.x) * 0.5f, (box2.min.y + box2.max.y) * 0.5f};
-            Vector2 const centerVec  = box1Center - box2Center;
-            if (Vector2DotProduct(centerVec, axis) < 0.0f) {
+            rlf::Vec2f const box1Center = {(box1.min.x + box1.max.x) * 0.5f, (box1.min.y + box1.max.y) * 0.5f};
+            rlf::Vec2f const box2Center = {(box2.min.x + box2.max.x) * 0.5f, (box2.min.y + box2.max.y) * 0.5f};
+            rlf::Vec2f const centerVec  = box1Center - box2Center;
+            if (centerVec.Dot(axis) < 0.0f)
+            {
                 overlap *= -1.0f;  // This is a trick to make overlap positive for penetration
                                    // and simplify calculation later.
             }
@@ -219,13 +246,15 @@ namespace rlf::phys {
             // Ensure overlap is positive (magnitude of penetration)
             overlap = std::abs(overlap);
 
-            if (overlap < minOverlap) {
+            if (overlap < minOverlap)
+            {
                 minOverlap     = overlap;
                 minOverlapAxis = axis;
             }
         }
 
-        if (!collisionFound) {
+        if (!collisionFound)
+        {
             return false;  // No collision
         }
 
@@ -234,15 +263,18 @@ namespace rlf::phys {
 
         // Determine the collision normal (the axis of least penetration)
         // The direction of the normal should point from box2 to box1.
-        Vector2 const box1Center   = {(box1.min.x + box1.max.x) * 0.5f, (box1.min.y + box1.max.y) * 0.5f};
-        Vector2 const box2Center   = {(box2.min.x + box2.max.x) * 0.5f, (box2.min.y + box2.max.y) * 0.5f};
-        Vector2 const centerVector = box1Center - box2Center;
+        rlf::Vec2f const box1Center   = {(box1.min.x + box1.max.x) * 0.5f, (box1.min.y + box1.max.y) * 0.5f};
+        rlf::Vec2f const box2Center   = {(box2.min.x + box2.max.x) * 0.5f, (box2.min.y + box2.max.y) * 0.5f};
+        rlf::Vec2f const centerVector = box1Center - box2Center;
 
         // If the dot product is negative, it means minOverlapAxis points
         // from box1 to box2, so we need to reverse it for the normal.
-        if (Vector2DotProduct(centerVector, minOverlapAxis) < 0.0f) {
-            collidedNormal = Vector2Scale(minOverlapAxis, -1.0f);
-        } else {
+        if (centerVector.Dot(minOverlapAxis) < 0.0f)
+        {
+            collidedNormal = -minOverlapAxis;
+        }
+        else
+        {
             collidedNormal = minOverlapAxis;
         }
 
@@ -253,13 +285,14 @@ namespace rlf::phys {
         // For simplicity, let's find the deepest penetrating vertex from box2 into box1.
         // This is an approximation and might not be perfectly accurate for all cases,
         // especially for edge-on-edge collisions.
-        f32     maxPenetration = -std::numeric_limits<f32>::max();
-        Vector2 deepVertex     = {0.0f, 0.0f};
+        f32        maxPenetration = -std::numeric_limits<f32>::max();
+        rlf::Vec2f deepVertex     = {0.0f, 0.0f};
 
         // Check corners of box2 against box1
-        for (Vector2 const& vertex : corners2) {
+        for (rlf::Vec2f const& vertex : corners2)
+        {
             // Project the vertex onto the normal
-            f32 const projection = Vector2DotProduct(vertex, collidedNormal);
+            f32 const projection = vertex.Dot(collidedNormal);
 
             // Project box1 onto the normal
             f32 min1, max1;
@@ -271,59 +304,66 @@ namespace rlf::phys {
             f32 const currentPenetration = projection - max1;  // How far beyond box1's "back" face
                                                                // the vertex is. Negative means inside.
 
-            if (currentPenetration > maxPenetration) {
+            if (currentPenetration > maxPenetration)
+            {
                 maxPenetration = currentPenetration;
                 deepVertex     = vertex;
             }
         }
         // The point on the surface of box1 where deepVertex from box2 would collide.
         // This is `deepVertex - collidedNormal * maxPenetration`
-        collidedPoint = Vector2Subtract(deepVertex, Vector2Scale(collidedNormal, maxPenetration));
+        collidedPoint = deepVertex - (collidedNormal * maxPenetration);
 
         // Calculate tangent (perpendicular to normal)
-        collidedTangent = Vector2{-collidedNormal.y, collidedNormal.x};
+        collidedTangent = rlf::Vec2f{-collidedNormal.y, collidedNormal.x};
 
         return true;
     }
 
-    bool CheckCollisionLines(Vector3 const& l1Start, Vector3 const& l1End, Vector3 const& l2Start, Vector3 const& l2End) {
-        Vector3 D1 = l1End - l1Start;    // Direction vector of segment 1
-        Vector3 D2 = l2End - l2Start;    // Direction vector of segment 2
-        Vector3 R  = l1Start - l2Start;  // Vector between segment start points
+    bool CheckCollisionLines(rlf::Vec3f const& l1Start, rlf::Vec3f const& l1End, rlf::Vec3f const& l2Start, rlf::Vec3f const& l2End)
+    {
+        rlf::Vec3f D1 = l1End - l1Start;    // Direction vector of segment 1
+        rlf::Vec3f D2 = l2End - l2Start;    // Direction vector of segment 2
+        rlf::Vec3f R  = l1Start - l2Start;  // Vector between segment start points
 
-        f32 a = Vector3LengthSqr(D1);
-        f32 b = Vector3DotProduct(D1, D2);
-        f32 c = Vector3LengthSqr(D2);
-        f32 d = Vector3DotProduct(D1, R);
-        f32 e = Vector3DotProduct(D2, R);
+        f32 a = D1.LengthSq();
+        f32 b = D1.Dot(D2);
+        f32 c = D2.LengthSq();
+        f32 d = D1.Dot(R);
+        f32 e = D2.Dot(R);
 
         f32 denom = a * c - b * b;  // Determinant of the system
 
         f32 s, t;  // Parameters for closest points on infinite lines
 
         // Handle parallel or degenerated lines
-        if (std::fabs(denom) < EPSILON) {
+        if (std::fabs(denom) < EPSILON)
+        {
             // Lines are parallel or (one or both) are points
 
             // Case 1: Both segments are points
-            if (a < EPSILON && c < EPSILON) {
+            if (a < EPSILON && c < EPSILON)
+            {
                 s = 0.0f;
                 t = 0.0f;
             }
             // Case 2: Segment 1 is a point (l1Start == l1End)
-            else if (a < EPSILON) {  // l1Start is a point
+            else if (a < EPSILON)
+            {  // l1Start is a point
                 s = 0.0f;
                 // Find closest point on segment 2 to l1Start
-                t = std::clamp(Vector3DotProduct(R, D2) / c, 0.0f, 1.0f);
+                t = std::clamp(R.Dot(D2) / c, 0.0f, 1.0f);
             }
             // Case 3: Segment 2 is a point (l2Start == l2End)
-            else if (c < EPSILON) {  // l2Start is a point
+            else if (c < EPSILON)
+            {  // l2Start is a point
                 t = 0.0f;
                 // Find closest point on segment 1 to l2Start
-                s = std::clamp(Vector3DotProduct(Vector3Negate(R), D1) / a, 0.0f, 1.0f);
+                s = std::clamp((-R).Dot(D1) / a, 0.0f, 1.0f);
             }
             // Case 4: Parallel lines (non-degenerate segments)
-            else {
+            else
+            {
                 // Project segment 2's start point onto segment 1
                 // Choose an arbitrary point on one line to project onto the other
                 // Here, we try to align based on 's' from the first equation (sa - tb = d)
@@ -341,7 +381,9 @@ namespace rlf::phys {
                 // to finding a point of closest approach based on clamping.
                 t = 0.0f;  // Default or calculate based on chosen s for line 1
             }
-        } else {
+        }
+        else
+        {
             // Skew lines or lines that intersect
             s = (b * e - c * d) / denom;
             t = (a * e - b * d) / denom;
@@ -352,35 +394,36 @@ namespace rlf::phys {
         }
 
         // Calculate the closest points on the segments using the clamped s and t
-        Vector3 closestPt1 = l1Start + D1 * s;
-        Vector3 closestPt2 = l2Start + D2 * t;
+        rlf::Vec3f closestPt1 = l1Start + D1 * s;
+        rlf::Vec3f closestPt2 = l2Start + D2 * t;
 
         // Calculate the distance between the closest points
-        f32 distanceSq = Vector3LengthSqr(closestPt1 - closestPt2);
+        f32 distanceSq = (closestPt1 - closestPt2).LengthSq();
 
         // Collision occurs if the distance between closest points is effectively zero
         return distanceSq < (EPSILON * EPSILON);
     }
 
-    bool CheckCollisionLineSphere(Vector3 const& startPt, Vector3 const& endPt, Vector3 const& spherePos, f32 const sphereRadius) {
+    bool CheckCollisionLineSphere(rlf::Vec3f const& startPt, rlf::Vec3f const& endPt, rlf::Vec3f const& spherePos, f32 const sphereRadius)
+    {
         // Vector representing the line segment
-        Vector3 lineVec = endPt - startPt;
+        rlf::Vec3f lineVec = endPt - startPt;
 
         // Vector from the startPt of the line segment to the sphere's center
-        Vector3 startToCenter = spherePos - startPt;
+        rlf::Vec3f startToCenter = spherePos - startPt;
 
         // Calculate the projection of startToCenter onto lineVec
         // This gives us the parameter t along the infinite line
-        f32 t = Vector3DotProduct(startToCenter, lineVec) / Vector3LengthSqr(lineVec);
+        f32 t = startToCenter.Dot(lineVec) / lineVec.LengthSq();
 
         // Clamp t to the [0, 1] range to find the closest point on the segment
         t = std::max(0.0f, std::min(1.0f, t));
 
         // Calculate the closest point on the line segment to the sphere's center
-        Vector3 closestPointOnSegment = startPt + lineVec * t;
+        rlf::Vec3f closestPointOnSegment = startPt + lineVec * t;
 
         // Calculate the distance squared from the sphere's center to this closest point
-        f32 distSq = Vector3LengthSqr(spherePos - closestPointOnSegment);
+        f32 distSq = (spherePos - closestPointOnSegment).LengthSq();
 
         // Check if this distance is less than or equal to the sphere's radius squared
         return distSq <= (sphereRadius * sphereRadius);

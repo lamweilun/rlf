@@ -7,11 +7,14 @@
 #include <sstream>
 #include <queue>
 
-namespace rlf::Node {
+namespace rlf::Node
+{
 
-    std::shared_ptr<BaseNode> BaseNode::addChild(std::string_view typeName) {
+    std::shared_ptr<BaseNode> BaseNode::addChild(std::string_view typeName)
+    {
         auto newChild = rlf::TypeManager::getInstance().createNode(typeName);
-        if (!newChild.has_value()) {
+        if (!newChild.has_value())
+        {
             return nullptr;
         }
 
@@ -20,29 +23,37 @@ namespace rlf::Node {
         return newChild.value();
     }
 
-    std::optional<std::shared_ptr<BaseNode>> BaseNode::getFirstChildOfType(std::string_view typeName) const {
-        for (auto const& child : getChildren()) {
-            if (child->getTypeNameImpl() == typeName) {
+    std::optional<std::shared_ptr<BaseNode>> BaseNode::getFirstChildOfType(std::string_view typeName) const
+    {
+        for (auto const& child : getChildren())
+        {
+            if (child->getTypeNameImpl() == typeName)
+            {
                 return child;
             }
         }
         return std::nullopt;
     }
 
-    std::shared_ptr<BaseNode> BaseNode::addOrGetFirstChildOfType(std::string_view typeName) {
+    std::shared_ptr<BaseNode> BaseNode::addOrGetFirstChildOfType(std::string_view typeName)
+    {
         auto child = getFirstChildOfType(typeName);
-        if (child.has_value()) {
+        if (child.has_value())
+        {
             return child.value();
         }
         child = addChild(typeName);
         return child.value();
     }
 
-    Vector2 const& BaseNode::getPosition() const {
+    rlf::Vec2f const& BaseNode::getPosition() const
+    {
         return mPosition;
     }
-    void BaseNode::setPosition(Vector2 const& position) {
-        if (Vector2Equals(mPosition, position)) {
+    void BaseNode::setPosition(rlf::Vec2f const& position)
+    {
+        if (mPosition == position)
+        {
             return;
         }
         mPosition   = position;
@@ -50,11 +61,14 @@ namespace rlf::Node {
         markGlobalDirty();
     }
 
-    Vector2 const& BaseNode::getScale() const {
+    rlf::Vec2f const& BaseNode::getScale() const
+    {
         return mScale;
     }
-    void BaseNode::setScale(Vector2 const& scale) {
-        if (Vector2Equals(mScale, scale)) {
+    void BaseNode::setScale(rlf::Vec2f const& scale)
+    {
+        if (mScale == scale)
+        {
             return;
         }
         mScale      = scale;
@@ -62,77 +76,98 @@ namespace rlf::Node {
         markGlobalDirty();
     }
 
-    f32 const& BaseNode::getRotation() const {
+    f32 const& BaseNode::getRotation() const
+    {
         return mRotation;
     }
-    void BaseNode::setRotation(f32 const rotation) {
-        if (FloatEquals(mRotation, rotation)) {
+    void BaseNode::setRotation(f32 const rotation)
+    {
+        if (FloatEquals(mRotation, rotation))
+        {
             return;
         }
         mRotation   = rotation;
         mLocalDirty = true;
         markGlobalDirty();
     }
-    f32 BaseNode::getRotationDeg() const {
+    f32 BaseNode::getRotationDeg() const
+    {
         return getRotation() * RAD2DEG;
     }
-    void BaseNode::setRotationDeg(f32 const rotationDeg) {
+    void BaseNode::setRotationDeg(f32 const rotationDeg)
+    {
         setRotation(rotationDeg * DEG2RAD);
     }
 
-    std::string const& BaseNode::getName() const {
+    std::string const& BaseNode::getName() const
+    {
         return mName;
     }
-    void BaseNode::setName(std::string const& name) {
+    void BaseNode::setName(std::string const& name)
+    {
         mName = name;
     }
 
-    bool BaseNode::getActive() const {
+    bool BaseNode::getActive() const
+    {
         bool active = getActiveSelf();
-        if (active) {
-            if (auto parent = mParent.lock()) {
+        if (active)
+        {
+            if (auto parent = mParent.lock())
+            {
                 active = active && parent->getActive();
             }
         }
         return active;
     }
-    bool BaseNode::getActiveSelf() const {
+    bool BaseNode::getActiveSelf() const
+    {
         return mActive;
     }
-    void BaseNode::setActive(bool const active) {
-        if (mActive != active) {
+    void BaseNode::setActive(bool const active)
+    {
+        if (mActive != active)
+        {
             mActive = active;
             setActiveImpl(active);
         }
 
         // Call it for all children as well
-        for (auto& child : getAllChildren()) {
+        for (auto& child : getAllChildren())
+        {
             child->setActiveImpl(child->getActiveSelf());
         }
     }
 
-    void BaseNode::setToDestroy(bool const toDestroy) {
+    void BaseNode::setToDestroy(bool const toDestroy)
+    {
         mToDestroy = toDestroy;
     }
 
-    bool BaseNode::isRootNode() const {
+    bool BaseNode::isRootNode() const
+    {
         return !hasParent();
     }
 
-    std::shared_ptr<BaseNode> BaseNode::getRootNode() {
-        if (auto rootNode = mRootNode.lock()) {
+    std::shared_ptr<BaseNode> BaseNode::getRootNode()
+    {
+        if (auto rootNode = mRootNode.lock())
+        {
             return rootNode;
         }
         std::shared_ptr<BaseNode> rootNode = shared_from_this();
-        while (auto parentNode = rootNode->mParent.lock()) {
+        while (auto parentNode = rootNode->mParent.lock())
+        {
             rootNode = parentNode;
         }
         mRootNode = rootNode;
         return rootNode;
     }
 
-    Matrix const& BaseNode::getLocalTransform() const {
-        if (mLocalDirty) {
+    Matrix const& BaseNode::getLocalTransform() const
+    {
+        if (mLocalDirty)
+        {
             auto scaleMat     = MatrixScale(mScale.x, mScale.y, 1.0f);
             auto translateMat = MatrixTranslate(mPosition.x, mPosition.y, 0.0f);
             auto rotMat       = MatrixRotateZ(mRotation);
@@ -142,10 +177,13 @@ namespace rlf::Node {
         return mLocalTransform;
     }
 
-    Matrix const& BaseNode::getGlobalTransform() const {
-        if (mGlobalDirty) {
+    Matrix const& BaseNode::getGlobalTransform() const
+    {
+        if (mGlobalDirty)
+        {
             mGlobalTransform = getLocalTransform();
-            if (auto parentNode = mParent.lock()) {
+            if (auto parentNode = mParent.lock())
+            {
                 mGlobalTransform = mGlobalTransform * parentNode->getGlobalTransform();
             }
             mGlobalDirty = false;
@@ -153,31 +191,35 @@ namespace rlf::Node {
         return mGlobalTransform;
     }
 
-    Vector2 BaseNode::getGlobalRight() const {
+    rlf::Vec2f BaseNode::getGlobalRight() const
+    {
         Matrix const& globalMat = getGlobalTransform();
-        return Vector2{globalMat.m0, globalMat.m4};
+        return rlf::Vec2f{globalMat.m0, globalMat.m4};
     }
 
-    Vector2 BaseNode::getGlobalPosition() const {
+    rlf::Vec2f BaseNode::getGlobalPosition() const
+    {
         auto const& globalMat = getGlobalTransform();
-        return Vector2{globalMat.m12, globalMat.m13};
+        return rlf::Vec2f{globalMat.m12, globalMat.m13};
     }
 
-    Vector2 BaseNode::getGlobalScale() const {
+    rlf::Vec2f BaseNode::getGlobalScale() const
+    {
         auto const& globalMat    = getGlobalTransform();
-        auto        globalScaleX = Vector3Length(Vector3{globalMat.m0, globalMat.m1, globalMat.m2});
-        auto        globalScaleY = Vector3Length(Vector3{globalMat.m4, globalMat.m5, globalMat.m6});
-        return Vector2{globalScaleX, globalScaleY};
+        auto        globalScaleX = rlf::Vec3f{globalMat.m0, globalMat.m1, globalMat.m2}.Length();
+        auto        globalScaleY = rlf::Vec3f{globalMat.m4, globalMat.m5, globalMat.m6}.Length();
+        return rlf::Vec2f{globalScaleX, globalScaleY};
     }
 
-    Quaternion BaseNode::getGlobalRotation() const {
+    Quaternion BaseNode::getGlobalRotation() const
+    {
         auto globalMat = getGlobalTransform();
 
-        auto globalScaleX = Vector3Length(Vector3{globalMat.m0, globalMat.m1, globalMat.m2});
-        auto globalScaleY = Vector3Length(Vector3{globalMat.m4, globalMat.m5, globalMat.m6});
-        auto globalScaleZ = Vector3Length(Vector3{globalMat.m8, globalMat.m9, globalMat.m10});
+        auto globalScaleX = rlf::Vec3f{globalMat.m0, globalMat.m1, globalMat.m2}.Length();
+        auto globalScaleY = rlf::Vec3f{globalMat.m4, globalMat.m5, globalMat.m6}.Length();
+        auto globalScaleZ = rlf::Vec3f{globalMat.m8, globalMat.m9, globalMat.m10}.Length();
 
-        auto invScale = Vector3Invert(Vector3{globalScaleX, globalScaleY, globalScaleZ});
+        auto invScale = 1.0f / rlf::Vec3f{globalScaleX, globalScaleY, globalScaleZ};
         invScale.x    = std::min(invScale.x, 1.0f);
         invScale.y    = std::min(invScale.y, 1.0f);
         invScale.z    = std::min(invScale.z, 1.0f);
@@ -201,36 +243,44 @@ namespace rlf::Node {
         return QuaternionFromMatrix(globalMat);
     }
 
-    f32 BaseNode::getGlobalRotationRad() const {
+    f32 BaseNode::getGlobalRotationRad() const
+    {
         auto const& globalRot = getGlobalRotation();
         return QuaternionToEuler(globalRot).z;
     }
-    f32 BaseNode::getGlobalRotationDeg() const {
+    f32 BaseNode::getGlobalRotationDeg() const
+    {
         return getGlobalRotationRad() * RAD2DEG;
     }
 
-    bool BaseNode::hasParent() const {
+    bool BaseNode::hasParent() const
+    {
         return getParent().lock() != nullptr;
     }
 
-    std::weak_ptr<BaseNode> BaseNode::getParent() const {
+    std::weak_ptr<BaseNode> BaseNode::getParent() const
+    {
         return mParent;
     }
 
-    void BaseNode::setParent(std::shared_ptr<BaseNode> newParent) {
+    void BaseNode::setParent(std::shared_ptr<BaseNode> newParent)
+    {
         // Return if im the root node
-        if (isRootNode()) {
+        if (isRootNode())
+        {
             return;
         }
         // Return if the new parent is myself
-        if (newParent == shared_from_this()) {
+        if (newParent == shared_from_this())
+        {
             return;
         }
 
         // Return if the new parent is the same as the current parent
         {
             auto currParent = mParent.lock();
-            if (currParent == newParent) {
+            if (currParent == newParent)
+            {
                 return;
             }
         }
@@ -242,8 +292,10 @@ namespace rlf::Node {
         {
             auto  currParent         = mParent.lock();
             auto& currParentChildren = currParent->getChildren();
-            for (size_t i = 0; i < currParentChildren.size(); ++i) {
-                if (currParentChildren[i] == shared_from_this()) {
+            for (size_t i = 0; i < currParentChildren.size(); ++i)
+            {
+                if (currParentChildren[i] == shared_from_this())
+                {
                     currParentChildren.erase(std::begin(currParentChildren) + static_cast<i32>(i));
                     break;
                 }
@@ -256,14 +308,17 @@ namespace rlf::Node {
         markGlobalDirty();
     }
 
-    std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren() {
+    std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren()
+    {
         // Append newly created children and call init on them
-        if (!mNewChildren.empty()) {
+        if (!mNewChildren.empty())
+        {
             size_t const oldSize = mChildren.size();
             size_t const newSize = oldSize + mNewChildren.size();
             mChildren.append_range(mNewChildren);
             mNewChildren.clear();
-            for (size_t i = oldSize; i < newSize; ++i) {
+            for (size_t i = oldSize; i < newSize; ++i)
+            {
                 mChildren[i]->setup();
                 mChildren[i]->init();
                 mChildren[i]->setActiveImpl(mChildren[i]->getActiveSelf());
@@ -273,11 +328,15 @@ namespace rlf::Node {
 #ifdef RLF_EDITOR
         // Check if any children needs to be shifted
         {
-            for (size_t i = 0; i < mChildren.size(); ++i) {
-                if (mChildren[i]->mToShiftDown && i < mChildren.size() - 1) {
+            for (size_t i = 0; i < mChildren.size(); ++i)
+            {
+                if (mChildren[i]->mToShiftDown && i < mChildren.size() - 1)
+                {
                     mChildren[i]->mToShiftDown = false;
                     std::swap(mChildren[i], mChildren[i + 1]);
-                } else if (mChildren[i]->mToShiftUp && i > 0) {
+                }
+                else if (mChildren[i]->mToShiftUp && i > 0)
+                {
                     mChildren[i]->mToShiftUp = false;
                     std::swap(mChildren[i], mChildren[i - 1]);
                 }
@@ -288,89 +347,109 @@ namespace rlf::Node {
         return mChildren;
     }
 
-    std::vector<std::shared_ptr<BaseNode>> const& BaseNode::getChildren() const {
+    std::vector<std::shared_ptr<BaseNode>> const& BaseNode::getChildren() const
+    {
         return const_cast<BaseNode&>(*this).getChildren();
     }
 
-    std::vector<std::shared_ptr<BaseNode>> BaseNode::getAllChildren() {
+    std::vector<std::shared_ptr<BaseNode>> BaseNode::getAllChildren()
+    {
         std::vector<std::shared_ptr<BaseNode>> allChildren;
         std::queue<std::shared_ptr<BaseNode>>  childQueue;
-        for (auto const& child : getChildren()) {
+        for (auto const& child : getChildren())
+        {
             childQueue.push(child);
         }
-        while (!childQueue.empty()) {
+        while (!childQueue.empty())
+        {
             auto child = childQueue.front();
             allChildren.push_back(child);
             childQueue.pop();
-            for (auto const& grandChild : child->getChildren()) {
+            for (auto const& grandChild : child->getChildren())
+            {
                 childQueue.push(grandChild);
             }
         }
         return allChildren;
     }
 
-    void BaseNode::setActiveImpl([[maybe_unused]] bool const active) {
+    void BaseNode::setActiveImpl([[maybe_unused]] bool const active)
+    {
     }
 
-    void BaseNode::setup() {
-        if (!mHasSetup) {
+    void BaseNode::setup()
+    {
+        if (!mHasSetup)
+        {
             setupImpl();
             mHasSetup = true;
         }
 
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->setup();
         }
     }
 
-    void BaseNode::init() {
-        if (!mHasInited) {
+    void BaseNode::init()
+    {
+        if (!mHasInited)
+        {
 #ifndef RLF_EDITOR
             initImpl();
 #endif
             mHasInited = true;
         }
 
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->init();
         }
     }
 
-    void BaseNode::uninit() {
+    void BaseNode::uninit()
+    {
         // Shutdown all children first
-        for ([[maybe_unused]] auto& child : getChildren()) {
+        for ([[maybe_unused]] auto& child : getChildren())
+        {
 #ifndef RLF_EDITOR
             child->uninit();
 #endif
         }
 
         // Calls uninit on self
-        if (!mHasInited) {
+        if (!mHasInited)
+        {
             return;
         }
         uninitImpl();
         mHasInited = false;
     }
 
-    void BaseNode::shutdown() {
+    void BaseNode::shutdown()
+    {
         // Shutdown all children first
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->shutdown();
         }
         mChildren.clear();
 
         // Calls shutdown on self
-        if (!mHasSetup) {
+        if (!mHasSetup)
+        {
             return;
         }
         shutdownImpl();
         mHasSetup = false;
     }
 
-    void BaseNode::preUpdate() {
+    void BaseNode::preUpdate()
+    {
         clearChildrenMarkedForDestruction();
         // If inactive just return
-        if (!mActive) {
+        if (!mActive)
+        {
             return;
         }
 
@@ -378,14 +457,17 @@ namespace rlf::Node {
         preUpdateImpl();
 #endif
 
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->preUpdate();
         }
     }
 
-    void BaseNode::update() {
+    void BaseNode::update()
+    {
         // If inactive just return
-        if (!mActive) {
+        if (!mActive)
+        {
             return;
         }
 
@@ -393,14 +475,17 @@ namespace rlf::Node {
         updateImpl();
 #endif
 
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->update();
         }
     }
 
-    void BaseNode::postUpdate() {
+    void BaseNode::postUpdate()
+    {
         // If inactive just return
-        if (!mActive) {
+        if (!mActive)
+        {
             return;
         }
 
@@ -408,29 +493,36 @@ namespace rlf::Node {
         postUpdateImpl();
 #endif
 
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->postUpdate();
         }
     }
 
-    rlf::Json BaseNode::serialize() {
+    rlf::Json BaseNode::serialize()
+    {
         rlf::Json j;
         j["type"] = getTypeNameImpl();
         j["data"] = serializeImpl();
-        for (auto const& child : getChildren()) {
+        for (auto const& child : getChildren())
+        {
             j["data"]["children"].push_back(child->serialize());
         }
         return j;
     }
-    void BaseNode::deserialize(rlf::Json const& j) {
+    void BaseNode::deserialize(rlf::Json const& j)
+    {
         deserializeImpl(j["data"]);
 
         std::vector<std::shared_ptr<BaseNode>> newChildren;
-        if (j["data"].contains("children")) {
-            for (auto const& entry : j["data"]["children"]) {
+        if (j["data"].contains("children"))
+        {
+            for (auto const& entry : j["data"]["children"])
+            {
                 // Try to create a node of type
                 auto childNodeOpt = rlf::TypeManager::getInstance().createNode(entry["type"].get<std::string_view>());
-                if (!childNodeOpt.has_value()) {
+                if (!childNodeOpt.has_value())
+                {
                     // If for whatever reason the node type is not registered, replace it with a base node
                     childNodeOpt = rlf::TypeManager::getInstance().createNode(rlf::Node::BaseNode::getTypeName());
                 }
@@ -441,7 +533,8 @@ namespace rlf::Node {
             }
         }
 
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->setToDestroy(true);
         }
         mNewChildren = std::move(newChildren);
@@ -452,9 +545,11 @@ namespace rlf::Node {
         mGlobalDirty = true;
     }
 
-    void BaseNode::deserializeFromFile(std::string const& filePath) {
+    void BaseNode::deserializeFromFile(std::string const& filePath)
+    {
         std::ifstream ifs(filePath);
-        if (!ifs.is_open()) {
+        if (!ifs.is_open())
+        {
             return;
         }
         std::stringstream ss;
@@ -463,7 +558,8 @@ namespace rlf::Node {
         deserialize(j);
     }
 
-    std::shared_ptr<BaseNode> BaseNode::clone() {
+    std::shared_ptr<BaseNode> BaseNode::clone()
+    {
         auto const nodeJson = serialize();
         auto const nodeType = getTypeNameImpl();
         auto       newChild = getParent().lock()->addChild(nodeType);
@@ -471,66 +567,84 @@ namespace rlf::Node {
         return newChild;
     }
 
-    void BaseNode::setupImpl() {
+    void BaseNode::setupImpl()
+    {
     }
 
-    void BaseNode::initImpl() {
+    void BaseNode::initImpl()
+    {
     }
 
-    void BaseNode::uninitImpl() {
+    void BaseNode::uninitImpl()
+    {
     }
 
-    void BaseNode::shutdownImpl() {
+    void BaseNode::shutdownImpl()
+    {
     }
 
-    void BaseNode::preUpdateImpl() {
+    void BaseNode::preUpdateImpl()
+    {
     }
 
-    void BaseNode::updateImpl() {
+    void BaseNode::updateImpl()
+    {
     }
 
-    void BaseNode::postUpdateImpl() {
+    void BaseNode::postUpdateImpl()
+    {
     }
 
-    rlf::Json BaseNode::serializeImpl() {
+    rlf::Json BaseNode::serializeImpl()
+    {
         rlf::acc::JsonSerializer js;
         access(js);
         return js.getJson();
     }
 
-    void BaseNode::deserializeImpl(rlf::Json const& j) {
+    void BaseNode::deserializeImpl(rlf::Json const& j)
+    {
         rlf::acc::JsonDeserializer jd;
         jd.setJson(j);
         access(jd);
     }
 
 #ifdef RLF_EDITOR
-    void BaseNode::imguiAccessImpl() {
+    void BaseNode::imguiAccessImpl()
+    {
         rlf::acc::ImGuiAccessor imguiAcc;
         access(imguiAcc);
     }
 #endif
 
-    void BaseNode::markGlobalDirty() {
+    void BaseNode::markGlobalDirty()
+    {
         mGlobalDirty = true;
-        for (auto& child : getChildren()) {
+        for (auto& child : getChildren())
+        {
             child->markGlobalDirty();
         }
     }
 
-    void BaseNode::clearChildrenMarkedForDestruction() {
+    void BaseNode::clearChildrenMarkedForDestruction()
+    {
         // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
         {
             size_t newSize = mChildren.size();
-            for (size_t i = 0; i < newSize;) {
-                if (mChildren[i]->mToDestroy) {
+            for (size_t i = 0; i < newSize;)
+            {
+                if (mChildren[i]->mToDestroy)
+                {
                     std::swap(mChildren[i], mChildren[newSize - 1]);
                     --newSize;
-                } else {
+                }
+                else
+                {
                     ++i;
                 }
             }
-            for (size_t i = newSize; i < mChildren.size(); ++i) {
+            for (size_t i = newSize; i < mChildren.size(); ++i)
+            {
                 mChildren[i]->uninit();
                 mChildren[i]->shutdown();
             }

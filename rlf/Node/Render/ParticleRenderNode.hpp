@@ -6,8 +6,10 @@
 
 #include <vector>
 
-namespace rlf::Node {
-    class ParticleRenderNode : public rlf::Node::RenderNode {
+namespace rlf::Node
+{
+    class ParticleRenderNode : public rlf::Node::RenderNode
+    {
     public:
         RLF_TYPE_REGISTER_QUICK(ParticleRenderNode)
 
@@ -43,11 +45,11 @@ namespace rlf::Node {
         rlf::Range<f32> const& getSpawnAngleDegRange() const;
         void                   setSpawnAngleDegRange(rlf::Range<f32> const& spawnAngleDegRange);
 
-        rlf::Range<Color4F> const& getStartColorRange() const;
-        void                       setStartColorRange(rlf::Range<Color4F> const& startColor);
+        rlf::Range<rlf::Color4F> const& getStartColorRange() const;
+        void                            setStartColorRange(rlf::Range<rlf::Color4F> const& startColor);
 
-        rlf::Range<Color4F> const& getEndColorRange() const;
-        void                       setEndColorRange(rlf::Range<Color4F> const& endColor);
+        rlf::Range<rlf::Color4F> const& getEndColorRange() const;
+        void                            setEndColorRange(rlf::Range<rlf::Color4F> const& endColor);
 
     protected:
         void updateLiveParticles();
@@ -92,21 +94,21 @@ namespace rlf::Node {
         rlf::Range<f32>     mStartRotationRange = {0.0f, 0.0f};
         rlf::Range<f32>     mEndRotationRange   = {0.0f, 0.0f};
         rlf::Range<f32>     mSpawnAngleDegRange = {0.0f, 359.0f};
-        rlf::Range<Color4F> mStartColorRange    = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
-        rlf::Range<Color4F> mEndColorRange      = {Color4F::FromColor(WHITE), Color4F::FromColor(WHITE)};
+        rlf::Range<Color4F> mStartColorRange    = {rlf::Color4F::ColorOne(), rlf::Color4F::ColorOne()};
+        rlf::Range<Color4F> mEndColorRange      = {rlf::Color4F::ColorOne(), rlf::Color4F::ColorOne()};
 
         // Runtime params (Resize the vector params in resizeParams)
-        std::vector<f32>     mLifeTimes;
-        std::vector<f32>     mScales;
-        std::vector<f32>     mScaleDeltas;
-        std::vector<f32>     mSpeeds;
-        std::vector<f32>     mSpeedDeltas;
-        std::vector<f32>     mRotations;
-        std::vector<f32>     mRotationDeltas;
-        std::vector<Vector2> mPositions;
-        std::vector<Vector2> mDirections;
-        std::vector<Color4F> mColors;
-        std::vector<Color4F> mColorDeltas;
+        std::vector<f32>        mLifeTimes;
+        std::vector<f32>        mScales;
+        std::vector<f32>        mScaleDeltas;
+        std::vector<f32>        mSpeeds;
+        std::vector<f32>        mSpeedDeltas;
+        std::vector<f32>        mRotations;
+        std::vector<f32>        mRotationDeltas;
+        std::vector<rlf::Vec2f> mPositions;
+        std::vector<rlf::Vec2f> mDirections;
+        std::vector<Color4F>    mColors;
+        std::vector<Color4F>    mColorDeltas;
 
         std::vector<u64> mLiveIndices;
         std::vector<u64> mFreeIndices;
