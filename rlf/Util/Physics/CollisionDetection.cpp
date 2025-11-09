@@ -178,7 +178,7 @@ namespace rlf::phys
         }
         else
         {
-            localNormal = rlf::Vec2f(localCirclePos - closestPointLocal).Normalized();
+            localNormal = (localCirclePos - closestPointLocal).Normalized();
             // Penetrating depth
             penetratingDepth = circleRadius - std::sqrtf(distanceSq);
         }
@@ -213,7 +213,7 @@ namespace rlf::phys
         axes.insert(axes.end(), normals2.begin(), normals2.end());
 
         f32        minOverlap     = std::numeric_limits<f32>::max();
-        rlf::Vec2f minOverlapAxis = {0.0f, 0.0f};
+        rlf::Vec2f minOverlapAxis = rlf::Vec2f::Zero();
         bool       collisionFound = true;  // Assume collision until a separating axis is found
 
         // Use SAT (Separating Axis Theorem)
@@ -286,7 +286,7 @@ namespace rlf::phys
         // This is an approximation and might not be perfectly accurate for all cases,
         // especially for edge-on-edge collisions.
         f32        maxPenetration = -std::numeric_limits<f32>::max();
-        rlf::Vec2f deepVertex     = {0.0f, 0.0f};
+        rlf::Vec2f deepVertex     = rlf::Vec2f::Zero();
 
         // Check corners of box2 against box1
         for (rlf::Vec2f const& vertex : corners2)

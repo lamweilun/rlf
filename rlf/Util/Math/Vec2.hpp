@@ -248,7 +248,7 @@ namespace rlf
             return (x * rhs.x) + (y * rhs.y);
         }
 
-        constexpr Vec2 Cross(Vec2 const& rhs) const
+        constexpr T Cross(Vec2 const& rhs) const
         {
             return (x * rhs.y) - (y * rhs.x);
         }
@@ -279,29 +279,23 @@ namespace rlf
             return Other * (Dot(Other) / other_len_sq);
         }
 
-        constexpr T Angle(Vec2 const& rhs) const
+        constexpr T Angle(Vec2 const& Rhs) const
         {
-            T d  = Dot(rhs);
-            T l1 = Length();
-            T l2 = rhs.Length();
-
             if constexpr (std::is_floating_point_v<T>)
             {
-                if (std::abs(l1) < std::numeric_limits<T>::epsilon() || std::abs(l2) < std::numeric_limits<T>::epsilon())
+                if (LengthSq() <= std::numeric_limits<T>::epsilon() || Rhs.LengthSq() <= std::numeric_limits<T>::epsilon())
                 {
                     return T{};
                 }
             }
             else
             {
-                if (l1 == 0 || l2 == 0)
+                if (LengthSq() == 0 || Rhs.LengthSq() == 0)
                 {
                     return T{};
                 }
             }
-
-            T cos_theta = std::clamp(d / (l1 * l2), T{-1}, T{1});
-            return std::acos(cos_theta);
+            return std::atan2(Cross(Rhs), Dot(Rhs));
         }
 
         friend inline void to_json(rlf::Json& j, Vec2 const& v)

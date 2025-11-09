@@ -19,8 +19,7 @@ namespace ext::Node
                     mBulletParticle->setParent(getRootNode());
                     mBulletParticle->setPosition(info.self->getGlobalPosition());
 
-                    auto const angleDeg = rlf::Degrees(info.collidedNormal.Angle(rlf::Vec2f::Right()));
-                    std::cout << angleDeg << std::endl;
+                    auto const angleDeg = rlf::Degrees(rlf::Vec2f::Right().Angle(info.collidedNormal));
                     mBulletParticle->setSpawnAngleDegRange({angleDeg - 45.0f, angleDeg + 45.0f});
 
                     mBulletParticle->setActive(true);
