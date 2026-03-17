@@ -4,11 +4,23 @@ project(rlf)
 
 # rlf dependencies
 CPMAddPackage("gh:nlohmann/json@3.12.0") # nlohmann_json
-CPMAddPackage("gh:raysan5/raylib#5.5") # raylib
+CPMAddPackage("gh:raysan5/raylib#1eea511070ece8e4f96e961588811340ebd0b11e") # raylib
+
+# boost
+CPMAddPackage(
+    NAME Boost
+    GITHUB_REPOSITORY boostorg/boost
+    GIT_TAG boost-1.90.0
+    OPTIONS
+        "BOOST_ENABLE_CMAKE ON" 
+        "BOOST_SKIP_INSTALL_RULES ON" # Set `OFF` for installation
+        "BUILD_SHARED_LIBS OFF" 
+        "BOOST_INCLUDE_LIBRARIES json\\\;pool" # Note the escapes!
+)
 
 if (RLF_EDITOR)
     # imgui
-    CPMAddPackage("gh:ocornut/imgui@1.92.1-docking")
+    CPMAddPackage("gh:ocornut/imgui@1.92.6-docking")
     add_library(
             imgui
             ${imgui_SOURCE_DIR}/imgui.cpp
@@ -34,7 +46,7 @@ add_library(
 
         Engine/Engine.cpp
 
-        Manager/TypeManager.cpp
+        Node/NodeManager.cpp
 
         Node/Audio/MusicNode.cpp
         Node/Audio/SoundNode.cpp
@@ -97,7 +109,13 @@ endif ()
 add_warning_flags(${PROJECT_NAME})
 target_precompile_headers(${PROJECT_NAME} PUBLIC pch.hpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ./)
-target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json raylib)
+target_link_libraries(
+    ${PROJECT_NAME} PUBLIC 
+    Boost::json
+    Boost::pool
+    nlohmann_json
+    raylib
+)
 if (RLF_EDITOR)
     target_link_libraries(${PROJECT_NAME} PUBLIC imgui rlImGui)
     target_compile_definitions(${PROJECT_NAME} PUBLIC RLF_EDITOR)

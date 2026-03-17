@@ -12,17 +12,18 @@
 
 static inline constexpr std::string_view assetsPathName = "assets";
 
-int main() {
+int main()
+{
     auto& engine = rlf::Engine::getInstance();
 
     // Register game node types
-    engine.setSetupFunc([]() {
-        rlf::TypeManager::getInstance().registerType<ext::Node::MainMenuManagerNode>();
-        rlf::TypeManager::getInstance().registerType<ext::Node::GameManagerNode>();
-        rlf::TypeManager::getInstance().registerType<ext::Node::PlayerNode>();
-        rlf::TypeManager::getInstance().registerType<ext::Node::PlayerBulletNode>();
-        rlf::TypeManager::getInstance().registerType<ext::Node::AsteroidNode>();
-    });
+    engine.setSetupFunc([]()
+                        {
+        rlf::NodeManager::getInstance().registerType<ext::Node::MainMenuManagerNode>();
+        rlf::NodeManager::getInstance().registerType<ext::Node::GameManagerNode>();
+        rlf::NodeManager::getInstance().registerType<ext::Node::PlayerNode>();
+        rlf::NodeManager::getInstance().registerType<ext::Node::PlayerBulletNode>();
+        rlf::NodeManager::getInstance().registerType<ext::Node::AsteroidNode>(); });
 
 #ifdef RLF_EDITOR
     // Set assets path to be this internal project folder
@@ -31,7 +32,8 @@ int main() {
     engine.setAssetsDirectory(assetsPath);
 
     // Set shutdown function such that it will copy assets over to application directory
-    engine.setShutdownFunc([](std::shared_ptr<rlf::Node::BaseNode>) {
+    engine.setShutdownFunc([](std::shared_ptr<rlf::Node::BaseNode>)
+                           {
         static constexpr std::string_view appName     = "exteroids";
         std::filesystem::path             currentPath = GetWorkingDirectory();
 #ifdef RLF_DEBUG
@@ -51,8 +53,7 @@ int main() {
 
         // imgui.ini remove
         auto imguiConfigFile = destinationPath.append("imgui.ini");
-        std::filesystem::remove(imguiConfigFile);
-    });
+        std::filesystem::remove(imguiConfigFile); });
 #else
     // Set assets path to application directory
     std::filesystem::path p(GetApplicationDirectory());

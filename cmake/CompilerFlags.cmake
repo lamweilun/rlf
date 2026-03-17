@@ -46,7 +46,7 @@ function(add_warning_flags TARGET)
             -Wswitch-enum
             -Wundef
             -Wunused
-            -Wzero-as-null-pointer-constant
+            # -Wzero-as-null-pointer-constant
             -Wno-exit-time-destructors
             -Wno-global-constructors
             -Wno-weak-vtables

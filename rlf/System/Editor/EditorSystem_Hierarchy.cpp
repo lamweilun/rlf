@@ -8,7 +8,8 @@
 #include <fstream>
 #include <sstream>
 
-namespace rlf::Editor {
+namespace rlf::Editor
+{
     static inline constexpr char const* id_ToggleChildrenButton = "ToggleChildrenButton";
     static inline constexpr char const* id_ShiftDownButton      = "ShiftDownButton";
     static inline constexpr char const* id_ShiftUpButton        = "ShiftUpButton";
@@ -16,8 +17,10 @@ namespace rlf::Editor {
     static inline constexpr char const* id_CloneButton          = "CloneButton";
 }
 
-namespace rlf::System {
-    void EditorSystem::displayHierarchyWindow() {
+namespace rlf::System
+{
+    void EditorSystem::displayHierarchyWindow()
+    {
         ImGui::Begin("Hierarchy");
 
         {
@@ -25,19 +28,24 @@ namespace rlf::System {
             ImGui::Text("FPS: %s", fps.c_str());
         }
 
-        if (ImGui::Button("New World")) {
+        if (ImGui::Button("New World"))
+        {
             mLoadedWorld.clear();
             auto rootNode = rlf::Engine::getInstance().getRootNode();
             rootNode->shutdown();
         }
 
-        if (ImGui::Button("Save World")) {
-            if (!mLoadedWorld.empty()) {
+        if (ImGui::Button("Save World"))
+        {
+            if (!mLoadedWorld.empty())
+            {
                 auto          rootNode = rlf::Engine::getInstance().getRootNode();
                 rlf::Json     j        = rootNode->serialize();
                 std::ofstream ofs(mLoadedWorld, std::ios::trunc);
                 ofs << j.dump(2) << std::endl;
-            } else {
+            }
+            else
+            {
                 auto          rootNode = rlf::Engine::getInstance().getRootNode();
                 rlf::Json     j        = rootNode->serialize();
                 auto          path     = rootNode->getName() + ".json";
@@ -48,10 +56,14 @@ namespace rlf::System {
         }
 
         // Add new child node button
-        if (mSelectedNode) {
-            if (ImGui::BeginCombo("Add Child Node", "")) {
-                for (auto const& [typeName, creatorFunc] : rlf::TypeManager::getInstance().getCreatorFuncs()) {
-                    if (ImGui::Selectable(typeName.data())) {
+        if (mSelectedNode)
+        {
+            if (ImGui::BeginCombo("Add Child Node", ""))
+            {
+                for (auto const& [typeName, creatorFunc] : rlf::NodeManager::getInstance().getCreatorFuncs())
+                {
+                    if (ImGui::Selectable(typeName.data()))
+                    {
                         auto newChildNode = mSelectedNode->addChild(typeName);
                         newChildNode->setName(std::string("New ") + typeName.data());
                         mShowChildrenTable[mSelectedNode] = true;
@@ -63,13 +75,15 @@ namespace rlf::System {
         }
 
         // Show what we are currently editing
-        if (!mLoadedWorld.empty()) {
+        if (!mLoadedWorld.empty())
+        {
             ImGui::Text("Currently editing: %s", std::filesystem::relative(mLoadedWorld, std::filesystem::current_path()).c_str());
         }
 
         ImGui::Separator();
 
-        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> drawChildrenTreeFunc = [&](std::shared_ptr<rlf::Node::BaseNode> node) {
+        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> drawChildrenTreeFunc = [&](std::shared_ptr<rlf::Node::BaseNode> node)
+        {
             // Setup unique IDs based on pointer address
             auto              rootNodePtr = node.get();
             std::stringstream ss;
@@ -78,19 +92,25 @@ namespace rlf::System {
             std::string const& nodeName     = node->getName();
 
             // Display arrow button if there's children
-            if (!node->getChildren().empty()) {
+            if (!node->getChildren().empty())
+            {
                 // Change arrow direction based on whether its showing children
                 ImGuiDir arrowDir = ImGuiDir_Right;
-                if (mShowChildrenTable.contains(node)) {
+                if (mShowChildrenTable.contains(node))
+                {
                     arrowDir = mShowChildrenTable.at(node) ? ImGuiDir_Down : ImGuiDir_Right;
                 }
 
                 // Toggleable arrow button to show children
                 std::string const arrowBtnID = nodeUniqueID + rlf::Editor::id_ToggleChildrenButton;
-                if (ImGui::ArrowButton(arrowBtnID.c_str(), arrowDir)) {
-                    if (mShowChildrenTable.contains(node)) {
+                if (ImGui::ArrowButton(arrowBtnID.c_str(), arrowDir))
+                {
+                    if (mShowChildrenTable.contains(node))
+                    {
                         mShowChildrenTable[node] = !mShowChildrenTable[node];
-                    } else {
+                    }
+                    else
+                    {
                         mShowChildrenTable[node] = true;
                     }
                 }
@@ -102,19 +122,23 @@ namespace rlf::System {
             ImGui::PushStyleColor(ImGuiCol_Text, ImGui::ColorConvertFloat4ToU32(activeColor));
             // Draw a node selectable
             std::string const selectableID = nodeName + nodeUniqueID;
-            if (ImGui::Selectable(selectableID.c_str(), node == mSelectedNode, 0, ImGui::CalcTextSize(nodeName.c_str()))) {
+            if (ImGui::Selectable(selectableID.c_str(), node == mSelectedNode, 0, ImGui::CalcTextSize(nodeName.c_str())))
+            {
                 mSelectedNode = node;
             }
             ImGui::PopStyleColor();
 
             // Drag-drop to set parent
-            if (ImGui::BeginDragDropSource()) {
+            if (ImGui::BeginDragDropSource())
+            {
                 mDraggedNode = node;
                 ImGui::SetDragDropPayload("NodeSetParent", nullptr, 0);
                 ImGui::EndDragDropSource();
             }
-            if (ImGui::BeginDragDropTarget()) {
-                if (ImGui::AcceptDragDropPayload("NodeSetParent")) {
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (ImGui::AcceptDragDropPayload("NodeSetParent"))
+                {
                     mDraggedNode->setParent(node);
                     mDraggedNode = nullptr;
                 }
@@ -122,32 +146,41 @@ namespace rlf::System {
             }
 
             // Shift Up/Down Buttons for rearrangement
-            if (node->hasParent()) {
+            if (node->hasParent())
+            {
                 ImGui::SameLine();
                 std::string const shiftDownButtonID = nodeUniqueID + rlf::Editor::id_ShiftDownButton;
-                if (ImGui::ArrowButton(shiftDownButtonID.c_str(), ImGuiDir_Down)) {
+                if (ImGui::ArrowButton(shiftDownButtonID.c_str(), ImGuiDir_Down))
+                {
                     node->mToShiftDown = true;
                 }
                 ImGui::SameLine();
                 std::string const shiftUpButtonID = nodeUniqueID + rlf::Editor::id_ShiftUpButton;
-                if (ImGui::ArrowButton(shiftUpButtonID.c_str(), ImGuiDir_Up)) {
+                if (ImGui::ArrowButton(shiftUpButtonID.c_str(), ImGuiDir_Up))
+                {
                     node->mToShiftUp = true;
                 }
             }
 
             // Delete Button
-            if (node == mSelectedNode) {
+            if (node == mSelectedNode)
+            {
                 ImGui::SameLine();
                 std::string const deleteID = std::string("X") + nodeUniqueID + rlf::Editor::id_DeleteButton;
                 ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.25f, 0.25f, 1.0f)));
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.5f, 0.5f, 1.0f)));
-                if (ImGui::Button(deleteID.c_str())) {
-                    if (node->isRootNode()) {
-                        for (auto& child : node->getChildren()) {
+                if (ImGui::Button(deleteID.c_str()))
+                {
+                    if (node->isRootNode())
+                    {
+                        for (auto& child : node->getChildren())
+                        {
                             child->setToDestroy(true);
                             mShowChildrenTable.erase(child);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         node->setToDestroy(true);
                         mShowChildrenTable.erase(node);
                     }
@@ -160,7 +193,8 @@ namespace rlf::System {
                 std::string const cloneID = std::string("C") + nodeUniqueID + rlf::Editor::id_CloneButton;
                 ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.5f, 0.0f, 1.0f)));
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.75f, 0.0f, 1.0f)));
-                if (ImGui::Button(cloneID.c_str())) {
+                if (ImGui::Button(cloneID.c_str()))
+                {
                     mSelectedNode = mSelectedNode->clone();
                 }
                 ImGui::PopStyleColor();
@@ -168,8 +202,10 @@ namespace rlf::System {
             }
 
             // Draw children if drop down arrow is toggled
-            if (mShowChildrenTable.contains(node) && mShowChildrenTable.at(node)) {
-                for (auto child : node->getChildren()) {
+            if (mShowChildrenTable.contains(node) && mShowChildrenTable.at(node))
+            {
+                for (auto child : node->getChildren())
+                {
                     ImGui::TreePush(ss.str().c_str());
                     drawChildrenTreeFunc(child);
                     ImGui::TreePop();

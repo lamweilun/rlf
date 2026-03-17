@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Manager/TypeManager.hpp>
+#include <Node/NodeManager.hpp>
 
 #include <Util/Accessor/JsonSerializer.hpp>
 #include <Util/Accessor/JsonDeserializer.hpp>

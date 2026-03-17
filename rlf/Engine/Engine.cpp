@@ -1,11 +1,18 @@
 #include <Engine/Engine.hpp>
 
+// System Types here
 #include <System/Physics/PhysicsSystem.hpp>
 #include <System/Audio/AudioSystem.hpp>
 #include <System/Render/RenderSystem.hpp>
 #include <System/Resource/ResourceSystem.hpp>
 
+#ifdef RLF_EDITOR
+#include <System/Editor/EditorSystem.hpp>
+#endif
+
 // All Node Types here
+#include <Node/BaseNode.hpp>
+
 #include <Node/Audio/MusicNode.hpp>
 #include <Node/Audio/SoundNode.cpp>
 
@@ -30,19 +37,16 @@
 #include <Node/UI/UITextNode.hpp>
 #include <Node/UI/UISliderNode.hpp>
 
-#include <Node/BaseNode.cpp>
-
-#ifdef RLF_EDITOR
-#include <System/Editor/EditorSystem.hpp>
-#endif
-
-namespace rlf {
-    Engine& Engine::getInstance() {
+namespace rlf
+{
+    Engine& Engine::getInstance()
+    {
         static Engine engine;
         return engine;
     }
 
-    void Engine::run(Config const& config) {
+    void Engine::run(Config const& config)
+    {
 #ifdef RLF_EDITOR
         unsigned int windowFlag = FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE;
 #else
@@ -70,41 +74,43 @@ namespace rlf {
 #endif
 
         // Register Types here
-        rlf::TypeManager::getInstance().registerType<rlf::Node::BaseNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::BaseNode>();
 
-        rlf::TypeManager::getInstance().registerType<rlf::Node::MusicNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::SoundNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::MusicNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::SoundNode>();
 
-        rlf::TypeManager::getInstance().registerType<rlf::Node::ColliderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::BoxColliderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::CircleColliderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::RigidbodyNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::ColliderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::BoxColliderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::CircleColliderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::RigidbodyNode>();
 
         // Render Nodes
-        rlf::TypeManager::getInstance().registerType<rlf::Node::RenderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::CameraNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::LineRenderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::CircleRenderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::QuadRenderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::SpriteRenderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::ParticleRenderNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::BurstParticleRenderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::RenderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::CameraNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::LineRenderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::CircleRenderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::QuadRenderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::SpriteRenderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::ParticleRenderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::BurstParticleRenderNode>();
 
         // UI Nodes
-        rlf::TypeManager::getInstance().registerType<rlf::Node::UINode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::UICameraNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::UIButtonNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::UISpriteNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::UITextNode>();
-        rlf::TypeManager::getInstance().registerType<rlf::Node::UISliderNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::UINode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::UICameraNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::UIButtonNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::UISpriteNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::UITextNode>();
+        rlf::NodeManager::getInstance().registerType<rlf::Node::UISliderNode>();
 
         // Run custom setup func, for registering of app node types
-        if (mSetupFunc) {
+        if (mSetupFunc)
+        {
             mSetupFunc();
         }
 
         // Initialize all systems
-        for (auto& system : mSystems) {
+        for (auto& system : mSystems)
+        {
             system->init();
         }
 
@@ -113,31 +119,37 @@ namespace rlf {
         mRootNode->setName(mRootNode->getTypeNameImpl().data());
 
         // Attempt to load initial world if there's one set
-        if (!mInitialWorldToLoad.empty()) {
+        if (!mInitialWorldToLoad.empty())
+        {
             mRootNode->deserializeFromFile(mInitialWorldToLoad);
         }
 
         // Run init
-        if (mInitFunc) {
+        if (mInitFunc)
+        {
             mInitFunc(mRootNode);
         }
         mRootNode->init();
 
-        while (!(WindowShouldClose() || mToQuit)) {
+        while (!(WindowShouldClose() || mToQuit))
+        {
 #ifndef RLF_EDITOR
             // Alt + Enter to toggle Borderless Fullscreen
-            if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)) {
+            if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER))
+            {
                 ToggleBorderlessWindowed();
             }
 #endif
 
             // Checks if there's a next world to load before doing any updates
-            if (!mNextWorldToLoad.empty()) {
+            if (!mNextWorldToLoad.empty())
+            {
                 mRootNode->deserializeFromFile(mNextWorldToLoad);
                 mNextWorldToLoad.clear();
             }
 
-            if (mUpdateFunc) {
+            if (mUpdateFunc)
+            {
                 mUpdateFunc(mRootNode);
             }
 
@@ -145,14 +157,16 @@ namespace rlf {
             mRootNode->update();
             mRootNode->postUpdate();
 
-            for (auto& system : mSystems) {
+            for (auto& system : mSystems)
+            {
                 system->update();
             }
 
             BeginDrawing();
             ClearBackground(BLACK);
 
-            for (auto& system : mSystems) {
+            for (auto& system : mSystems)
+            {
                 system->render();
             }
 
@@ -164,7 +178,8 @@ namespace rlf {
             EndDrawing();
         }
 
-        if (mShutdownFunc) {
+        if (mShutdownFunc)
+        {
             mShutdownFunc(mRootNode);
         }
 
@@ -172,49 +187,60 @@ namespace rlf {
         mRootNode.reset();
 
         std::ranges::reverse(mSystems);
-        for (auto const& system : mSystems) {
+        for (auto const& system : mSystems)
+        {
             system->shutdown();
         }
 
         CloseWindow();
     }
 
-    void Engine::setToQuit() {
+    void Engine::setToQuit()
+    {
         mToQuit = true;
     }
 
-    void Engine::setAssetsDirectory(std::filesystem::path const& assetsPath) {
+    void Engine::setAssetsDirectory(std::filesystem::path const& assetsPath)
+    {
         std::filesystem::current_path(assetsPath);
     }
 
-    std::string Engine::getAssetsDirectory() const {
+    std::string Engine::getAssetsDirectory() const
+    {
         return std::filesystem::current_path().string();
     }
 
-    void Engine::setInitialWorldToLoad(std::string const& filename) {
+    void Engine::setInitialWorldToLoad(std::string const& filename)
+    {
         mInitialWorldToLoad = filename;
     }
-    void Engine::setNextWorldToLoad(std::string const& filename) {
+    void Engine::setNextWorldToLoad(std::string const& filename)
+    {
         mNextWorldToLoad = filename;
     }
 
-    void Engine::setSetupFunc(std::function<void()> setupFunc) {
+    void Engine::setSetupFunc(std::function<void()> setupFunc)
+    {
         mSetupFunc = setupFunc;
     }
 
-    void Engine::setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc) {
+    void Engine::setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc)
+    {
         mInitFunc = initFunc;
     }
 
-    void Engine::setUpdateFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> updateFunc) {
+    void Engine::setUpdateFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> updateFunc)
+    {
         mUpdateFunc = updateFunc;
     }
 
-    void Engine::setShutdownFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> shutdownFunc) {
+    void Engine::setShutdownFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> shutdownFunc)
+    {
         mShutdownFunc = shutdownFunc;
     }
 
-    std::shared_ptr<Node::BaseNode> Engine::getRootNode() const {
+    std::shared_ptr<Node::BaseNode> Engine::getRootNode() const
+    {
         return mRootNode;
     }
 }
