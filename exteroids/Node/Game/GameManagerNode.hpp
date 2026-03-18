@@ -6,8 +6,10 @@
 #include <Node/Player/PlayerNode.hpp>
 #include <Node/Asteroid/AsteroidNode.hpp>
 
-namespace ext::Node {
-    class GameManagerNode : public rlf::Node::BaseNode {
+namespace ext::Node
+{
+    class GameManagerNode : public rlf::Node::BaseNode
+    {
     public:
         RLF_TYPE_REGISTER_QUICK(GameManagerNode)
 
@@ -22,19 +24,19 @@ namespace ext::Node {
 
     private:
         // Game UI
-        std::shared_ptr<rlf::Node::BaseNode> mGameUINode;
+        rlf::Node::BaseNode* mGameUINode;
 
         // Player
-        std::shared_ptr<ext::Node::PlayerNode> mPlayerNode;
+        ext::Node::PlayerNode* mPlayerNode;
 
         // Asteroids
-        void                                     spawnBigAsteroid() const;
-        void                                     spawnMediumAsteroid() const;
-        void                                     spawnSmallAsteroid() const;
-        std::shared_ptr<ext::Node::AsteroidNode> mBigAsteroidNode;
-        std::shared_ptr<ext::Node::AsteroidNode> mMediumAsteroidNode;
-        std::shared_ptr<ext::Node::AsteroidNode> mSmallAsteroidNode;
-        f32                                      mAsteroidSpawnTimer        = 1.0f;
-        f32                                      mCurrentAsteroidSpawnTimer = 0.0f;
+        void                     spawnBigAsteroid() const;
+        void                     spawnMediumAsteroid() const;
+        void                     spawnSmallAsteroid() const;
+        ext::Node::AsteroidNode* mBigAsteroidNode = nullptr;
+        ext::Node::AsteroidNode* mMediumAsteroidNode = nullptr;
+        ext::Node::AsteroidNode* mSmallAsteroidNode = nullptr;
+        f32                      mAsteroidSpawnTimer        = 1.0f;
+        f32                      mCurrentAsteroidSpawnTimer = 0.0f;
     };
 }

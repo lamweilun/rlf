@@ -115,7 +115,7 @@ namespace rlf
         }
 
         // Create root node
-        mRootNode = std::make_shared<rlf::Node::BaseNode>();
+        mRootNode = rlf::NodeManager::getInstance().create<rlf::Node::BaseNode>().value();
         mRootNode->setName(mRootNode->getTypeNameImpl().data());
 
         // Attempt to load initial world if there's one set
@@ -184,7 +184,7 @@ namespace rlf
         }
 
         mRootNode->shutdown();
-        mRootNode.reset();
+        rlf::NodeManager::getInstance().destroy(mRootNode);
 
         std::ranges::reverse(mSystems);
         for (auto const& system : mSystems)
@@ -224,22 +224,22 @@ namespace rlf
         mSetupFunc = setupFunc;
     }
 
-    void Engine::setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc)
+    void Engine::setInitFunc(std::function<void(rlf::Node::BaseNode*)> initFunc)
     {
         mInitFunc = initFunc;
     }
 
-    void Engine::setUpdateFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> updateFunc)
+    void Engine::setUpdateFunc(std::function<void(rlf::Node::BaseNode*)> updateFunc)
     {
         mUpdateFunc = updateFunc;
     }
 
-    void Engine::setShutdownFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> shutdownFunc)
+    void Engine::setShutdownFunc(std::function<void(rlf::Node::BaseNode*)> shutdownFunc)
     {
         mShutdownFunc = shutdownFunc;
     }
 
-    std::shared_ptr<Node::BaseNode> Engine::getRootNode() const
+    rlf::Node::BaseNode* Engine::getRootNode() const
     {
         return mRootNode;
     }

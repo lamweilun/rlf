@@ -32,7 +32,7 @@ int main()
     engine.setAssetsDirectory(assetsPath);
 
     // Set shutdown function such that it will copy assets over to application directory
-    engine.setShutdownFunc([](std::shared_ptr<rlf::Node::BaseNode>)
+    engine.setShutdownFunc([](rlf::Node::BaseNode*)
                            {
         static constexpr std::string_view appName     = "exteroids";
         std::filesystem::path             currentPath = GetWorkingDirectory();

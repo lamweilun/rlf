@@ -14,6 +14,6 @@ namespace ext::Node {
         void updateImpl() override;
 
     private:
-        std::shared_ptr<rlf::Node::BurstParticleRenderNode> mBulletParticle;
+        rlf::Node::BurstParticleRenderNode* mBulletParticle = nullptr;
     };
 }

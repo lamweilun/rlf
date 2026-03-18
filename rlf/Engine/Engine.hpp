@@ -5,14 +5,18 @@
 #include <functional>
 #include <memory>
 
-namespace rlf {
-    namespace Node {
+namespace rlf
+{
+    namespace Node
+    {
         class BaseNode;
     }
 
-    class Engine {
+    class Engine
+    {
     public:
-        struct Config {
+        struct Config
+        {
             u32              width  = 1280;
             u32              height = 720;
             std::string_view title  = "Hello rlf";
@@ -36,11 +40,11 @@ namespace rlf {
         void        setNextWorldToLoad(std::string const &filename);
 
         void setSetupFunc(std::function<void()> setupFunc);
-        void setInitFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> initFunc);
-        void setUpdateFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> updateFunc);
-        void setShutdownFunc(std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> shutdownFunc);
+        void setInitFunc(std::function<void(rlf::Node::BaseNode*)> initFunc);
+        void setUpdateFunc(std::function<void(rlf::Node::BaseNode*)> updateFunc);
+        void setShutdownFunc(std::function<void(rlf::Node::BaseNode*)> shutdownFunc);
 
-        std::shared_ptr<Node::BaseNode> getRootNode() const;
+        rlf::Node::BaseNode* getRootNode() const;
 
         template <class T>
         void addSystem();
@@ -52,10 +56,10 @@ namespace rlf {
         std::string                                               mInitialWorldToLoad;
         std::string                                               mNextWorldToLoad;
         std::function<void()>                                     mSetupFunc;
-        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mInitFunc;
-        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mUpdateFunc;
-        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> mShutdownFunc;
-        std::shared_ptr<Node::BaseNode>                           mRootNode;
+        std::function<void(rlf::Node::BaseNode*)> mInitFunc;
+        std::function<void(rlf::Node::BaseNode*)> mUpdateFunc;
+        std::function<void(rlf::Node::BaseNode*)> mShutdownFunc;
+        Node::BaseNode                                           *mRootNode;
 
         std::vector<std::shared_ptr<System::ISystem>> mSystems;
         std::unordered_map<std::string, u64>          mSystemLUT;

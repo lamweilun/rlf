@@ -13,7 +13,7 @@ namespace ext::Node {
         void updateImpl() override;
 
     private:
-        std::shared_ptr<rlf::Node::UIButtonNode> mStartButton;
-        std::shared_ptr<rlf::Node::UIButtonNode> mExitButton;
+        rlf::Node::UIButtonNode* mStartButton = nullptr;
+        rlf::Node::UIButtonNode* mExitButton = nullptr;
     };
 }

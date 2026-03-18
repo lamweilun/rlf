@@ -9,21 +9,20 @@
 
 namespace rlf::Node
 {
-
-    std::shared_ptr<BaseNode> BaseNode::addChild(std::string_view typeName)
+    BaseNode* BaseNode::addChild(std::string_view typeName)
     {
-        auto newChild = rlf::NodeManager::getInstance().createNode(typeName);
+        auto newChild = rlf::NodeManager::getInstance().create(typeName);
         if (!newChild.has_value())
         {
             return nullptr;
         }
 
-        newChild.value()->mParent = weak_from_this();
+        newChild.value()->mParent = this;
         mNewChildren.push_back(newChild.value());
         return newChild.value();
     }
 
-    std::optional<std::shared_ptr<BaseNode>> BaseNode::getFirstChildOfType(std::string_view typeName) const
+    std::optional<BaseNode*> BaseNode::getFirstChildOfType(std::string_view typeName) const
     {
         for (auto const& child : getChildren())
         {
@@ -35,7 +34,7 @@ namespace rlf::Node
         return std::nullopt;
     }
 
-    std::shared_ptr<BaseNode> BaseNode::addOrGetFirstChildOfType(std::string_view typeName)
+    BaseNode* BaseNode::addOrGetFirstChildOfType(std::string_view typeName)
     {
         auto child = getFirstChildOfType(typeName);
         if (child.has_value())
@@ -113,9 +112,9 @@ namespace rlf::Node
         bool active = getActiveSelf();
         if (active)
         {
-            if (auto parent = mParent.lock())
+            if (mParent)
             {
-                active = active && parent->getActive();
+                active = active && mParent->getActive();
             }
         }
         return active;
@@ -149,14 +148,14 @@ namespace rlf::Node
         return !hasParent();
     }
 
-    std::shared_ptr<BaseNode> BaseNode::getRootNode()
+    BaseNode* BaseNode::getRootNode()
     {
-        if (auto rootNode = mRootNode.lock())
+        if (mRootNode)
         {
-            return rootNode;
+            return mRootNode;
         }
-        std::shared_ptr<BaseNode> rootNode = shared_from_this();
-        while (auto parentNode = rootNode->mParent.lock())
+        BaseNode* rootNode = this;
+        while (auto parentNode = rootNode->mParent)
         {
             rootNode = parentNode;
         }
@@ -182,7 +181,7 @@ namespace rlf::Node
         if (mGlobalDirty)
         {
             mGlobalTransform = getLocalTransform();
-            if (auto parentNode = mParent.lock())
+            if (auto parentNode = mParent)
             {
                 mGlobalTransform = mGlobalTransform * parentNode->getGlobalTransform();
             }
@@ -255,15 +254,15 @@ namespace rlf::Node
 
     bool BaseNode::hasParent() const
     {
-        return getParent().lock() != nullptr;
+        return getParent() != nullptr;
     }
 
-    std::weak_ptr<BaseNode> BaseNode::getParent() const
+    BaseNode* BaseNode::getParent() const
     {
         return mParent;
     }
 
-    void BaseNode::setParent(std::shared_ptr<BaseNode> newParent)
+    void BaseNode::setParent(BaseNode* newParent)
     {
         // Return if im the root node
         if (isRootNode())
@@ -271,14 +270,14 @@ namespace rlf::Node
             return;
         }
         // Return if the new parent is myself
-        if (newParent == shared_from_this())
+        if (newParent == this)
         {
             return;
         }
 
         // Return if the new parent is the same as the current parent
         {
-            auto currParent = mParent.lock();
+            auto currParent = mParent;
             if (currParent == newParent)
             {
                 return;
@@ -286,15 +285,15 @@ namespace rlf::Node
         }
 
         // Add this node to the new parent
-        newParent->mNewChildren.push_back(shared_from_this());
+        newParent->mNewChildren.push_back(this);
 
         // Remove this node from the old parent
         {
-            auto  currParent         = mParent.lock();
+            auto  currParent         = mParent;
             auto& currParentChildren = currParent->getChildren();
             for (size_t i = 0; i < currParentChildren.size(); ++i)
             {
-                if (currParentChildren[i] == shared_from_this())
+                if (currParentChildren[i] == this)
                 {
                     currParentChildren.erase(std::begin(currParentChildren) + static_cast<i32>(i));
                     break;
@@ -308,7 +307,7 @@ namespace rlf::Node
         markGlobalDirty();
     }
 
-    std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren()
+    std::vector<BaseNode*>& BaseNode::getChildren()
     {
         // Append newly created children and call init on them
         if (!mNewChildren.empty())
@@ -347,15 +346,15 @@ namespace rlf::Node
         return mChildren;
     }
 
-    std::vector<std::shared_ptr<BaseNode>> const& BaseNode::getChildren() const
+    std::vector<BaseNode*> const& BaseNode::getChildren() const
     {
         return const_cast<BaseNode&>(*this).getChildren();
     }
 
-    std::vector<std::shared_ptr<BaseNode>> BaseNode::getAllChildren()
+    std::vector<BaseNode*> BaseNode::getAllChildren()
     {
-        std::vector<std::shared_ptr<BaseNode>> allChildren;
-        std::queue<std::shared_ptr<BaseNode>>  childQueue;
+        std::vector<BaseNode*> allChildren;
+        std::queue<BaseNode*>  childQueue;
         for (auto const& child : getChildren())
         {
             childQueue.push(child);
@@ -514,21 +513,21 @@ namespace rlf::Node
     {
         deserializeImpl(j["data"]);
 
-        std::vector<std::shared_ptr<BaseNode>> newChildren;
+        std::vector<BaseNode*> newChildren;
         if (j["data"].contains("children"))
         {
             for (auto const& entry : j["data"]["children"])
             {
                 // Try to create a node of type
-                auto childNodeOpt = rlf::NodeManager::getInstance().createNode(entry["type"].get<std::string_view>());
+                auto childNodeOpt = rlf::NodeManager::getInstance().create(entry["type"].get<std::string_view>());
                 if (!childNodeOpt.has_value())
                 {
                     // If for whatever reason the node type is not registered, replace it with a base node
-                    childNodeOpt = rlf::NodeManager::getInstance().createNode(rlf::Node::BaseNode::getTypeName());
+                    childNodeOpt = rlf::NodeManager::getInstance().create(rlf::Node::BaseNode::getTypeName());
                 }
-                std::shared_ptr<BaseNode> childNode = childNodeOpt.value();
+                BaseNode* childNode = childNodeOpt.value();
                 childNode->deserialize(entry);
-                childNode->mParent = shared_from_this();
+                childNode->mParent = this;
                 newChildren.push_back(childNode);
             }
         }
@@ -558,11 +557,11 @@ namespace rlf::Node
         deserialize(j);
     }
 
-    std::shared_ptr<BaseNode> BaseNode::clone()
+    BaseNode* BaseNode::clone()
     {
         auto const nodeJson = serialize();
         auto const nodeType = getTypeNameImpl();
-        auto       newChild = getParent().lock()->addChild(nodeType);
+        auto       newChild = getParent()->addChild(nodeType);
         newChild->deserialize(nodeJson);
         return newChild;
     }
@@ -635,6 +634,7 @@ namespace rlf::Node
             {
                 if (mChildren[i]->mToDestroy)
                 {
+                    rlf::NodeManager::getInstance().destroy(mChildren[i]);
                     std::swap(mChildren[i], mChildren[newSize - 1]);
                     --newSize;
                 }

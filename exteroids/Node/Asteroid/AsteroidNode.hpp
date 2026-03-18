@@ -21,7 +21,7 @@ namespace ext::Node {
         RLF_NODE_ACCESS_END
 
     private:
-        std::shared_ptr<rlf::Node::CircleColliderNode> mAsteroidCollider;
+        rlf::Node::CircleColliderNode* mAsteroidCollider = nullptr;
 
         u32 mHP             = 1;
         f32 mAnglePerSecond = 0.0f;

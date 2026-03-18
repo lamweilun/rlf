@@ -4,12 +4,12 @@
 
 namespace rlf::Node {
     template <class T>
-    std::shared_ptr<T> BaseNode::addChild() {
+    T* BaseNode::addChild() {
         return std::static_pointer_cast<T>(addChild(T::getTypeName()));
     }
 
     template <class T>
-    std::optional<std::shared_ptr<T>> BaseNode::getFirstChildOfType() const {
+    std::optional<T*> BaseNode::getFirstChildOfType() const {
         auto child = getFirstChildOfType(T::getTypeName());
         if (!child.has_value()) {
             return std::nullopt;
@@ -18,12 +18,12 @@ namespace rlf::Node {
     }
 
     template <class T>
-    std::shared_ptr<T> BaseNode::addOrGetFirstChildOfType() {
+    T* BaseNode::addOrGetFirstChildOfType() {
         return std::static_pointer_cast<T>(addOrGetFirstChildOfType(T::getTypeName()));
     }
 
     template <class T>
-    std::optional<std::shared_ptr<T>> BaseNode::getFirstChildOfName(std::string_view childName) const {
+    std::optional<T*> BaseNode::getFirstChildOfName(std::string_view childName) const {
         auto children = getChildren();
         for (auto child : children) {
             if (child->getName() == childName) {
@@ -35,16 +35,16 @@ namespace rlf::Node {
 
     template <class T>
     bool BaseNode::is() {
-        return std::dynamic_pointer_cast<T>(shared_from_this()) != nullptr;
+        return dynamic_cast<T*>(this) != nullptr;
     }
 
     template <class T>
-    std::shared_ptr<T> BaseNode::as() {
-        return std::static_pointer_cast<T>(shared_from_this());
+    T* BaseNode::as() {
+        return static_cast<T*>(this);
     }
 
     template <class T>
-    std::shared_ptr<T> BaseNode::as() const {
-        return std::static_pointer_cast<T>(shared_from_this());
+    T* BaseNode::as() const {
+        return static_cast<T*>(this);
     }
 }

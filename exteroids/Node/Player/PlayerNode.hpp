@@ -4,8 +4,10 @@
 #include <Node/Audio/SoundNode.hpp>
 #include <Node/Player/PlayerBulletNode.hpp>
 
-namespace ext::Node {
-    class PlayerNode : public rlf::Node::RigidbodyNode {
+namespace ext::Node
+{
+    class PlayerNode : public rlf::Node::RigidbodyNode
+    {
     public:
         RLF_TYPE_REGISTER_QUICK(PlayerNode)
 
@@ -14,9 +16,9 @@ namespace ext::Node {
         void updateImpl() override;
 
     private:
-        std::shared_ptr<rlf::Node::SoundNode>        mFireSoudNode;
-        std::shared_ptr<ext::Node::PlayerBulletNode> mPlayerBulletNode;
-        f32                                          mFireRate        = 0.1f;
-        f32                                          mCurrentFireRate = 0.0f;
+        rlf::Node::SoundNode*        mFireSoudNode = nullptr;
+        ext::Node::PlayerBulletNode* mPlayerBulletNode = nullptr;
+        f32                          mFireRate        = 0.1f;
+        f32                          mCurrentFireRate = 0.0f;
     };
 }
