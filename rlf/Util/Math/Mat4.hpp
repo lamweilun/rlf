@@ -61,7 +61,7 @@ namespace rlf
         Mat4& operator=(Mat4&&)      = default;
 
         // Static identity matrix
-        static inline constexpr Mat4 identity() { return Mat4(T{1}); }
+        static inline constexpr Mat4 Identity() { return Mat4(T{1}); }
 
         // Column access operator
         inline constexpr Vec4<T>&       operator[](std::size_t index) { return vecs[index]; }
@@ -70,7 +70,7 @@ namespace rlf
         // Row access (returns a Vec4 representing the row)
         // Note: This returns a copy, not a reference to the underlying storage directly
         // This now correctly accesses components of each column vector.
-        inline constexpr rlf::Vec4<T> row(std::size_t const r) const
+        inline constexpr rlf::Vec4<T> Row(std::size_t const r) const
         {
             return rlf::Vec4<T>(vecs[0][r], vecs[1][r], vecs[2][r], vecs[3][r]);
         }
@@ -238,15 +238,15 @@ namespace rlf
         rlf::Vec4<T> operator*(rlf::Vec4<T> const& v) const
         {
             return rlf::Vec4<T>(
-                row(0).dot(v),  // R0 . V
-                row(1).dot(v),  // R1 . V
-                row(2).dot(v),  // R2 . V
-                row(3).dot(v)   // R3 . V
+                Row(0).dot(v),  // R0 . V
+                Row(1).dot(v),  // R1 . V
+                Row(2).dot(v),  // R2 . V
+                Row(3).dot(v)   // R3 . V
             );
         }
 
         // Transpose (mutating)
-        Mat4& transpose()
+        Mat4& Transpose()
         {
             for (std::size_t r = 0; r < 4; ++r)
             {
@@ -258,8 +258,8 @@ namespace rlf
             return *this;
         }
 
-        // Returns a transposed copy
-        constexpr Mat4 transposed() const
+        // Returns a Transposed copy
+        constexpr Mat4 Transposed() const
         {
             Mat4 result;  // Default constructs to identity, we'll overwrite
             for (std::size_t r = 0; r < 4; ++r)
@@ -274,7 +274,7 @@ namespace rlf
 
         // Determinant (using Laplace expansion/cofactor method)
         // This remains mostly the same, but access pattern is updated to vecs[col][row]
-        constexpr T determinant() const
+        constexpr T Determinant() const
         {
             // Access: vecs[column][row]
             // This makes (row, col) = vecs[col][row]
@@ -313,14 +313,14 @@ namespace rlf
         }
 
         // Inverse of the matrix (using adjugate matrix and determinant)
-        constexpr Mat4 inverse() const
+        constexpr Mat4 Inverse() const
         {
             if constexpr (std::is_floating_point_v<T>)
             {
-                T det = determinant();
+                T det = Determinant();
                 if (std::abs(det) <= std::numeric_limits<T>::epsilon())
                 {
-                    return identity();
+                    return Identity();
                 }
 
                 Mat4 result;
@@ -344,10 +344,10 @@ namespace rlf
                 result.vecs[1][3] = inv_det * (d[0] * (d[6] * d[11] - d[7] * d[10]) - d[4] * (d[2] * d[11] - d[3] * d[10]) + d[8] * (d[2] * d[7] - d[3] * d[6]));
 
                 // Row 2 of inverse (Column 2 of adjugate)
-                result.vecs[2][0] = inv_det * (d[4] * (d[10] * d[15] - d[11] * d[14]) - d[8] * (d[6] * d[15] - d[7] * d[14]) + d[12] * (d[6] * d[11] - d[7] * d[10]));  // Fix: C02 was used for row(2,0)
-                result.vecs[2][1] = inv_det * (d[8] * (d[2] * d[15] - d[3] * d[14]) - d[0] * (d[10] * d[15] - d[11] * d[14]) - d[12] * (d[2] * d[11] - d[3] * d[10]));  // Fix: C12 was used for row(2,1)
-                result.vecs[2][2] = inv_det * (d[0] * (d[6] * d[15] - d[7] * d[14]) - d[4] * (d[2] * d[15] - d[3] * d[14]) + d[12] * (d[2] * d[7] - d[3] * d[6]));      // Fix: C22 was used for row(2,2)
-                result.vecs[2][3] = inv_det * (d[4] * (d[2] * d[11] - d[3] * d[10]) - d[0] * (d[6] * d[11] - d[7] * d[10]) + d[8] * (d[2] * d[7] - d[3] * d[6]));       // Fix: C32 was used for row(2,3)
+                result.vecs[2][0] = inv_det * (d[4] * (d[10] * d[15] - d[11] * d[14]) - d[8] * (d[6] * d[15] - d[7] * d[14]) + d[12] * (d[6] * d[11] - d[7] * d[10]));  // Fix: C02 was used for Row(2,0)
+                result.vecs[2][1] = inv_det * (d[8] * (d[2] * d[15] - d[3] * d[14]) - d[0] * (d[10] * d[15] - d[11] * d[14]) - d[12] * (d[2] * d[11] - d[3] * d[10]));  // Fix: C12 was used for Row(2,1)
+                result.vecs[2][2] = inv_det * (d[0] * (d[6] * d[15] - d[7] * d[14]) - d[4] * (d[2] * d[15] - d[3] * d[14]) + d[12] * (d[2] * d[7] - d[3] * d[6]));      // Fix: C22 was used for Row(2,2)
+                result.vecs[2][3] = inv_det * (d[4] * (d[2] * d[11] - d[3] * d[10]) - d[0] * (d[6] * d[11] - d[7] * d[10]) + d[8] * (d[2] * d[7] - d[3] * d[6]));       // Fix: C32 was used for Row(2,3)
 
                 // Row 3 of inverse (Column 3 of adjugate)
                 result.vecs[3][0] = inv_det * (d[8] * (d[6] * d[11] - d[7] * d[10]) - d[4] * (d[10] * d[15] - d[11] * d[14]) - d[12] * (d[6] * d[11] - d[7] * d[10]));  // Fix: This was result(0,3)
@@ -359,14 +359,14 @@ namespace rlf
             }
             else
             {
-                return identity();
+                return Identity();
             }
         }
 
         // --- Static Transformation Matrix Creators ---
 
         // Translation Matrix
-        static constexpr Mat4 translation(T const x, T const y, T const z)
+        static constexpr Mat4 Translation(T const x, T const y, T const z)
         {
             Mat4 m;  // Starts as identity
             m.vecs[3].x = x;
@@ -374,13 +374,13 @@ namespace rlf
             m.vecs[3].z = z;
             return m;
         }
-        static constexpr Mat4 translation(rlf::Vec3<T> const& v)
+        static constexpr Mat4 Translation(rlf::Vec3<T> const& v)
         {
-            return translation(v.x, v.y, v.z);
+            return Translation(v.x, v.y, v.z);
         }
 
         // Scaling Matrix
-        static constexpr Mat4 scale(T const x, T const y, T const z)
+        static constexpr Mat4 Scale(T const x, T const y, T const z)
         {
             Mat4 m;  // Starts as identity
             m.vecs[0].x = x;
@@ -388,14 +388,14 @@ namespace rlf
             m.vecs[2].z = z;
             return m;
         }
-        static constexpr Mat4 scale(rlf::Vec3<T> const& v)
+        static constexpr Mat4 Scale(rlf::Vec3<T> const& v)
         {
-            return scale(v.x, v.y, v.z);
+            return Scale(v.x, v.y, v.z);
         }
 
         // Rotation Matrix from Euler Angles (roll, pitch, yaw) in radians
         // Order of application: Z (yaw), then Y (pitch), then X (roll)
-        static Mat4 rotation(T const roll_rad, T const pitch_rad, T const yaw_rad)
+        static Mat4 Rotation(T const roll_rad, T const pitch_rad, T const yaw_rad)
         {
             Mat4 rx, ry, rz;
             T    cos_r = std::cos(roll_rad);
@@ -426,15 +426,15 @@ namespace rlf
             // Combine rotations: Z then Y then X (R = Rx * Ry * Rz)
             return rx * ry * rz;
         }
-        static Mat4 rotation(rlf::Vec3<T> const& euler_angles_rad)
+        static Mat4 Rotation(rlf::Vec3<T> const& euler_angles_rad)
         {
-            return rotation(euler_angles_rad.x, euler_angles_rad.y,
+            return Rotation(euler_angles_rad.x, euler_angles_rad.y,
                             euler_angles_rad.z);
         }
 
         // Rotation Matrix from an axis and angle
         // Axis must be normalized! Angle in radians.
-        static Mat4 rotation(T const angle_rad, rlf::Vec3<T> const& axis)
+        static Mat4 Rotation(T const angle_rad, rlf::Vec3<T> const& axis)
         {
             Mat4 m;  // Starts as identity
             T    c   = std::cos(angle_rad);
@@ -470,7 +470,7 @@ namespace rlf
 
         // Rotation Matrix from a Quaternion
         // Assumes Quat::toMatrix() exists and returns a 4x4 array in column-major.
-        static Mat4 rotation(rlf::Quat<T> const& q)
+        static Mat4 Rotation(rlf::Quat<T> const& q)
         {
             return Mat4(q.to_matrix());
         }
@@ -480,7 +480,7 @@ namespace rlf
         // aspect_ratio: width / height
         // near_plane: distance to near clipping plane (positive value)
         // far_plane: distance to far clipping plane (positive value)
-        static Mat4 perspective(T const fov_y_rad, T const aspect_ratio, T const near_plane, T const far_plane)
+        static Mat4 Perspective(T const fov_y_rad, T const aspect_ratio, T const near_plane, T const far_plane)
         {
             Mat4 m{};  // Starts as zero matrix
             T    tan_half_fov_y = std::tan(fov_y_rad / static_cast<T>(2));
@@ -497,7 +497,7 @@ namespace rlf
         }
 
         // Orthographic Projection Matrix
-        static Mat4 orthographic(T const left, T const right, T const bottom,
+        static Mat4 Orthographic(T const left, T const right, T const bottom,
                                  T const top, T const near_plane, T const far_plane)
         {
             Mat4 m(static_cast<T>(1));  // Start with identity
@@ -515,7 +515,7 @@ namespace rlf
         // eye: Position of the camera
         // center: Point the camera is looking at
         // up: Up direction of the camera (should be normalized)
-        static Mat4 lookAt(rlf::Vec3<T> const& eye, rlf::Vec3<T> const& center,
+        static Mat4 LookAt(rlf::Vec3<T> const& eye, rlf::Vec3<T> const& center,
                            rlf::Vec3<T> const& up)
         {
             // Calculate camera's coordinate system axes
@@ -530,7 +530,7 @@ namespace rlf
 
             Mat4 result;  // Starts as identity, will be overwritten
             // First, create a rotation matrix from the camera's axes
-            // (transposed, as we're converting world to camera space)
+            // (Transposed, as we're converting world to camera space)
             result.vecs[0].x = s.x;
             result.vecs[0].y = u.x;
             result.vecs[0].z = -f.x;  // Negative f for right-handed coordinate system in OpenGL
