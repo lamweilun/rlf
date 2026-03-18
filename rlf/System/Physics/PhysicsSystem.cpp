@@ -5,30 +5,30 @@
 
 namespace rlf::System
 {
-    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode)
+    void PhysicsSystem::addColliderNode(rlf::Node::BoxColliderNode* boxColliderNode)
     {
         mBoxColliderNodes.insert(boxColliderNode);
     }
 
-    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider)
+    void PhysicsSystem::addColliderNode(rlf::Node::CircleColliderNode* circleCollider)
     {
         mCircleColliderNodes.insert(circleCollider);
     }
 
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode)
+    void PhysicsSystem::removeColliderNode(rlf::Node::BoxColliderNode* boxColliderNode)
     {
         mBoxColliderNodes.erase(boxColliderNode);
     }
 
-    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider)
+    void PhysicsSystem::removeColliderNode(rlf::Node::CircleColliderNode* circleCollider)
     {
         mCircleColliderNodes.erase(circleCollider);
     }
 
     void PhysicsSystem::update()
     {
-        std::unordered_map<void*, std::set<void*>>                                                  collidedMap;
-        std::unordered_map<std::shared_ptr<rlf::Node::ColliderNode>, std::vector<rlf::CollideInfo>> collideInfos;
+        std::unordered_map<void*, std::set<void*>>                                  collidedMap;
+        std::unordered_map<rlf::Node::ColliderNode*, std::vector<rlf::CollideInfo>> collideInfos;
 
         // For every CircleCollider
         for (auto const& cc1 : mCircleColliderNodes)
@@ -44,7 +44,7 @@ namespace rlf::System
             // Check against other circle colliders
             for (auto const& cc2 : mCircleColliderNodes)
             {
-                if (collidedMap[cc1.get()].contains(cc2.get()))
+                if (collidedMap[cc1].contains(cc2))
                 {
                     continue;
                 }
@@ -84,15 +84,15 @@ namespace rlf::System
                     collideInfos[cc1].push_back(info1);
                     collideInfos[cc2].push_back(info2);
 
-                    collidedMap[cc1.get()].insert(cc2.get());
-                    collidedMap[cc2.get()].insert(cc1.get());
+                    collidedMap[cc1].insert(cc2);
+                    collidedMap[cc2].insert(cc1);
                 }
             }
 
             // Check against other BoxCollider
             for (auto const& bc : mBoxColliderNodes)
             {
-                if (collidedMap[cc1.get()].contains(bc.get()))
+                if (collidedMap[cc1].contains(bc))
                 {
                     continue;
                 }
@@ -111,8 +111,8 @@ namespace rlf::System
                 rlf::Vec2f const boxMin   = bcPos - bcScale * 0.5f;
                 rlf::Vec2f const boxMax   = bcPos + bcScale * 0.5f;
                 BoundingBox      box{
-                         {boxMin.x, boxMin.y, 0.0f},
-                         {boxMax.x, boxMax.y, 0.0f}
+                    {boxMin.x, boxMin.y, 0.0f},
+                    {boxMax.x, boxMax.y, 0.0f}
                 };
 
                 rlf::Vec2f collidedPoint    = rlf::Vec2f::Zero();
@@ -140,8 +140,8 @@ namespace rlf::System
                     collideInfos[cc1].push_back(info1);
                     collideInfos[bc].push_back(info2);
 
-                    collidedMap[cc1.get()].insert(bc.get());
-                    collidedMap[bc.get()].insert(cc1.get());
+                    collidedMap[cc1].insert(bc);
+                    collidedMap[bc].insert(cc1);
                 }
             }
         }
@@ -159,8 +159,8 @@ namespace rlf::System
             rlf::Vec2f const box1Min        = bc1Pos - bc1Scale * 0.5f;
             rlf::Vec2f const box1Max        = bc1Pos + bc1Scale * 0.5f;
             BoundingBox      box1{
-                     {box1Min.x, box1Min.y, 0.0f},
-                     {box1Max.x, box1Max.y, 0.0f}
+                {box1Min.x, box1Min.y, 0.0f},
+                {box1Max.x, box1Max.y, 0.0f}
             };
 
             // Check against other BoxCollider
@@ -174,7 +174,7 @@ namespace rlf::System
                 {
                     continue;
                 }
-                if (collidedMap[bc1.get()].contains(bc2.get()))
+                if (collidedMap[bc1].contains(bc2))
                 {
                     continue;
                 }
@@ -189,8 +189,8 @@ namespace rlf::System
                 rlf::Vec2f const box2Min        = bc2Pos - bc2Scale * 0.5f;
                 rlf::Vec2f const box2Max        = bc2Pos + bc2Scale * 0.5f;
                 BoundingBox      box2{
-                         {box2Min.x, box2Min.y, 0.0f},
-                         {box2Max.x, box2Max.y, 0.0f}
+                    {box2Min.x, box2Min.y, 0.0f},
+                    {box2Max.x, box2Max.y, 0.0f}
                 };
 
                 rlf::Vec2f collidedPoint    = rlf::Vec2f::Zero();
@@ -201,8 +201,8 @@ namespace rlf::System
                                                       box2, bc2RotationRad,
                                                       collidedPoint, collidedNormal, collidedTangent, penetratingDepth))
                 {
-                    collidedMap[bc1.get()].insert(bc2.get());
-                    collidedMap[bc2.get()].insert(bc1.get());
+                    collidedMap[bc1].insert(bc2);
+                    collidedMap[bc2].insert(bc1);
 
                     rlf::CollideInfo info1;
                     info1.self            = bc1;

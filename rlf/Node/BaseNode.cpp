@@ -634,7 +634,6 @@ namespace rlf::Node
             {
                 if (mChildren[i]->mToDestroy)
                 {
-                    rlf::NodeManager::getInstance().destroy(mChildren[i]);
                     std::swap(mChildren[i], mChildren[newSize - 1]);
                     --newSize;
                 }
@@ -647,6 +646,7 @@ namespace rlf::Node
             {
                 mChildren[i]->uninit();
                 mChildren[i]->shutdown();
+                rlf::NodeManager::getInstance().destroy(mChildren[i]);
             }
             mChildren.resize(newSize);
         }

@@ -8,12 +8,12 @@ namespace rlf::Node
     void CameraNode::setupImpl()
     {
         auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
-        renderSys->addCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
+        renderSys->addCameraNode(this);
     }
     void CameraNode::shutdownImpl()
     {
         auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
-        renderSys->eraseCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
+        renderSys->eraseCameraNode(this);
     }
 
     Color const& CameraNode::getClearColor() const
@@ -62,7 +62,7 @@ namespace rlf::Node
         auto renderSys  = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
         if (mIsActiveCamera)
         {
-            renderSys->setActiveCameraNode(std::static_pointer_cast<CameraNode>(shared_from_this()));
+            renderSys->setActiveCameraNode(this);
         }
         else
         {

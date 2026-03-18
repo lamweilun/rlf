@@ -52,7 +52,7 @@ namespace rlf::Node
         auto renderSys    = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
         if (mIsActiveUICamera)
         {
-            renderSys->setActiveUICameraNode(std::static_pointer_cast<UICameraNode>(shared_from_this()));
+            renderSys->setActiveUICameraNode(this);
         }
         else
         {

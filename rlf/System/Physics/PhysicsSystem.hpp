@@ -6,14 +6,16 @@
 
 #include <unordered_set>
 
-namespace rlf::System {
-    class PhysicsSystem : public ISystem {
+namespace rlf::System
+{
+    class PhysicsSystem : public ISystem
+    {
     public:
-        void addColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode);
-        void addColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider);
+        void addColliderNode(rlf::Node::BoxColliderNode* boxColliderNode);
+        void addColliderNode(rlf::Node::CircleColliderNode* circleCollider);
 
-        void removeColliderNode(std::shared_ptr<rlf::Node::BoxColliderNode> boxColliderNode);
-        void removeColliderNode(std::shared_ptr<rlf::Node::CircleColliderNode> const& circleCollider);
+        void removeColliderNode(rlf::Node::BoxColliderNode* boxColliderNode);
+        void removeColliderNode(rlf::Node::CircleColliderNode* circleCollider);
 
         void update() override;
 
@@ -23,25 +25,31 @@ namespace rlf::System {
 
     private:
         template <class T>
-        struct Table {
-            std::vector<std::shared_ptr<T>>             mData;
-            std::unordered_map<std::shared_ptr<T>, u64> mIndexLookup;
+        struct Table
+        {
+            std::vector<T*>             mData;
+            std::unordered_map<T*, u64> mIndexLookup;
 
-            void insert(std::shared_ptr<T> const& p) {
-                if (mIndexLookup.contains(p)) {
+            void insert(T* p)
+            {
+                if (mIndexLookup.contains(p))
+                {
                     return;
                 }
                 mIndexLookup[p] = mData.size();
                 mData.push_back(p);
             }
 
-            void erase(std::shared_ptr<T> const& p) {
+            void erase(T* p)
+            {
                 auto itr = mIndexLookup.find(p);
-                if (itr == mIndexLookup.end()) {
+                if (itr == mIndexLookup.end())
+                {
                     return;
                 }
                 auto const index = itr->second;
-                if (index == mData.size() - 1) {
+                if (index == mData.size() - 1)
+                {
                     mIndexLookup.erase(itr);
                     mData.pop_back();
                     return;
@@ -52,14 +60,17 @@ namespace rlf::System {
                 mData.pop_back();
             }
 
-            auto size() const {
+            auto size() const
+            {
                 return mData.size();
             }
 
-            auto begin() const {
+            auto begin() const
+            {
                 return std::begin(mData);
             }
-            auto end() const {
+            auto end() const
+            {
                 return std::end(mData);
             }
         };

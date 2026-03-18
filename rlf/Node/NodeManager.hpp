@@ -3,7 +3,7 @@
 #include <Node/NodePool.hpp>
 
 #include <unordered_map>
-#include <functional>
+#include <set>
 #include <optional>
 #include <memory>
 
@@ -26,11 +26,6 @@ namespace rlf
         template <class T>
         bool registerType()
         {
-            // mCreator.insert({T::getTypeName(), []()
-            //                  {
-            //                      return std::make_shared<T>();
-            //                  }});
-
             mNodePools.insert({T::getTypeName(), std::make_unique<rlf::Node::NodePool<T>>()});
 
             return true;
@@ -49,20 +44,11 @@ namespace rlf
 
         void destroy(rlf::Node::BaseNode* node);
 
-        template <class T>
-        std::optional<std::shared_ptr<T>> createNode() const
-        {
-            return createNode(T::getTypeName());
-        }
-        std::optional<std::shared_ptr<rlf::Node::BaseNode>> createNode(std::string_view typeName);
-
 #ifdef RLF_EDITOR
-        std::map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> getCreatorFuncs() const;
+        std::set<std::string_view> getNodePoolNames() const;
 #endif
 
     private:
-        std::unordered_map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> mCreator;
-
         std::unordered_map<std::string_view, std::unique_ptr<rlf::Node::INodePool>> mNodePools;
     };
 }

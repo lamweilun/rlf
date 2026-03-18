@@ -8,24 +8,24 @@ namespace rlf::Node
 
     void ParticleRenderNode::setupImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(this);
         unspawnAllParticle();
     }
 
     void ParticleRenderNode::shutdownImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(this);
     }
 
     void ParticleRenderNode::setActiveImpl([[maybe_unused]] bool const selfActive)
     {
         if (getActive())
         {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
+            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(this);
         }
         else
         {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(std::static_pointer_cast<ParticleRenderNode>(shared_from_this()));
+            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(this);
         }
     }
 

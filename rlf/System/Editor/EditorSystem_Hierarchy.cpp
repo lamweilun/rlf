@@ -60,7 +60,7 @@ namespace rlf::System
         {
             if (ImGui::BeginCombo("Add Child Node", ""))
             {
-                for (auto const& [typeName, creatorFunc] : rlf::NodeManager::getInstance().getCreatorFuncs())
+                for (auto const& typeName : rlf::NodeManager::getInstance().getNodePoolNames())
                 {
                     if (ImGui::Selectable(typeName.data()))
                     {
@@ -82,10 +82,10 @@ namespace rlf::System
 
         ImGui::Separator();
 
-        std::function<void(std::shared_ptr<rlf::Node::BaseNode>)> drawChildrenTreeFunc = [&](std::shared_ptr<rlf::Node::BaseNode> node)
+        std::function<void(rlf::Node::BaseNode*)> drawChildrenTreeFunc = [&](rlf::Node::BaseNode* node)
         {
             // Setup unique IDs based on pointer address
-            auto              rootNodePtr = node.get();
+            auto              rootNodePtr = node;
             std::stringstream ss;
             ss << rootNodePtr;
             std::string const  nodeUniqueID = std::string("##") + ss.str();

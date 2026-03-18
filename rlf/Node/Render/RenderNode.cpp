@@ -3,42 +3,55 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::Node {
-    void RenderNode::setActiveImpl([[maybe_unused]] bool const selfActive) {
-        if (getActive()) {
+namespace rlf::Node
+{
+    void RenderNode::setActiveImpl([[maybe_unused]] bool const selfActive)
+    {
+        if (getActive())
+        {
             rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(as<RenderNode>());
-        } else {
+        }
+        else
+        {
             rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(as<RenderNode>());
         }
     }
 
-    void RenderNode::setupImpl() {
+    void RenderNode::setupImpl()
+    {
         rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(as<RenderNode>());
     }
-    void RenderNode::shutdownImpl() {
+    void RenderNode::shutdownImpl()
+    {
         rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(as<RenderNode>());
     }
 
-    void RenderNode::renderImpl() {
+    void RenderNode::renderImpl()
+    {
     }
 
-    Color const& RenderNode::getTint() const {
+    Color const& RenderNode::getTint() const
+    {
         return mTint;
     }
-    void RenderNode::setTint(Color const& tint) {
+    void RenderNode::setTint(Color const& tint)
+    {
         mTint = tint;
     }
 
-    i32 RenderNode::getLayer() const {
+    i32 RenderNode::getLayer() const
+    {
         return mLayer;
     }
-    void RenderNode::setLayer(i32 const layer) {
-        if (mLayer == layer) {
+    void RenderNode::setLayer(i32 const layer)
+    {
+        if (mLayer == layer)
+        {
             return;
         }
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(this);
         mLayer = layer;
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(std::static_pointer_cast<RenderNode>(shared_from_this()));
+        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(this);
     }
 
 }

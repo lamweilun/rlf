@@ -8,7 +8,6 @@
 #include <Node/Render/CameraNode.hpp>
 
 #include <map>
-#include <memory>
 #include <unordered_set>
 
 namespace rlf::System
@@ -16,24 +15,24 @@ namespace rlf::System
     class RenderSystem : public ISystem
     {
     public:
-        void addRenderNode(std::shared_ptr<rlf::Node::RenderNode> const& renderNode);
-        void removeRenderNode(std::shared_ptr<rlf::Node::RenderNode> const& renderNode);
+        void addRenderNode(rlf::Node::RenderNode* const& renderNode);
+        void removeRenderNode(rlf::Node::RenderNode* const& renderNode);
 
-        void addParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> const& renderNode);
-        void removeParticleRenderNode(std::shared_ptr<rlf::Node::ParticleRenderNode> const& renderNode);
+        void addParticleRenderNode(rlf::Node::ParticleRenderNode* const& renderNode);
+        void removeParticleRenderNode(rlf::Node::ParticleRenderNode* const& renderNode);
 
-        void addUINode(std::shared_ptr<rlf::Node::UINode> const& uiNode);
-        void removeUINode(std::shared_ptr<rlf::Node::UINode> const& uiNode);
+        void addUINode(rlf::Node::UINode* const& uiNode);
+        void removeUINode(rlf::Node::UINode* const& uiNode);
 
-        void                                   addCameraNode(std::shared_ptr<rlf::Node::CameraNode> const& cameraNode);
-        void                                   eraseCameraNode(std::shared_ptr<rlf::Node::CameraNode> const& cameraNode);
-        void                                   setActiveCameraNode(std::shared_ptr<rlf::Node::CameraNode> const& cameraNode);
-        std::shared_ptr<rlf::Node::CameraNode> getActiveCameraNode() const;
+        void                   addCameraNode(rlf::Node::CameraNode* const& cameraNode);
+        void                   eraseCameraNode(rlf::Node::CameraNode* const& cameraNode);
+        void                   setActiveCameraNode(rlf::Node::CameraNode* const& cameraNode);
+        rlf::Node::CameraNode* getActiveCameraNode() const;
 
-        void                                     addUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> const& cameraNode);
-        void                                     eraseUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> const& cameraNode);
-        void                                     setActiveUICameraNode(std::shared_ptr<rlf::Node::UICameraNode> const& cameraNode);
-        std::shared_ptr<rlf::Node::UICameraNode> getActiveUICameraNode() const;
+        void                     addUICameraNode(rlf::Node::UICameraNode* const& cameraNode);
+        void                     eraseUICameraNode(rlf::Node::UICameraNode* const& cameraNode);
+        void                     setActiveUICameraNode(rlf::Node::UICameraNode* const& cameraNode);
+        rlf::Node::UICameraNode* getActiveUICameraNode() const;
 
         rlf::Vec2f getMousePosition() const;
         rlf::Vec2f getUIMousePosition() const;
@@ -43,14 +42,14 @@ namespace rlf::System
         void render() override;
 
     private:
-        std::map<int, std::unordered_set<std::shared_ptr<rlf::Node::RenderNode>>>         mRenderNodes;
-        std::map<int, std::unordered_set<std::shared_ptr<rlf::Node::ParticleRenderNode>>> mParticleRenderNodes;
-        std::map<int, std::unordered_set<std::shared_ptr<rlf::Node::UINode>>>             mUINodes;
+        std::map<int, std::unordered_set<rlf::Node::RenderNode*>>         mRenderNodes;
+        std::map<int, std::unordered_set<rlf::Node::ParticleRenderNode*>> mParticleRenderNodes;
+        std::map<int, std::unordered_set<rlf::Node::UINode*>>             mUINodes;
 
-        std::unordered_set<std::shared_ptr<rlf::Node::CameraNode>> mCameraNodes;
-        std::shared_ptr<rlf::Node::CameraNode>                     mActiveCameraNode;
+        std::unordered_set<rlf::Node::CameraNode*> mCameraNodes;
+        rlf::Node::CameraNode*                     mActiveCameraNode;
 
-        std::unordered_set<std::shared_ptr<rlf::Node::UICameraNode>> mUICameraNodes;
-        std::shared_ptr<rlf::Node::UICameraNode>                     mActiveUICameraNode;
+        std::unordered_set<rlf::Node::UICameraNode*> mUICameraNodes;
+        rlf::Node::UICameraNode*                     mActiveUICameraNode;
     };
 }

@@ -25,25 +25,15 @@ namespace rlf
         return itr->second->destroy(node);
     }
 
-    std::optional<std::shared_ptr<rlf::Node::BaseNode>> NodeManager::createNode(std::string_view typeName)
-    {
-        auto itr = mCreator.find(typeName);
-        if (itr == std::end(mCreator))
-        {
-            return std::nullopt;
-        }
-        return itr->second();
-    }
-
 #ifdef RLF_EDITOR
-    std::map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> NodeManager::getCreatorFuncs() const
+    std::set<std::string_view> NodeManager::getNodePoolNames() const
     {
-        std::map<std::string_view, std::function<std::shared_ptr<rlf::Node::BaseNode>()>> sortedCreators;
-        for (auto const& [name, func] : mCreator)
+        std::set<std::string_view> sortedNames;
+        for (auto const& [name, _] : mNodePools)
         {
-            sortedCreators[name] = func;
+            sortedNames.insert(name);
         }
-        return sortedCreators;
+        return sortedNames;
     }
 #endif
 }
