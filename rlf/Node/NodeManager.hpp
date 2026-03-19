@@ -52,18 +52,3 @@ namespace rlf
         std::unordered_map<std::string_view, std::unique_ptr<rlf::Node::INodePool>> mNodePools;
     };
 }
-
-#define RLF_TYPE_NAME(NAME)                                \
-    inline static constexpr std::string_view getTypeName() \
-    {                                                      \
-        return NAME;                                       \
-    }
-
-#define RLF_TYPE_REGISTER(TYPE, NAME)                                \
-    RLF_TYPE_NAME(NAME)                                              \
-    inline virtual std::string_view getTypeNameImpl() const override \
-    {                                                                \
-        return getTypeName();                                        \
-    }
-
-#define RLF_TYPE_REGISTER_QUICK(TYPE) RLF_TYPE_REGISTER(TYPE, #TYPE)

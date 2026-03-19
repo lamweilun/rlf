@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Node/NodeManager.hpp>
+
 #include <System/ISystem.hpp>
 
 #include <functional>
@@ -31,7 +33,7 @@ namespace rlf
         Engine &operator=(Engine const &) = delete;
         Engine &operator=(Engine &&)      = delete;
 
-        void run(Config const &config = Config(1280, 720, "Hello rlf"));
+        void run(Config const &config);
         void setToQuit();
 
         void        setAssetsDirectory(std::filesystem::path const &assetsPath);
@@ -39,7 +41,7 @@ namespace rlf
         void        setInitialWorldToLoad(std::string const &filename);
         void        setNextWorldToLoad(std::string const &filename);
 
-        void setSetupFunc(std::function<void()> setupFunc);
+        void setSetupFunc(std::function<void(rlf::NodeManager&)> setupFunc);
         void setInitFunc(std::function<void(rlf::Node::BaseNode*)> initFunc);
         void setUpdateFunc(std::function<void(rlf::Node::BaseNode*)> updateFunc);
         void setShutdownFunc(std::function<void(rlf::Node::BaseNode*)> shutdownFunc);
@@ -55,7 +57,7 @@ namespace rlf
     private:
         std::string                                               mInitialWorldToLoad;
         std::string                                               mNextWorldToLoad;
-        std::function<void()>                                     mSetupFunc;
+        std::function<void(rlf::NodeManager&)>                    mSetupFunc;
         std::function<void(rlf::Node::BaseNode*)> mInitFunc;
         std::function<void(rlf::Node::BaseNode*)> mUpdateFunc;
         std::function<void(rlf::Node::BaseNode*)> mShutdownFunc;

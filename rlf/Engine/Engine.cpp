@@ -11,6 +11,8 @@
 #endif
 
 // All Node Types here
+#include <Node/NodeManager.hpp>
+
 #include <Node/BaseNode.hpp>
 
 #include <Node/Audio/MusicNode.hpp>
@@ -105,7 +107,7 @@ namespace rlf
         // Run custom setup func, for registering of app node types
         if (mSetupFunc)
         {
-            mSetupFunc();
+            mSetupFunc(rlf::NodeManager::getInstance());
         }
 
         // Initialize all systems
@@ -219,7 +221,7 @@ namespace rlf
         mNextWorldToLoad = filename;
     }
 
-    void Engine::setSetupFunc(std::function<void()> setupFunc)
+    void Engine::setSetupFunc(std::function<void(rlf::NodeManager&)> setupFunc)
     {
         mSetupFunc = setupFunc;
     }

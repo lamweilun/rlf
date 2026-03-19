@@ -1,4 +1,3 @@
-#include <memory>
 #include <Util/Physics/CollisionDetection.hpp>
 
 #ifndef SIGN

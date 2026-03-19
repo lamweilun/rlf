@@ -1,6 +1,7 @@
 #include <System/Editor/EditorSystem.hpp>
 
 #include <Engine/Engine.hpp>
+#include <Node/NodeManager.hpp>
 #include <Node/BaseNode.hpp>
 
 #include <imgui.h>

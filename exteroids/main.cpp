@@ -17,13 +17,13 @@ int main()
     auto& engine = rlf::Engine::getInstance();
 
     // Register game node types
-    engine.setSetupFunc([]()
+    engine.setSetupFunc([](rlf::NodeManager& nm)
                         {
-        rlf::NodeManager::getInstance().registerType<ext::Node::MainMenuManagerNode>();
-        rlf::NodeManager::getInstance().registerType<ext::Node::GameManagerNode>();
-        rlf::NodeManager::getInstance().registerType<ext::Node::PlayerNode>();
-        rlf::NodeManager::getInstance().registerType<ext::Node::PlayerBulletNode>();
-        rlf::NodeManager::getInstance().registerType<ext::Node::AsteroidNode>(); });
+        nm.registerType<ext::Node::MainMenuManagerNode>();
+        nm.registerType<ext::Node::GameManagerNode>();
+        nm.registerType<ext::Node::PlayerNode>();
+        nm.registerType<ext::Node::PlayerBulletNode>();
+        nm.registerType<ext::Node::AsteroidNode>(); });
 
 #ifdef RLF_EDITOR
     // Set assets path to be this internal project folder
