@@ -1,6 +1,9 @@
 #pragma once
 
 #include <System/ISystem.hpp>
+
+#include <System/SystemTable.hpp>
+
 #include <Node/Render/RenderNode.hpp>
 #include <Node/Render/ParticleRenderNode.hpp>
 #include <Node/UI/UINode.hpp>
@@ -42,9 +45,9 @@ namespace rlf::System
         void render() override;
 
     private:
-        std::map<int, std::unordered_set<rlf::Node::RenderNode*>>         mRenderNodes;
-        std::map<int, std::unordered_set<rlf::Node::ParticleRenderNode*>> mParticleRenderNodes;
-        std::map<int, std::unordered_set<rlf::Node::UINode*>>             mUINodes;
+        std::map<int, rlf::System::Table<rlf::Node::RenderNode*>>         mRenderNodes;
+        std::map<int, rlf::System::Table<rlf::Node::ParticleRenderNode*>> mParticleRenderNodes;
+        std::map<int, rlf::System::Table<rlf::Node::UINode*>>             mUINodes;
 
         std::unordered_set<rlf::Node::CameraNode*> mCameraNodes;
         rlf::Node::CameraNode*                     mActiveCameraNode;
