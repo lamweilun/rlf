@@ -127,7 +127,7 @@ namespace rlf::System
             auto loadedRscCopy = loadedResources;
             for (auto const& [path, rsc] : loadedRscCopy)
             {
-                if (rsc.expired())
+                if (rsc.use_count() == 0)
                 {
                     loadedResources.erase(path);
                 }
