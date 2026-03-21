@@ -56,8 +56,7 @@ namespace rlf
 #endif
         SetConfigFlags(windowFlag);
         InitWindow(static_cast<int>(config.width), static_cast<int>(config.height), config.title.data());
-        SetWindowMonitor(0);
-        // SetTargetFPS(GetMonitorRefreshRate(0));
+        SetTargetFPS(GetMonitorRefreshRate(0));
         SetExitKey(KEY_NULL);
 
 #ifdef RLF_EDITOR

@@ -1,107 +1,124 @@
 {
-  "version": 10,
-  "configurePresets": [
-    {
-      "name": "configure-base",
-      "hidden": true,
-      "generator": "Ninja",
-      "cacheVariables": {
-        "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-        "CMAKE_CXX_STANDARD": "23",
-        "CPM_SOURCE_CACHE": "$env{HOME}/.cache/CPM",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "RLF_EDITOR": "False"
-      }
-    },
-    {
-      "name": "configure-base-editor",
-      "hidden": true,
-      "inherits": [
-        "configure-base"
-      ],
-      "cacheVariables": {
-        "RLF_EDITOR": "True"
-      }
-    },
-    {
-      "name": "configure-debug",
-      "displayName": "Configure Debug",
-      "binaryDir": "${sourceDir}/build/Debug",
-      "inherits": [
-        "configure-base"
-      ],
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "RLF_DEBUG": "ON"
-      }
-    },
-    {
-      "name": "configure-release",
-      "displayName": "Configure Release",
-      "binaryDir": "${sourceDir}/build/Release",
-      "inherits": [
-        "configure-base"
-      ],
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "RLF_DEBUG": "OFF"
-      }
-    },
-    {
-      "name": "configure-debug-editor",
-      "displayName": "Configure Debug Editor",
-      "binaryDir": "${sourceDir}/build/Debug-Editor",
-      "inherits": [
-        "configure-base-editor",
-        "configure-debug"
-      ]
-    },
-    {
-      "name": "configure-release-editor",
-      "displayName": "Configure Release Editor",
-      "binaryDir": "${sourceDir}/build/Release-Editor",
-      "inherits": [
-        "configure-base-editor",
-        "configure-release"
-      ]
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "build-debug",
-      "displayName": "Build Debug",
-      "configurePreset": "configure-debug",
-      "targets": [
-        "rlf",
-        "exteroids"
-      ]
-    },
-    {
-      "name": "build-release",
-      "displayName": "Build Release",
-      "configurePreset": "configure-release",
-      "targets": [
-        "rlf",
-        "exteroids"
-      ]
-    },
-    {
-      "name": "build-debug-editor",
-      "displayName": "Build Debug Editor",
-      "configurePreset": "configure-debug-editor",
-      "targets": [
-        "rlf",
-        "exteroids"
-      ]
-    },
-    {
-      "name": "build-release-editor",
-      "displayName": "Build Release Editor",
-      "configurePreset": "configure-release-editor",
-      "targets": [
-        "rlf",
-        "exteroids"
-      ]
-    }
-  ]
+    "version": 10,
+    "configurePresets": [
+        {
+            "name": "configure-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_STANDARD": "23",
+                "CPM_SOURCE_CACHE": "$env{HOME}/.cache/CPM",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "RLF_EDITOR": "False"
+            }
+        },
+        {
+            "name": "configure-base-editor",
+            "hidden": true,
+            "inherits": [
+                "configure-base"
+            ],
+            "cacheVariables": {
+                "RLF_EDITOR": "True"
+            }
+        },
+        {
+            "name": "configure-debug",
+            "displayName": "Configure Debug",
+            "binaryDir": "${sourceDir}/build/Debug",
+            "inherits": [
+                "configure-base"
+            ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "RLF_DEBUG": "ON"
+            }
+        },
+        {
+            "name": "configure-release",
+            "displayName": "Configure Release",
+            "binaryDir": "${sourceDir}/build/Release",
+            "inherits": [
+                "configure-base"
+            ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "RLF_DEBUG": "OFF"
+            }
+        },
+        {
+            "name": "configure-debug-editor",
+            "displayName": "Configure Debug Editor",
+            "binaryDir": "${sourceDir}/build/Debug-Editor",
+            "inherits": [
+                "configure-base-editor",
+                "configure-debug"
+            ]
+        },
+        {
+            "name": "configure-release-editor",
+            "displayName": "Configure Release Editor",
+            "binaryDir": "${sourceDir}/build/Release-Editor",
+            "inherits": [
+                "configure-base-editor",
+                "configure-release"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "build-base",
+            "hidden": true,
+            "jobs": 2
+        },
+        {
+            "name": "build-debug",
+            "inherits": [
+                "build-base"
+            ],
+            "displayName": "Build Debug",
+            "configurePreset": "configure-debug",
+            "targets": [
+                "rlf",
+                "exteroids"
+            ]
+        },
+        {
+            "name": "build-release",
+            "inherits": [
+                "build-base"
+            ],
+            "displayName": "Build Release",
+            "configurePreset": "configure-release",
+            "targets": [
+                "rlf",
+                "exteroids"
+            ]
+        },
+        {
+            "name": "build-debug-editor",
+            "inherits": [
+                "build-base"
+            ],
+            "displayName": "Build Debug Editor",
+            "configurePreset": "configure-debug-editor",
+            "targets": [
+                "rlf",
+                "exteroids"
+            ]
+        },
+        {
+            "name": "build-release-editor",
+            "inherits": [
+                "build-base"
+            ],
+            "displayName": "Build Release Editor",
+            "configurePreset": "configure-release-editor",
+            "targets": [
+                "rlf",
+                "exteroids"
+            ]
+        }
+    ]
 }

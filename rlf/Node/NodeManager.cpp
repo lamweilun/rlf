@@ -22,7 +22,7 @@ namespace rlf
         {
             return;
         }
-        return itr->second->destroy(node);
+        itr->second->destroy(node);
     }
 
 #ifdef RLF_EDITOR

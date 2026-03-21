@@ -3,9 +3,12 @@
 #include <Node/NodePool.hpp>
 
 #include <unordered_map>
-#include <set>
 #include <optional>
 #include <memory>
+
+#ifdef RLF_EDITOR
+#include <set>
+#endif
 
 namespace rlf::Node
 {
