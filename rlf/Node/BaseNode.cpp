@@ -627,28 +627,36 @@ namespace rlf::Node
 
     void BaseNode::clearChildrenMarkedForDestruction()
     {
-        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
+        if (mChildren.empty())
         {
-            size_t newSize = mChildren.size();
-            for (size_t i = 0; i < newSize;)
-            {
-                if (mChildren[i]->mToDestroy)
-                {
-                    std::swap(mChildren[i], mChildren[newSize - 1]);
-                    --newSize;
-                }
-                else
-                {
-                    ++i;
-                }
-            }
-            for (size_t i = newSize; i < mChildren.size(); ++i)
-            {
-                mChildren[i]->uninit();
-                mChildren[i]->shutdown();
-                rlf::NodeManager::getInstance().destroy(mChildren[i]);
-            }
-            mChildren.resize(newSize);
+            return;
         }
+
+        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
+        size_t newSize = mChildren.size();
+        for (size_t i = 0; i < newSize;)
+        {
+            if (mChildren[i]->mToDestroy)
+            {
+                std::swap(mChildren[i], mChildren[newSize - 1]);
+                --newSize;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        for (size_t i = newSize; i < mChildren.size(); ++i)
+        {
+            for (auto& child : mChildren[i]->getChildren())
+            {
+                child->setToDestroy(true);
+            }
+            mChildren[i]->clearChildrenMarkedForDestruction();
+            mChildren[i]->uninit();
+            mChildren[i]->shutdown();
+            rlf::NodeManager::getInstance().destroy(mChildren[i]);
+        }
+        mChildren.resize(newSize);
     }
 }

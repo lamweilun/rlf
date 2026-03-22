@@ -2,8 +2,10 @@
 
 #include <Resource/IResource.hpp>
 
-namespace rlf {
-    class TextureResource : public IResource {
+namespace rlf
+{
+    class TextureResource : public IResource
+    {
     public:
         void                       setTexture(std::shared_ptr<::Texture> texture);
         std::shared_ptr<::Texture> getTexture() const;
