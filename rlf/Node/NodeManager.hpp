@@ -20,12 +20,6 @@ namespace rlf
     class NodeManager
     {
     public:
-        static NodeManager& getInstance()
-        {
-            static NodeManager instance;
-            return instance;
-        }
-
         template <class T>
         bool registerType()
         {

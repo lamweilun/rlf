@@ -41,12 +41,14 @@ namespace rlf
         void        setInitialWorldToLoad(std::string const &filename);
         void        setNextWorldToLoad(std::string const &filename);
 
-        void setSetupFunc(std::function<void(rlf::NodeManager&)> setupFunc);
-        void setInitFunc(std::function<void(rlf::Node::BaseNode*)> initFunc);
-        void setUpdateFunc(std::function<void(rlf::Node::BaseNode*)> updateFunc);
-        void setShutdownFunc(std::function<void(rlf::Node::BaseNode*)> shutdownFunc);
+        void setSetupFunc(std::function<void(rlf::NodeManager &)> setupFunc);
+        void setInitFunc(std::function<void(rlf::Node::BaseNode *)> initFunc);
+        void setUpdateFunc(std::function<void(rlf::Node::BaseNode *)> updateFunc);
+        void setShutdownFunc(std::function<void(rlf::Node::BaseNode *)> shutdownFunc);
 
-        rlf::Node::BaseNode* getRootNode() const;
+        rlf::NodeManager &getNodeManager();
+
+        rlf::Node::BaseNode *getRootNode() const;
 
         template <class T>
         void addSystem();
@@ -55,13 +57,15 @@ namespace rlf
         std::shared_ptr<T> getSystem() const;
 
     private:
-        std::string                                               mInitialWorldToLoad;
-        std::string                                               mNextWorldToLoad;
-        std::function<void(rlf::NodeManager&)>                    mSetupFunc;
-        std::function<void(rlf::Node::BaseNode*)> mInitFunc;
-        std::function<void(rlf::Node::BaseNode*)> mUpdateFunc;
-        std::function<void(rlf::Node::BaseNode*)> mShutdownFunc;
-        Node::BaseNode                                           *mRootNode;
+        rlf::NodeManager mNodeManager;
+
+        std::string                                mInitialWorldToLoad;
+        std::string                                mNextWorldToLoad;
+        std::function<void(rlf::NodeManager &)>    mSetupFunc;
+        std::function<void(rlf::Node::BaseNode *)> mInitFunc;
+        std::function<void(rlf::Node::BaseNode *)> mUpdateFunc;
+        std::function<void(rlf::Node::BaseNode *)> mShutdownFunc;
+        Node::BaseNode                            *mRootNode;
 
         std::vector<std::shared_ptr<System::ISystem>> mSystems;
         std::unordered_map<std::string, u64>          mSystemLUT;
@@ -69,5 +73,7 @@ namespace rlf
         bool mToQuit = false;
     };
 }
+
+#define RLF_NODE_MANAGER rlf::Engine::getInstance().getNodeManager()
 
 #include <Engine/EngineImpl.hpp>

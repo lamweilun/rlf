@@ -61,7 +61,7 @@ namespace rlf::System
         {
             if (ImGui::BeginCombo("Add Child Node", ""))
             {
-                for (auto const& typeName : rlf::NodeManager::getInstance().getNodePoolNames())
+                for (auto const& typeName : RLF_NODE_MANAGER.getNodePoolNames())
                 {
                     if (ImGui::Selectable(typeName.data()))
                     {

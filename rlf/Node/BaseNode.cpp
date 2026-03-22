@@ -11,7 +11,7 @@ namespace rlf::Node
 {
     BaseNode* BaseNode::addChild(std::string_view typeName)
     {
-        auto newChild = rlf::NodeManager::getInstance().create(typeName);
+        auto newChild = RLF_NODE_MANAGER.create(typeName);
         if (!newChild.has_value())
         {
             return nullptr;
@@ -519,11 +519,11 @@ namespace rlf::Node
             for (auto const& entry : j["data"]["children"])
             {
                 // Try to create a node of type
-                auto childNodeOpt = rlf::NodeManager::getInstance().create(entry["type"].get<std::string_view>());
+                auto childNodeOpt = RLF_NODE_MANAGER.create(entry["type"].get<std::string_view>());
                 if (!childNodeOpt.has_value())
                 {
                     // If for whatever reason the node type is not registered, replace it with a base node
-                    childNodeOpt = rlf::NodeManager::getInstance().create(rlf::Node::BaseNode::getTypeName());
+                    childNodeOpt = RLF_NODE_MANAGER.create(rlf::Node::BaseNode::getTypeName());
                 }
                 BaseNode* childNode = childNodeOpt.value();
                 childNode->deserialize(entry);
@@ -655,7 +655,7 @@ namespace rlf::Node
             mChildren[i]->clearChildrenMarkedForDestruction();
             mChildren[i]->uninit();
             mChildren[i]->shutdown();
-            rlf::NodeManager::getInstance().destroy(mChildren[i]);
+            RLF_NODE_MANAGER.destroy(mChildren[i]);
         }
         mChildren.resize(newSize);
     }
