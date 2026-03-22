@@ -75,38 +75,38 @@ namespace rlf
 #endif
 
         // Register Types here
-        RLF_NODE_MANAGER.registerType<rlf::Node::BaseNode>();
+        mNodeManager.registerType<rlf::Node::BaseNode>();
 
-        RLF_NODE_MANAGER.registerType<rlf::Node::MusicNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::SoundNode>();
+        mNodeManager.registerType<rlf::Node::MusicNode>();
+        mNodeManager.registerType<rlf::Node::SoundNode>();
 
-        RLF_NODE_MANAGER.registerType<rlf::Node::ColliderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::BoxColliderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::CircleColliderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::RigidbodyNode>();
+        mNodeManager.registerType<rlf::Node::ColliderNode>();
+        mNodeManager.registerType<rlf::Node::BoxColliderNode>();
+        mNodeManager.registerType<rlf::Node::CircleColliderNode>();
+        mNodeManager.registerType<rlf::Node::RigidbodyNode>();
 
         // Render Nodes
-        RLF_NODE_MANAGER.registerType<rlf::Node::RenderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::CameraNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::LineRenderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::CircleRenderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::QuadRenderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::SpriteRenderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::ParticleRenderNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::BurstParticleRenderNode>();
+        mNodeManager.registerType<rlf::Node::RenderNode>();
+        mNodeManager.registerType<rlf::Node::CameraNode>();
+        mNodeManager.registerType<rlf::Node::LineRenderNode>();
+        mNodeManager.registerType<rlf::Node::CircleRenderNode>();
+        mNodeManager.registerType<rlf::Node::QuadRenderNode>();
+        mNodeManager.registerType<rlf::Node::SpriteRenderNode>();
+        mNodeManager.registerType<rlf::Node::ParticleRenderNode>();
+        mNodeManager.registerType<rlf::Node::BurstParticleRenderNode>();
 
         // UI Nodes
-        RLF_NODE_MANAGER.registerType<rlf::Node::UINode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::UICameraNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::UIButtonNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::UISpriteNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::UITextNode>();
-        RLF_NODE_MANAGER.registerType<rlf::Node::UISliderNode>();
+        mNodeManager.registerType<rlf::Node::UINode>();
+        mNodeManager.registerType<rlf::Node::UICameraNode>();
+        mNodeManager.registerType<rlf::Node::UIButtonNode>();
+        mNodeManager.registerType<rlf::Node::UISpriteNode>();
+        mNodeManager.registerType<rlf::Node::UITextNode>();
+        mNodeManager.registerType<rlf::Node::UISliderNode>();
 
         // Run custom setup func, for registering of app node types
         if (mSetupFunc)
         {
-            mSetupFunc(RLF_NODE_MANAGER);
+            mSetupFunc(mNodeManager);
         }
 
         // Initialize all systems
@@ -116,7 +116,7 @@ namespace rlf
         }
 
         // Create root node
-        mRootNode = RLF_NODE_MANAGER.create<rlf::Node::BaseNode>().value();
+        mRootNode = mNodeManager.create<rlf::Node::BaseNode>().value();
         mRootNode->setName(mRootNode->getTypeNameImpl().data());
 
         // Attempt to load initial world if there's one set
@@ -185,7 +185,7 @@ namespace rlf
         }
 
         mRootNode->shutdown();
-        RLF_NODE_MANAGER.destroy(mRootNode);
+        mNodeManager.destroy(mRootNode);
 
         std::ranges::reverse(mSystems);
         for (auto const& system : mSystems)
