@@ -1,8 +1,16 @@
 #include <System/Resource/ResourceSystem.hpp>
 
+// Global unloaded list
+namespace
+{
+    static std::vector<std::string> mTexturesToBeUnloaded = {};
+    static std::vector<std::string> mMusicsToBeUnloaded   = {};
+    static std::vector<std::string> mSoundsToBeUnloaded   = {};
+    static std::vector<std::string> mFontsToBeUnloaded    = {};
+}
+
 namespace rlf::System
 {
-
     TextureResource ResourceSystem::getTextureResource(std::string const& filePath)
     {
         TextureResource rsc;
@@ -18,8 +26,13 @@ namespace rlf::System
             auto newTexture = LoadTexture(filePath.c_str());
             if (IsTextureValid(newTexture))
             {
-                texture                   = std::shared_ptr<Texture>(new Texture{}, [](Texture* t)
-                                                                     { UnloadTexture(*t); delete t; });
+                auto deleter = [path = filePath](Texture* t)
+                {
+                    mTexturesToBeUnloaded.push_back(path);
+                    UnloadTexture(*t);
+                    delete t;
+                };
+                texture                   = std::shared_ptr<Texture>(new Texture{}, deleter);
                 *texture                  = newTexture;
                 mLoadedTextures[filePath] = texture;
             }
@@ -29,6 +42,40 @@ namespace rlf::System
             texture = mLoadedTextures.at(filePath).lock();
         }
         rsc.setTexture(texture);
+        return rsc;
+    }
+
+    MusicResource ResourceSystem::getMusicResource(std::string const& filePath)
+    {
+        MusicResource rsc;
+        if (filePath.empty())
+        {
+            return rsc;
+        }
+        std::shared_ptr<Music> music;
+
+        // If sound cannot be found, create and load it in
+        if (!mLoadedMusics.contains(filePath))
+        {
+            auto newMusic = LoadMusicStream(filePath.c_str());
+            if (IsMusicValid(newMusic))
+            {
+                auto deleter = [path = filePath](Music* s)
+                {
+                    mMusicsToBeUnloaded.push_back(path);
+                    UnloadMusicStream(*s);
+                    delete s;
+                };
+                music                   = std::shared_ptr<Music>(new Music{}, deleter);
+                *music                  = newMusic;
+                mLoadedMusics[filePath] = music;
+            }
+        }
+        else
+        {
+            music = mLoadedMusics.at(filePath).lock();
+        }
+        rsc.setMusicStream(music);
         return rsc;
     }
 
@@ -47,8 +94,13 @@ namespace rlf::System
             auto newSound = LoadSound(filePath.c_str());
             if (IsSoundValid(newSound))
             {
-                sound                   = std::shared_ptr<Sound>(new Sound{}, [](Sound* s)
-                                                                 { UnloadSound(*s); delete s; });
+                auto deleter = [path = filePath](Sound* s)
+                {
+                    mSoundsToBeUnloaded.push_back(path);
+                    UnloadSound(*s);
+                    delete s;
+                };
+                sound                   = std::shared_ptr<Sound>(new Sound{}, deleter);
                 *sound                  = newSound;
                 mLoadedSounds[filePath] = sound;
             }
@@ -58,35 +110,6 @@ namespace rlf::System
             sound = mLoadedSounds.at(filePath).lock();
         }
         rsc.setSound(sound);
-        return rsc;
-    }
-
-    MusicResource ResourceSystem::getMusicResource(std::string const& filePath)
-    {
-        MusicResource rsc;
-        if (filePath.empty())
-        {
-            return rsc;
-        }
-        std::shared_ptr<Music> music;
-
-        // If sound cannot be found, create and load it in
-        if (!mLoadedMusic.contains(filePath))
-        {
-            auto newMusic = LoadMusicStream(filePath.c_str());
-            if (IsMusicValid(newMusic))
-            {
-                music                  = std::shared_ptr<Music>(new Music{}, [](Music* s)
-                                                                { UnloadMusicStream(*s); delete s; });
-                *music                 = newMusic;
-                mLoadedMusic[filePath] = music;
-            }
-        }
-        else
-        {
-            music = mLoadedMusic.at(filePath).lock();
-        }
-        rsc.setMusicStream(music);
         return rsc;
     }
 
@@ -105,8 +128,14 @@ namespace rlf::System
             auto newFont = LoadFont(filePath.c_str());
             if (IsFontValid(newFont))
             {
-                font                   = std::shared_ptr<Font>(new Font{}, [](Font* f)
-                                                               { UnloadFont(*f); delete f; });
+                auto deleter = [path = filePath](Font* f)
+                {
+                    mFontsToBeUnloaded.push_back(path);
+                    UnloadFont(*f);
+                    delete f;
+                };
+
+                font                   = std::shared_ptr<Font>(new Font{}, deleter);
                 *font                  = newFont;
                 mLoadedFonts[filePath] = font;
             }
@@ -121,26 +150,44 @@ namespace rlf::System
 
     void ResourceSystem::update()
     {
-        // Garbage Collect
-        auto garbageCollectFunc = [](auto& loadedResources)
+        // Remove unloaded textures
+        for (auto const& filePath : mTexturesToBeUnloaded)
         {
-            auto loadedRscCopy = loadedResources;
-            for (auto const& [path, rsc] : loadedRscCopy)
-            {
-                if (rsc.use_count() == 0)
-                {
-                    loadedResources.erase(path);
-                }
-            }
-        };
-        garbageCollectFunc(mLoadedTextures);
-        garbageCollectFunc(mLoadedSounds);
-        garbageCollectFunc(mLoadedFonts);
+            mLoadedTextures.erase(filePath);
+        }
+        mTexturesToBeUnloaded.clear();
+
+        // Remove unloaded musics
+        for (auto const& filePath : mMusicsToBeUnloaded)
+        {
+            mLoadedMusics.erase(filePath);
+        }
+        mMusicsToBeUnloaded.clear();
+
+        // Remove unloaded sounds
+        for (auto const& filePath : mSoundsToBeUnloaded)
+        {
+            mLoadedSounds.erase(filePath);
+        }
+        mSoundsToBeUnloaded.clear();
+
+        // Remove unloaded fonts
+        for (auto const& filePath : mFontsToBeUnloaded)
+        {
+            mLoadedFonts.erase(filePath);
+        }
+        mFontsToBeUnloaded.clear();
     }
 
     void ResourceSystem::shutdown()
     {
+        mTexturesToBeUnloaded.clear();
+        mMusicsToBeUnloaded.clear();
+        mSoundsToBeUnloaded.clear();
+        mFontsToBeUnloaded.clear();
+
         mLoadedTextures.clear();
+        mLoadedMusics.clear();
         mLoadedSounds.clear();
         mLoadedFonts.clear();
     }

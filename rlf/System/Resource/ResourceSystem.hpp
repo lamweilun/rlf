@@ -7,8 +7,10 @@
 
 #include <System/ISystem.hpp>
 
-namespace rlf::System {
-    class ResourceSystem : public ISystem {
+namespace rlf::System
+{
+    class ResourceSystem : public ISystem
+    {
     public:
         void update() override;
         void shutdown() override;
@@ -20,7 +22,7 @@ namespace rlf::System {
 
     private:
         std::unordered_map<std::string, std::weak_ptr<Texture>> mLoadedTextures;
-        std::unordered_map<std::string, std::weak_ptr<Music>>   mLoadedMusic;
+        std::unordered_map<std::string, std::weak_ptr<Music>>   mLoadedMusics;
         std::unordered_map<std::string, std::weak_ptr<Sound>>   mLoadedSounds;
         std::unordered_map<std::string, std::weak_ptr<Font>>    mLoadedFonts;
     };
