@@ -11,6 +11,11 @@
 #endif
 
 static inline constexpr std::string_view assetsPathName = "assets";
+#ifdef RLF_DEBUG
+static constexpr std::string_view buildTypePathName = "Debug";
+#else
+static constexpr std::string_view buildTypePathName = "Release";
+#endif
 
 int main()
 {
@@ -36,11 +41,6 @@ int main()
                            {
         static constexpr std::string_view appName     = "exteroids";
         std::filesystem::path             currentPath = GetWorkingDirectory();
-#ifdef RLF_DEBUG
-        static constexpr std::string_view buildTypePathName = "Debug";
-#else
-        static constexpr std::string_view buildTypePathName = "Release";
-#endif
         std::filesystem::path destinationPath = std::filesystem::path(GetApplicationDirectory())
                                                     .append("..")
                                                     .append("..")
