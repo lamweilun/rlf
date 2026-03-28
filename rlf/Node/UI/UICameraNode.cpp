@@ -8,11 +8,11 @@ namespace rlf::Node
 
     void UICameraNode::setupImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addUICameraNode(as<UICameraNode>());
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addUICameraNode(as<UICameraNode>());
     }
     void UICameraNode::shutdownImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->eraseUICameraNode(as<UICameraNode>());
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->eraseUICameraNode(as<UICameraNode>());
     }
 
     rlf::Vec2f const& UICameraNode::getReferenceResolution() const
@@ -49,7 +49,7 @@ namespace rlf::Node
     void UICameraNode::setIsActiveUICamera(bool const isActiveCamera)
     {
         mIsActiveUICamera = isActiveCamera;
-        auto renderSys    = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
+        auto renderSys    = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
         if (mIsActiveUICamera)
         {
             renderSys->setActiveUICameraNode(this);

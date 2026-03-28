@@ -7,7 +7,7 @@
 #include <System/Editor/EditorSystem.hpp>
 #endif
 
-namespace rlf::System
+namespace rlf
 {
     void RenderSystem::addRenderNode(rlf::Node::RenderNode* const& renderNode)
     {
@@ -192,7 +192,7 @@ namespace rlf::System
         }
 
 #ifdef RLF_EDITOR
-        auto physicsSys = rlf::Engine::getInstance().getSystem<rlf::System::PhysicsSystem>();
+        auto physicsSys = rlf::Engine::getInstance().getSystem<rlf::PhysicsSystem>();
         physicsSys->editorRender();
 #endif
 

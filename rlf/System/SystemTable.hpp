@@ -3,7 +3,7 @@
 #include <vector>
 #include <unordered_map>
 
-namespace rlf::System
+namespace rlf
 {
     template <class T>
     class Table

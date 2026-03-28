@@ -15,7 +15,7 @@ namespace ext::Node
     void PlayerNode::updateImpl()
     {
         // Mouse Controls
-        auto const mousePos  = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->getMousePosition();
+        auto const mousePos  = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->getMousePosition();
         auto const direction = rlf::Vec2f(mousePos - getGlobalPosition()).Normalized();
         setRotation(std::atan2f(direction.y, direction.x));
 

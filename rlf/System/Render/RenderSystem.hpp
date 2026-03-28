@@ -13,7 +13,7 @@
 #include <map>
 #include <unordered_set>
 
-namespace rlf::System
+namespace rlf
 {
     class RenderSystem : public ISystem
     {
@@ -45,9 +45,9 @@ namespace rlf::System
         void render() override;
 
     private:
-        std::map<int, rlf::System::Table<rlf::Node::RenderNode*>>         mRenderNodes;
-        std::map<int, rlf::System::Table<rlf::Node::ParticleRenderNode*>> mParticleRenderNodes;
-        std::map<int, rlf::System::Table<rlf::Node::UINode*>>             mUINodes;
+        std::map<int, rlf::Table<rlf::Node::RenderNode*>>         mRenderNodes;
+        std::map<int, rlf::Table<rlf::Node::ParticleRenderNode*>> mParticleRenderNodes;
+        std::map<int, rlf::Table<rlf::Node::UINode*>>             mUINodes;
 
         std::unordered_set<rlf::Node::CameraNode*> mCameraNodes;
         rlf::Node::CameraNode*                     mActiveCameraNode;

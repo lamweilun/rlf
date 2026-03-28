@@ -41,19 +41,20 @@
 
 namespace rlf
 {
-    Engine& Engine::getInstance()
+    void Engine::setInstance(Engine* const instance)
     {
-        static Engine engine;
-        return engine;
+        assert(instance != nullptr);
+        mInstance = instance;
     }
 
-    void Engine::run(Config const& config)
+    Engine& Engine::getInstance()
     {
-#ifdef RLF_EDITOR
-        unsigned int windowFlag = FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE;
-#else
-        unsigned int windowFlag = FLAG_MSAA_4X_HINT;
-#endif
+        return *mInstance;
+    }
+
+    void Engine::run(rlf::EngineConfig const& config)
+    {
+        unsigned int const windowFlag = FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE;
         SetConfigFlags(windowFlag);
         InitWindow(static_cast<int>(config.width), static_cast<int>(config.height), config.title.data());
         SetTargetFPS(GetMonitorRefreshRate(0));
@@ -62,55 +63,56 @@ namespace rlf
 #ifdef RLF_EDITOR
         MaximizeWindow();
 #else
-        // ToggleBorderlessWindowed();
-#endif
-
-        addSystem<rlf::System::PhysicsSystem>();
-        addSystem<rlf::System::AudioSystem>();
-        addSystem<rlf::System::RenderSystem>();
-        addSystem<rlf::System::ResourceSystem>();
-
-#ifdef RLF_EDITOR
-        addSystem<rlf::System::EditorSystem>();
+        ToggleBorderlessWindowed();
 #endif
 
         // Register Types here
-        mNodeManager.registerType<rlf::Node::BaseNode>();
+        mNodeManager.registerNodeType<rlf::Node::BaseNode>();
 
-        mNodeManager.registerType<rlf::Node::MusicNode>();
-        mNodeManager.registerType<rlf::Node::SoundNode>();
+        mNodeManager.registerNodeType<rlf::Node::MusicNode>();
+        mNodeManager.registerNodeType<rlf::Node::SoundNode>();
 
-        mNodeManager.registerType<rlf::Node::ColliderNode>();
-        mNodeManager.registerType<rlf::Node::BoxColliderNode>();
-        mNodeManager.registerType<rlf::Node::CircleColliderNode>();
-        mNodeManager.registerType<rlf::Node::RigidbodyNode>();
+        mNodeManager.registerNodeType<rlf::Node::ColliderNode>();
+        mNodeManager.registerNodeType<rlf::Node::BoxColliderNode>();
+        mNodeManager.registerNodeType<rlf::Node::CircleColliderNode>();
+        mNodeManager.registerNodeType<rlf::Node::RigidbodyNode>();
 
         // Render Nodes
-        mNodeManager.registerType<rlf::Node::RenderNode>();
-        mNodeManager.registerType<rlf::Node::CameraNode>();
-        mNodeManager.registerType<rlf::Node::LineRenderNode>();
-        mNodeManager.registerType<rlf::Node::CircleRenderNode>();
-        mNodeManager.registerType<rlf::Node::QuadRenderNode>();
-        mNodeManager.registerType<rlf::Node::SpriteRenderNode>();
-        mNodeManager.registerType<rlf::Node::ParticleRenderNode>();
-        mNodeManager.registerType<rlf::Node::BurstParticleRenderNode>();
+        mNodeManager.registerNodeType<rlf::Node::RenderNode>();
+        mNodeManager.registerNodeType<rlf::Node::CameraNode>();
+        mNodeManager.registerNodeType<rlf::Node::LineRenderNode>();
+        mNodeManager.registerNodeType<rlf::Node::CircleRenderNode>();
+        mNodeManager.registerNodeType<rlf::Node::QuadRenderNode>();
+        mNodeManager.registerNodeType<rlf::Node::SpriteRenderNode>();
+        mNodeManager.registerNodeType<rlf::Node::ParticleRenderNode>();
+        mNodeManager.registerNodeType<rlf::Node::BurstParticleRenderNode>();
 
         // UI Nodes
-        mNodeManager.registerType<rlf::Node::UINode>();
-        mNodeManager.registerType<rlf::Node::UICameraNode>();
-        mNodeManager.registerType<rlf::Node::UIButtonNode>();
-        mNodeManager.registerType<rlf::Node::UISpriteNode>();
-        mNodeManager.registerType<rlf::Node::UITextNode>();
-        mNodeManager.registerType<rlf::Node::UISliderNode>();
+        mNodeManager.registerNodeType<rlf::Node::UINode>();
+        mNodeManager.registerNodeType<rlf::Node::UICameraNode>();
+        mNodeManager.registerNodeType<rlf::Node::UIButtonNode>();
+        mNodeManager.registerNodeType<rlf::Node::UISpriteNode>();
+        mNodeManager.registerNodeType<rlf::Node::UITextNode>();
+        mNodeManager.registerNodeType<rlf::Node::UISliderNode>();
+
+        // Register Systems
+        mSystemManager.registerSystem<rlf::PhysicsSystem>();
+        mSystemManager.registerSystem<rlf::AudioSystem>();
+        mSystemManager.registerSystem<rlf::RenderSystem>();
+        mSystemManager.registerSystem<rlf::ResourceSystem>();
+
+#ifdef RLF_EDITOR
+        mSystemManager.registerSystem<rlf::EditorSystem>();
+#endif
 
         // Run custom setup func, for registering of app node types
-        if (mSetupFunc)
+        if (config.setup_func)
         {
-            mSetupFunc(mNodeManager);
+            config.setup_func(mNodeManager, mSystemManager);
         }
 
         // Initialize all systems
-        for (auto& system : mSystems)
+        for (auto& system : mSystemManager.getSystems())
         {
             system->init();
         }
@@ -125,11 +127,6 @@ namespace rlf
             mRootNode->deserializeFromFile(mInitialWorldToLoad);
         }
 
-        // Run init
-        if (mInitFunc)
-        {
-            mInitFunc(mRootNode);
-        }
         mRootNode->init();
 
         while (!(WindowShouldClose() || mToQuit))
@@ -149,16 +146,11 @@ namespace rlf
                 mNextWorldToLoad.clear();
             }
 
-            if (mUpdateFunc)
-            {
-                mUpdateFunc(mRootNode);
-            }
-
             mRootNode->preUpdate();
             mRootNode->update();
             mRootNode->postUpdate();
 
-            for (auto& system : mSystems)
+            for (auto& system : mSystemManager.getSystems())
             {
                 system->update();
             }
@@ -166,7 +158,7 @@ namespace rlf
             BeginDrawing();
             ClearBackground(BLACK);
 
-            for (auto& system : mSystems)
+            for (auto& system : mSystemManager.getSystems())
             {
                 system->render();
             }
@@ -179,16 +171,17 @@ namespace rlf
             EndDrawing();
         }
 
-        if (mShutdownFunc)
+        if (config.shutdown_func)
         {
-            mShutdownFunc(mRootNode);
+            config.shutdown_func();
         }
 
         mRootNode->shutdown();
         mNodeManager.destroy(mRootNode);
 
-        std::ranges::reverse(mSystems);
-        for (auto const& system : mSystems)
+        auto systems = mSystemManager.getSystems();
+        std::ranges::reverse(systems);
+        for (auto const& system : systems)
         {
             system->shutdown();
         }
@@ -218,26 +211,6 @@ namespace rlf
     void Engine::setNextWorldToLoad(std::string const& filename)
     {
         mNextWorldToLoad = filename;
-    }
-
-    void Engine::setSetupFunc(std::function<void(rlf::NodeManager&)> setupFunc)
-    {
-        mSetupFunc = setupFunc;
-    }
-
-    void Engine::setInitFunc(std::function<void(rlf::Node::BaseNode*)> initFunc)
-    {
-        mInitFunc = initFunc;
-    }
-
-    void Engine::setUpdateFunc(std::function<void(rlf::Node::BaseNode*)> updateFunc)
-    {
-        mUpdateFunc = updateFunc;
-    }
-
-    void Engine::setShutdownFunc(std::function<void(rlf::Node::BaseNode*)> shutdownFunc)
-    {
-        mShutdownFunc = shutdownFunc;
     }
 
     rlf::NodeManager& Engine::getNodeManager()

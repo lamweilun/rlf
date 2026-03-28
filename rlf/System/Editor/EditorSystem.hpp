@@ -7,7 +7,7 @@ namespace rlf::Node
     class BaseNode;
 }
 
-namespace rlf::System
+namespace rlf
 {
     class EditorSystem : public ISystem
     {

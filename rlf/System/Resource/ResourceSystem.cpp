@@ -9,7 +9,7 @@ namespace
     static std::vector<std::string> mFontsToBeUnloaded    = {};
 }
 
-namespace rlf::System
+namespace rlf
 {
     TextureResource ResourceSystem::getTextureResource(std::string const& filePath)
     {

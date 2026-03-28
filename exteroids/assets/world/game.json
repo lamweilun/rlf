@@ -34,8 +34,8 @@
             "a": 255
           },
           "Reference Resolution": {
-            "x": 1280.0,
-            "y": 720.0
+            "x": 1920.0,
+            "y": 1080.0
           },
           "Zoom": 1.0,
           "Zoom To Window Size": true,
@@ -57,8 +57,8 @@
           },
           "rotation": 0.0,
           "Reference Resolution": {
-            "x": 1280.0,
-            "y": 720.0
+            "x": 1920.0,
+            "y": 1080.0
           },
           "Zoom": 1.0,
           "Zoom To Window Size": true,

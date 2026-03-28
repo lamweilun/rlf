@@ -1,7 +1,9 @@
 #pragma once
 
-namespace rlf::System {
-    class ISystem {
+namespace rlf
+{
+    class ISystem
+    {
     public:
         ISystem()                           = default;
         virtual ~ISystem()                  = default;

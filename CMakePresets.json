@@ -6,8 +6,8 @@
             "hidden": true,
             "generator": "Ninja",
             "cacheVariables": {
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "CPM_SOURCE_CACHE": "$env{HOME}/.cache/CPM",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "RLF_EDITOR": "False"

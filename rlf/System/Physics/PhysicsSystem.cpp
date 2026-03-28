@@ -3,7 +3,7 @@
 #include <System/Physics/CollideInfo.hpp>
 #include <Util/Physics/CollisionDetection.hpp>
 
-namespace rlf::System
+namespace rlf
 {
     void PhysicsSystem::addColliderNode(rlf::Node::BoxColliderNode* boxColliderNode)
     {

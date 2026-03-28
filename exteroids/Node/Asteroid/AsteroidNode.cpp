@@ -12,9 +12,11 @@ namespace ext::Node
         mAsteroidCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>().value();
         mAsteroidCollider->setCollidedCallback([this](rlf::CollideInfo const& info)
                                                {
-            if (info.other && info.other->getTag() == "PlayerBullet") {
-                setHP(getHP() - 1);
-            } });
+                                                   if (info.other && info.other->getTag() == "PlayerBullet")
+                                                   {
+                                                       setHP(getHP() - 1);
+                                                   }
+                                               });
 
         setSpeed(rlf::Range(50.0f, 100.0f).getValue());
         setVelocityFromAngleDeg(rlf::Range(0.0f, 359.0f).getValue());
@@ -27,7 +29,7 @@ namespace ext::Node
 
         // Check if out of bounds, if it is, bring it back
         auto const pos              = getGlobalPosition();
-        auto const screenSize       = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->getScreenSize();
+        auto const screenSize       = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->getScreenSize();
         auto const halfScreenWidth  = screenSize.x * 0.5f;
         auto const halfScreenHeight = screenSize.y * 0.5f;
 

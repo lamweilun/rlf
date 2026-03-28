@@ -1,16 +1,17 @@
 #pragma once
 
-namespace rlf {
-    namespace System {
-        class ResourceSystem;
-    }
+namespace rlf
+{
+    class ResourceSystem;
 #ifdef RLF_EDITOR
-    namespace acc {
+    namespace acc
+    {
         class ImGuiAccessor;
     }
 #endif
 
-    class IResource {
+    class IResource
+    {
     public:
         std::string const& getFilePath() const;
 
@@ -19,7 +20,7 @@ namespace rlf {
 
     private:
         std::string mFilePath;
-        friend class rlf::System::ResourceSystem;
+        friend class rlf::ResourceSystem;
 #ifdef RLF_EDITOR
         friend class rlf::acc::ImGuiAccessor;
 #endif

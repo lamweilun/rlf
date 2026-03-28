@@ -6,7 +6,7 @@
 #include <Node/Physics/BoxColliderNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
 
-namespace rlf::System
+namespace rlf
 {
     class PhysicsSystem : public ISystem
     {
@@ -24,7 +24,7 @@ namespace rlf::System
 #endif
 
     private:
-        rlf::System::Table<rlf::Node::BoxColliderNode*>    mBoxColliderNodes;
-        rlf::System::Table<rlf::Node::CircleColliderNode*> mCircleColliderNodes;
+        rlf::Table<rlf::Node::BoxColliderNode*>    mBoxColliderNodes;
+        rlf::Table<rlf::Node::CircleColliderNode*> mCircleColliderNodes;
     };
 }

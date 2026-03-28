@@ -7,7 +7,7 @@
 
 #include <System/ISystem.hpp>
 
-namespace rlf::System
+namespace rlf
 {
     class ResourceSystem : public ISystem
     {

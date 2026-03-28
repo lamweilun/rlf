@@ -78,7 +78,7 @@ namespace rlf::Node
         }
 
         // Get Global Mouse Pos
-        auto mouseWorldPos = rlf::Engine::getInstance().getSystem<System::RenderSystem>()->getUIMousePosition();
+        auto mouseWorldPos = rlf::Engine::getInstance().getSystem<RenderSystem>()->getUIMousePosition();
 
         // Check if mouse is clicking
         auto mIsHoveringButton = CheckCollisionPointRec({mouseWorldPos.x, mouseWorldPos.y}, buttonRec);

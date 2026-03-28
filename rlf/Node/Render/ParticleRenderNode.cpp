@@ -8,24 +8,24 @@ namespace rlf::Node
 
     void ParticleRenderNode::setupImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addParticleRenderNode(this);
         unspawnAllParticle();
     }
 
     void ParticleRenderNode::shutdownImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeParticleRenderNode(this);
     }
 
     void ParticleRenderNode::setActiveImpl([[maybe_unused]] bool const selfActive)
     {
         if (getActive())
         {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addParticleRenderNode(this);
+            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addParticleRenderNode(this);
         }
         else
         {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeParticleRenderNode(this);
+            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeParticleRenderNode(this);
         }
     }
 

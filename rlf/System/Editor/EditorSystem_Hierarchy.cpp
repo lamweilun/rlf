@@ -18,7 +18,7 @@ namespace rlf::Editor
     static inline constexpr char const* id_CloneButton          = "CloneButton";
 }
 
-namespace rlf::System
+namespace rlf
 {
     void EditorSystem::displayHierarchyWindow()
     {
@@ -61,7 +61,7 @@ namespace rlf::System
         {
             if (ImGui::BeginCombo("Add Child Node", ""))
             {
-                for (auto const& typeName : RLF_NODE_MANAGER.getNodePoolNames())
+                for (auto const& typeName : rlf::Engine::getInstance().getNodeManager().getNodePoolNames())
                 {
                     if (ImGui::Selectable(typeName.data()))
                     {

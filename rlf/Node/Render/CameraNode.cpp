@@ -7,12 +7,12 @@ namespace rlf::Node
 {
     void CameraNode::setupImpl()
     {
-        auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
+        auto renderSys = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
         renderSys->addCameraNode(this);
     }
     void CameraNode::shutdownImpl()
     {
-        auto renderSys = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
+        auto renderSys = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
         renderSys->eraseCameraNode(this);
     }
 
@@ -59,7 +59,7 @@ namespace rlf::Node
     void CameraNode::setIsActiveCamera(bool const isActiveCamera)
     {
         mIsActiveCamera = isActiveCamera;
-        auto renderSys  = rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>();
+        auto renderSys  = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
         if (mIsActiveCamera)
         {
             renderSys->setActiveCameraNode(this);

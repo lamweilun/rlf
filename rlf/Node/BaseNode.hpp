@@ -135,8 +135,7 @@ namespace rlf::Node
         mutable bool   mLocalDirty      = true;
         mutable bool   mGlobalDirty     = true;
 
-        BaseNode*              mRootNode = nullptr;
-        BaseNode*              mParent   = nullptr;
+        BaseNode*              mParent = nullptr;
         std::vector<BaseNode*> mChildren;
         std::vector<BaseNode*> mNewChildren;
 
@@ -153,7 +152,7 @@ namespace rlf::Node
         virtual rlf::Json serializeImpl();
         virtual void      deserializeImpl(rlf::Json const& j);
 #ifdef RLF_EDITOR
-        friend class rlf::System::EditorSystem;
+        friend class rlf::EditorSystem;
         virtual void imguiAccessImpl();
         bool         mToShiftDown = false;
         bool         mToShiftUp   = false;

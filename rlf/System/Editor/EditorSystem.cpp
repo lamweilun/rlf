@@ -7,13 +7,16 @@
 #include <rlImGui.h>
 #include <imgui.h>
 
-namespace rlf::System {
-    void EditorSystem::init() {
+namespace rlf
+{
+    void EditorSystem::init()
+    {
         rlImGuiSetup(true);
         ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     }
 
-    void EditorSystem::render() {
+    void EditorSystem::render()
+    {
         rlImGuiBegin();
         displayHierarchyWindow();
         displayInspectorWindow();
@@ -22,7 +25,8 @@ namespace rlf::System {
         rlImGuiEnd();
     }
 
-    void EditorSystem::shutdown() {
+    void EditorSystem::shutdown()
+    {
         mSelectedNode = nullptr;
         mDraggedNode  = nullptr;
         mShowChildrenTable.clear();
@@ -30,19 +34,24 @@ namespace rlf::System {
         rlImGuiShutdown();
     }
 
-    void EditorSystem::setDraggedFilePath(std::filesystem::path const& p) {
+    void EditorSystem::setDraggedFilePath(std::filesystem::path const& p)
+    {
         mDraggedPath = p;
     }
-    std::filesystem::path const& EditorSystem::getDraggedFilePath() const {
+    std::filesystem::path const& EditorSystem::getDraggedFilePath() const
+    {
         return mDraggedPath;
     }
-    void EditorSystem::clearDraggedFilePath() {
+    void EditorSystem::clearDraggedFilePath()
+    {
         mDraggedPath.clear();
     }
 
-    void EditorSystem::displayInspectorWindow() {
+    void EditorSystem::displayInspectorWindow()
+    {
         ImGui::Begin("Inspector");
-        if (mSelectedNode) {
+        if (mSelectedNode)
+        {
             ImGui::Text("Node Type: %s", mSelectedNode->getTypeNameImpl().data());
             ImGui::Separator();
             mSelectedNode->imguiAccessImpl();

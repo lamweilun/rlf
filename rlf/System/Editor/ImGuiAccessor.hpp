@@ -110,8 +110,8 @@ namespace rlf::acc
                 {
                     if (ImGui::AcceptDragDropPayload("DragFromFileBrowser"))
                     {
-                        auto       editorSys   = rlf::Engine::getInstance().getSystem<System::EditorSystem>();
-                        auto       resourceSys = rlf::Engine::getInstance().getSystem<System::ResourceSystem>();
+                        auto       editorSys   = rlf::Engine::getInstance().getSystem<EditorSystem>();
+                        auto       resourceSys = rlf::Engine::getInstance().getSystem<ResourceSystem>();
                         auto const filepath    = editorSys->getDraggedFilePath();
                         if constexpr (std::is_same_v<T, TextureResource>)
                         {
@@ -202,8 +202,9 @@ namespace rlf::acc
             ImGui::Text("%s", name.data());
             std::apply([this, name](Ts&... t)
                        {
-                size_t i = 0;
-                ((*this)(std::string(name.data()) + ' ' + std::to_string(i++) + "##" + getAddressAsString(&t), t), ...); },
+                           size_t i = 0;
+                           ((*this)(std::string(name.data()) + ' ' + std::to_string(i++) + "##" + getAddressAsString(&t), t), ...);
+                       },
                        tup);
             ImGui::EndChild();
         }

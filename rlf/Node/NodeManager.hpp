@@ -21,10 +21,10 @@ namespace rlf
     {
     public:
         template <class T>
-        bool registerType()
+        bool registerNodeType()
         {
+            static_assert(std::is_base_of_v<rlf::Node::BaseNode, T>);
             mNodePools.insert({T::getTypeName(), std::make_unique<rlf::Node::NodePool<T>>()});
-
             return true;
         }
 

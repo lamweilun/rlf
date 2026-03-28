@@ -1,10 +1,9 @@
 #pragma once
 
+#include <Engine/EngineConfig.hpp>
 #include <Node/NodeManager.hpp>
+#include <System/SystemManager.hpp>
 
-#include <System/ISystem.hpp>
-
-#include <functional>
 #include <memory>
 
 namespace rlf
@@ -17,13 +16,7 @@ namespace rlf
     class Engine
     {
     public:
-        struct Config
-        {
-            u32              width  = 1280;
-            u32              height = 720;
-            std::string_view title  = "Hello rlf";
-        };
-
+        static void    setInstance(Engine *const instance);
         static Engine &getInstance();
 
         Engine()                          = default;
@@ -33,7 +26,7 @@ namespace rlf
         Engine &operator=(Engine const &) = delete;
         Engine &operator=(Engine &&)      = delete;
 
-        void run(Config const &config);
+        void run(rlf::EngineConfig const &config);
         void setToQuit();
 
         void        setAssetsDirectory(std::filesystem::path const &assetsPath);
@@ -41,39 +34,24 @@ namespace rlf
         void        setInitialWorldToLoad(std::string const &filename);
         void        setNextWorldToLoad(std::string const &filename);
 
-        void setSetupFunc(std::function<void(rlf::NodeManager &)> setupFunc);
-        void setInitFunc(std::function<void(rlf::Node::BaseNode *)> initFunc);
-        void setUpdateFunc(std::function<void(rlf::Node::BaseNode *)> updateFunc);
-        void setShutdownFunc(std::function<void(rlf::Node::BaseNode *)> shutdownFunc);
-
-        rlf::NodeManager &getNodeManager();
-
+        rlf::NodeManager    &getNodeManager();
         rlf::Node::BaseNode *getRootNode() const;
 
         template <class T>
-        void addSystem();
-
-        template <class T>
-        std::shared_ptr<T> getSystem() const;
+        std::shared_ptr<T> getSystem() const
+        {
+            return mSystemManager.getSystem<T>();
+        }
 
     private:
-        rlf::NodeManager mNodeManager;
+        static inline Engine *mInstance = nullptr;
 
-        std::string                                mInitialWorldToLoad;
-        std::string                                mNextWorldToLoad;
-        std::function<void(rlf::NodeManager &)>    mSetupFunc;
-        std::function<void(rlf::Node::BaseNode *)> mInitFunc;
-        std::function<void(rlf::Node::BaseNode *)> mUpdateFunc;
-        std::function<void(rlf::Node::BaseNode *)> mShutdownFunc;
-        Node::BaseNode                            *mRootNode;
+        rlf::NodeManager   mNodeManager;
+        rlf::SystemManager mSystemManager;
 
-        std::vector<std::shared_ptr<System::ISystem>> mSystems;
-        std::unordered_map<std::string, u64>          mSystemLUT;
-
-        bool mToQuit = false;
+        std::string     mInitialWorldToLoad;
+        std::string     mNextWorldToLoad;
+        Node::BaseNode *mRootNode;
+        bool            mToQuit = false;
     };
 }
-
-#define RLF_NODE_MANAGER rlf::Engine::getInstance().getNodeManager()
-
-#include <Engine/EngineImpl.hpp>

@@ -9,21 +9,21 @@ namespace rlf::Node
     {
         if (getActive())
         {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(as<RenderNode>());
+            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addRenderNode(as<RenderNode>());
         }
         else
         {
-            rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(as<RenderNode>());
+            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeRenderNode(as<RenderNode>());
         }
     }
 
     void RenderNode::setupImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(as<RenderNode>());
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addRenderNode(as<RenderNode>());
     }
     void RenderNode::shutdownImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(as<RenderNode>());
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeRenderNode(as<RenderNode>());
     }
 
     void RenderNode::renderImpl()
@@ -49,9 +49,9 @@ namespace rlf::Node
         {
             return;
         }
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->removeRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeRenderNode(this);
         mLayer = layer;
-        rlf::Engine::getInstance().getSystem<rlf::System::RenderSystem>()->addRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addRenderNode(this);
     }
 
 }

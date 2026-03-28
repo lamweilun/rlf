@@ -11,7 +11,7 @@ namespace rlf::Node
 {
     BaseNode* BaseNode::addChild(std::string_view typeName)
     {
-        auto newChild = RLF_NODE_MANAGER.create(typeName);
+        auto newChild = rlf::Engine::getInstance().getNodeManager().create(typeName);
         if (!newChild.has_value())
         {
             return nullptr;
@@ -150,17 +150,7 @@ namespace rlf::Node
 
     BaseNode* BaseNode::getRootNode()
     {
-        if (mRootNode)
-        {
-            return mRootNode;
-        }
-        BaseNode* rootNode = this;
-        while (auto parentNode = rootNode->mParent)
-        {
-            rootNode = parentNode;
-        }
-        mRootNode = rootNode;
-        return rootNode;
+        return rlf::Engine::getInstance().getRootNode();
     }
 
     Matrix const& BaseNode::getLocalTransform() const
@@ -519,11 +509,11 @@ namespace rlf::Node
             for (auto const& entry : j["data"]["children"])
             {
                 // Try to create a node of type
-                auto childNodeOpt = RLF_NODE_MANAGER.create(entry["type"].get<std::string_view>());
+                auto childNodeOpt = rlf::Engine::getInstance().getNodeManager().create(entry["type"].get<std::string_view>());
                 if (!childNodeOpt.has_value())
                 {
                     // If for whatever reason the node type is not registered, replace it with a base node
-                    childNodeOpt = RLF_NODE_MANAGER.create(rlf::Node::BaseNode::getTypeName());
+                    childNodeOpt = rlf::Engine::getInstance().getNodeManager().create(rlf::Node::BaseNode::getTypeName());
                 }
                 BaseNode* childNode = childNodeOpt.value();
                 childNode->deserialize(entry);
@@ -655,7 +645,7 @@ namespace rlf::Node
             mChildren[i]->clearChildrenMarkedForDestruction();
             mChildren[i]->uninit();
             mChildren[i]->shutdown();
-            RLF_NODE_MANAGER.destroy(mChildren[i]);
+            rlf::Engine::getInstance().getNodeManager().destroy(mChildren[i]);
         }
         mChildren.resize(newSize);
     }

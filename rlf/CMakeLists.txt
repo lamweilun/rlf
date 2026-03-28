@@ -4,7 +4,7 @@ project(rlf)
 
 # rlf dependencies
 CPMAddPackage("gh:nlohmann/json@3.12.0") # nlohmann_json
-CPMAddPackage("gh:raysan5/raylib#1eea511070ece8e4f96e961588811340ebd0b11e") # raylib
+CPMAddPackage("gh:raysan5/raylib#1b084ff9f256bea3406255322fce4618e0b250f0") # raylib
 
 # boost
 CPMAddPackage(
@@ -80,6 +80,7 @@ add_library(
         Resource/SoundResource.cpp
         Resource/FontResource.cpp
 
+        System/SystemManager.cpp
         System/ISystem.cpp
         System/Audio/AudioSystem.cpp
         System/Physics/PhysicsSystem.cpp

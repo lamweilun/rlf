@@ -2,8 +2,10 @@
 
 #include <System/ISystem.hpp>
 
-namespace rlf::System {
-    class AudioSystem : public ISystem {
+namespace rlf
+{
+    class AudioSystem : public ISystem
+    {
     public:
         void init() override;
         void shutdown() override;
