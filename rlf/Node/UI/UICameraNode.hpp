@@ -2,12 +2,12 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     class UICameraNode : public BaseNode
     {
     public:
-        RLF_TYPE_REGISTER_QUICK(UICameraNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(UICameraNode)
 
         rlf::Vec2f const& getReferenceResolution() const;
         void              setReferenceResolution(rlf::Vec2f const& referenceResolution);

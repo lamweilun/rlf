@@ -1,6 +1,6 @@
 #include <Node/Physics/RigidbodyNode.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
 
     void RigidbodyNode::setVelocity(rlf::Vec2f const& velocity)

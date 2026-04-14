@@ -5,30 +5,30 @@
 
 namespace rlf
 {
-    void PhysicsSystem::addColliderNode(rlf::Node::BoxColliderNode* boxColliderNode)
+    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::BoxColliderNode> boxColliderNode)
     {
         mBoxColliderNodes.insert(boxColliderNode);
     }
 
-    void PhysicsSystem::addColliderNode(rlf::Node::CircleColliderNode* circleCollider)
+    void PhysicsSystem::addColliderNode(std::shared_ptr<rlf::CircleColliderNode> circleCollider)
     {
         mCircleColliderNodes.insert(circleCollider);
     }
 
-    void PhysicsSystem::removeColliderNode(rlf::Node::BoxColliderNode* boxColliderNode)
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::BoxColliderNode> boxColliderNode)
     {
         mBoxColliderNodes.erase(boxColliderNode);
     }
 
-    void PhysicsSystem::removeColliderNode(rlf::Node::CircleColliderNode* circleCollider)
+    void PhysicsSystem::removeColliderNode(std::shared_ptr<rlf::CircleColliderNode> circleCollider)
     {
         mCircleColliderNodes.erase(circleCollider);
     }
 
     void PhysicsSystem::update()
     {
-        std::unordered_map<void*, std::set<void*>>                                  collidedMap;
-        std::unordered_map<rlf::Node::ColliderNode*, std::vector<rlf::CollideInfo>> collideInfos;
+        std::unordered_map<void*, std::set<void*>>                                            collidedMap;
+        std::unordered_map<std::shared_ptr<rlf::ColliderNode>, std::vector<rlf::CollideInfo>> collideInfos;
 
         // For every CircleCollider
         for (auto const& cc1 : mCircleColliderNodes)
@@ -44,7 +44,7 @@ namespace rlf
             // Check against other circle colliders
             for (auto const& cc2 : mCircleColliderNodes)
             {
-                if (collidedMap[cc1].contains(cc2))
+                if (collidedMap[cc1.get()].contains(cc2.get()))
                 {
                     continue;
                 }
@@ -84,15 +84,15 @@ namespace rlf
                     collideInfos[cc1].push_back(info1);
                     collideInfos[cc2].push_back(info2);
 
-                    collidedMap[cc1].insert(cc2);
-                    collidedMap[cc2].insert(cc1);
+                    collidedMap[cc1.get()].insert(cc2.get());
+                    collidedMap[cc2.get()].insert(cc1.get());
                 }
             }
 
             // Check against other BoxCollider
             for (auto const& bc : mBoxColliderNodes)
             {
-                if (collidedMap[cc1].contains(bc))
+                if (collidedMap[cc1.get()].contains(bc.get()))
                 {
                     continue;
                 }
@@ -140,8 +140,8 @@ namespace rlf
                     collideInfos[cc1].push_back(info1);
                     collideInfos[bc].push_back(info2);
 
-                    collidedMap[cc1].insert(bc);
-                    collidedMap[bc].insert(cc1);
+                    collidedMap[cc1.get()].insert(bc.get());
+                    collidedMap[bc.get()].insert(cc1.get());
                 }
             }
         }
@@ -174,7 +174,7 @@ namespace rlf
                 {
                     continue;
                 }
-                if (collidedMap[bc1].contains(bc2))
+                if (collidedMap[bc1.get()].contains(bc2.get()))
                 {
                     continue;
                 }
@@ -201,8 +201,8 @@ namespace rlf
                                                       box2, bc2RotationRad,
                                                       collidedPoint, collidedNormal, collidedTangent, penetratingDepth))
                 {
-                    collidedMap[bc1].insert(bc2);
-                    collidedMap[bc2].insert(bc1);
+                    collidedMap[bc1.get()].insert(bc2.get());
+                    collidedMap[bc2.get()].insert(bc1.get());
 
                     rlf::CollideInfo info1;
                     info1.self            = bc1;

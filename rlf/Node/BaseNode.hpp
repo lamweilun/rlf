@@ -11,10 +11,12 @@
 
 #include <vector>
 
-namespace rlf::Node
+namespace rlf
 {
-    class BaseNode
+    class BaseNode : public std::enable_shared_from_this<BaseNode>
     {
+        friend class NodeManager;
+
     public:
         BaseNode()                           = default;
         virtual ~BaseNode()                  = default;
@@ -33,27 +35,27 @@ namespace rlf::Node
         }
 
         template <class T>
-        T*        addChild();
-        BaseNode* addChild(std::string_view typeName);
+        std::shared_ptr<T>        addChild();
+        std::shared_ptr<BaseNode> addChild(std::string_view typeName);
 
         template <class T>
-        std::optional<T*>        getFirstChildOfType() const;
-        std::optional<BaseNode*> getFirstChildOfType(std::string_view typeName) const;
+        std::optional<std::shared_ptr<T>>        getFirstChildOfType() const;
+        std::optional<std::shared_ptr<BaseNode>> getFirstChildOfType(std::string_view typeName) const;
 
         template <class T>
-        T*        addOrGetFirstChildOfType();
-        BaseNode* addOrGetFirstChildOfType(std::string_view typeName);
+        std::shared_ptr<T>        addOrGetFirstChildOfType();
+        std::shared_ptr<BaseNode> addOrGetFirstChildOfType(std::string_view typeName);
 
         template <class T>
-        std::optional<T*> getFirstChildOfName(std::string_view childName) const;
+        std::optional<std::shared_ptr<T>> getFirstChildOfName(std::string_view childName) const;
 
         template <class T>
         bool is();
 
         template <class T>
-        T* as();
+        std::shared_ptr<T> as();
         template <class T>
-        T* as() const;
+        std::shared_ptr<T> as() const;
 
         rlf::Vec2f const& getPosition() const;
         void              setPosition(rlf::Vec2f const& position);
@@ -64,6 +66,8 @@ namespace rlf::Node
         f32               getRotationDeg() const;
         void              setRotationDeg(f32 const rotationDeg);
 
+        rlf::UUID const& getID() const;
+
         std::string const& getName() const;
         void               setName(std::string const& name);
 
@@ -73,23 +77,23 @@ namespace rlf::Node
 
         void setToDestroy(bool const toDestroy);
 
-        bool          isRootNode() const;
-        BaseNode*     getRootNode();
-        Matrix const& getLocalTransform() const;
-        Matrix const& getGlobalTransform() const;
-        rlf::Vec2f    getGlobalRight() const;
-        rlf::Vec2f    getGlobalPosition() const;
-        rlf::Vec2f    getGlobalScale() const;
-        Quaternion    getGlobalRotation() const;
-        f32           getGlobalRotationRad() const;
-        f32           getGlobalRotationDeg() const;
+        bool                      isRootNode() const;
+        std::shared_ptr<BaseNode> getRootNode();
+        Matrix const&             getLocalTransform() const;
+        Matrix const&             getGlobalTransform() const;
+        rlf::Vec2f                getGlobalRight() const;
+        rlf::Vec2f                getGlobalPosition() const;
+        rlf::Vec2f                getGlobalScale() const;
+        Quaternion                getGlobalRotation() const;
+        f32                       getGlobalRotationRad() const;
+        f32                       getGlobalRotationDeg() const;
 
-        bool                          hasParent() const;
-        BaseNode*                     getParent() const;
-        void                          setParent(BaseNode* newParent);
-        std::vector<BaseNode*>&       getChildren();
-        std::vector<BaseNode*> const& getChildren() const;
-        std::vector<BaseNode*>        getAllChildren();
+        bool                                          hasParent() const;
+        std::weak_ptr<BaseNode>                       getParent() const;
+        void                                          setParent(std::shared_ptr<BaseNode> newParent);
+        std::vector<std::shared_ptr<BaseNode>>&       getChildren();
+        std::vector<std::shared_ptr<BaseNode>> const& getChildren() const;
+        std::vector<std::shared_ptr<BaseNode>>        getAllChildren();
 
         void setup();      // Meant for editor and systems
         void init();       // Meant for gameplay
@@ -104,7 +108,7 @@ namespace rlf::Node
 
         void deserializeFromFile(std::string const& filePath);
 
-        BaseNode* clone();
+        std::shared_ptr<BaseNode> clone();
 
     protected:
         virtual void setActiveImpl(bool const selfActive);
@@ -120,6 +124,7 @@ namespace rlf::Node
         void markGlobalDirty();
         void clearChildrenMarkedForDestruction();
 
+        rlf::UUID   mID;
         std::string mName;
 
         bool mActive    = true;
@@ -135,9 +140,9 @@ namespace rlf::Node
         mutable bool   mLocalDirty      = true;
         mutable bool   mGlobalDirty     = true;
 
-        BaseNode*              mParent = nullptr;
-        std::vector<BaseNode*> mChildren;
-        std::vector<BaseNode*> mNewChildren;
+        std::weak_ptr<BaseNode>                mParent;
+        std::vector<std::shared_ptr<BaseNode>> mChildren;
+        std::vector<std::shared_ptr<BaseNode>> mNewChildren;
 
     protected:
         inline void access(auto& acc)

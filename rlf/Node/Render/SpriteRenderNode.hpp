@@ -4,10 +4,12 @@
 
 #include <Resource/TextureResource.hpp>
 
-namespace rlf::Node {
-    class SpriteRenderNode : public RenderNode {
+namespace rlf
+{
+    class SpriteRenderNode : public RenderNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(SpriteRenderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(SpriteRenderNode)
 
         void renderImpl() override;
 

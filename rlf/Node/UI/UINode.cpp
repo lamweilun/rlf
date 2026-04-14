@@ -3,7 +3,7 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     void UINode::setActiveImpl([[maybe_unused]] bool const selfActive)
     {

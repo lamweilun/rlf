@@ -5,12 +5,12 @@
 
 namespace rlf
 {
-    void MusicResource::setMusicStream(std::shared_ptr<::Music> musicStream)
+    void MusicResource::setMusicStream(std::shared_ptr<Music> musicStream)
     {
         mMusicStream = musicStream;
     }
 
-    std::shared_ptr<::Music> MusicResource::getMusicStream() const
+    std::shared_ptr<Music> MusicResource::getMusicStream() const
     {
         return mMusicStream;
     }
@@ -24,6 +24,5 @@ namespace rlf
     {
         std::string filePath = j.get<std::string>();
         rsc                  = rlf::Engine::getInstance().getSystem<rlf::ResourceSystem>()->getMusicResource(filePath);
-        rsc.setFilePath(filePath);
     }
 }

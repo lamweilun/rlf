@@ -2,10 +2,12 @@
 
 #include <Node/Render/RenderNode.hpp>
 
-namespace rlf::Node {
-    class QuadRenderNode : public RenderNode {
+namespace rlf
+{
+    class QuadRenderNode : public RenderNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(QuadRenderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(QuadRenderNode)
 
         void renderImpl() override;
 

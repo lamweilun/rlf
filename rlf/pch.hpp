@@ -8,6 +8,7 @@
 #include <Util/Reflection/Reflection.hpp>
 #include <Util/Types.hpp>
 #include <Util/Json.hpp>
+#include <Util/UUID.hpp>
 #include <Util/Color.hpp>
 #include <Util/Math/Math.hpp>
 

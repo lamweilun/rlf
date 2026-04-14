@@ -3,29 +3,28 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
-
     void ParticleRenderNode::setupImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addParticleRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addParticleRenderNode(as<ParticleRenderNode>());
         unspawnAllParticle();
     }
 
     void ParticleRenderNode::shutdownImpl()
     {
-        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeParticleRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeParticleRenderNode(as<ParticleRenderNode>());
     }
 
     void ParticleRenderNode::setActiveImpl([[maybe_unused]] bool const selfActive)
     {
         if (getActive())
         {
-            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addParticleRenderNode(this);
+            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addParticleRenderNode(as<ParticleRenderNode>());
         }
         else
         {
-            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeParticleRenderNode(this);
+            rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeParticleRenderNode(as<ParticleRenderNode>());
         }
     }
 

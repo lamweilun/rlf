@@ -3,17 +3,19 @@
 #include <Node/BaseNode.hpp>
 #include <Node/UI/UIButtonNode.hpp>
 
-namespace ext::Node {
-    class MainMenuManagerNode : public rlf::Node::BaseNode {
+namespace ext
+{
+    class MainMenuManagerNode : public rlf::BaseNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(MainMenuManagerNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(MainMenuManagerNode)
 
     protected:
         void initImpl() override;
         void updateImpl() override;
 
     private:
-        rlf::Node::UIButtonNode* mStartButton = nullptr;
-        rlf::Node::UIButtonNode* mExitButton = nullptr;
+        std::shared_ptr<rlf::UIButtonNode> mStartButton;
+        std::shared_ptr<rlf::UIButtonNode> mExitButton;
     };
 }

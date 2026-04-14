@@ -5,12 +5,12 @@
 
 namespace rlf
 {
-    void FontResource::setFont(std::shared_ptr<::Font> font)
+    void FontResource::setFont(std::shared_ptr<Font> font)
     {
         mFont = font;
     }
 
-    std::shared_ptr<::Font> FontResource::getFont() const
+    std::shared_ptr<Font> FontResource::getFont() const
     {
         return mFont;
     }
@@ -24,6 +24,5 @@ namespace rlf
     {
         std::string filePath = j.get<std::string>();
         rsc                  = rlf::Engine::getInstance().getSystem<rlf::ResourceSystem>()->getFontResource(filePath);
-        rsc.setFilePath(filePath);
     }
 }

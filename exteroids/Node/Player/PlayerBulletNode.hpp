@@ -4,16 +4,18 @@
 
 #include <Node/Physics/RigidbodyNode.hpp>
 
-namespace ext::Node {
-    class PlayerBulletNode : public rlf::Node::RigidbodyNode {
+namespace ext
+{
+    class PlayerBulletNode : public rlf::RigidbodyNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(PlayerBulletNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(PlayerBulletNode)
 
     protected:
         void initImpl() override;
         void updateImpl() override;
 
     private:
-        rlf::Node::BurstParticleRenderNode* mBulletParticle = nullptr;
+        std::shared_ptr<rlf::BurstParticleRenderNode> mBulletParticle = nullptr;
     };
 }

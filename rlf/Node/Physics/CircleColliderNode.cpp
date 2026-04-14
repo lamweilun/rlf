@@ -3,7 +3,7 @@
 #include <Engine/Engine.hpp>
 #include <System/Physics/PhysicsSystem.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     void CircleColliderNode::setupImpl()
     {

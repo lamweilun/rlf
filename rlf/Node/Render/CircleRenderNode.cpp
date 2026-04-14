@@ -1,6 +1,6 @@
 #include <Node/Render/CircleRenderNode.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     void CircleRenderNode::renderImpl()
     {

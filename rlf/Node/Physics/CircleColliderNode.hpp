@@ -2,10 +2,12 @@
 
 #include <Node/Physics/ColliderNode.hpp>
 
-namespace rlf::Node {
-    class CircleColliderNode : public ColliderNode {
+namespace rlf
+{
+    class CircleColliderNode : public ColliderNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(CircleColliderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(CircleColliderNode)
 
     protected:
         void setupImpl() override;

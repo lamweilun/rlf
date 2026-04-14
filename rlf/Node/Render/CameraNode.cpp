@@ -3,17 +3,17 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     void CameraNode::setupImpl()
     {
         auto renderSys = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
-        renderSys->addCameraNode(this);
+        renderSys->addCameraNode(as<CameraNode>());
     }
     void CameraNode::shutdownImpl()
     {
         auto renderSys = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
-        renderSys->eraseCameraNode(this);
+        renderSys->eraseCameraNode(as<CameraNode>());
     }
 
     Color const& CameraNode::getClearColor() const
@@ -62,7 +62,7 @@ namespace rlf::Node
         auto renderSys  = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
         if (mIsActiveCamera)
         {
-            renderSys->setActiveCameraNode(this);
+            renderSys->setActiveCameraNode(as<CameraNode>());
         }
         else
         {

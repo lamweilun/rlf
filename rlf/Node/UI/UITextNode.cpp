@@ -1,11 +1,14 @@
 #include <Node/UI/UITextNode.hpp>
 
-namespace rlf::Node {
-    void UITextNode::renderImpl() {
+namespace rlf
+{
+    void UITextNode::renderImpl()
+    {
         auto const spacing  = mAutoSpacing ? static_cast<float>(mFontSize) * 0.1f : mSpacing;
         auto const textSize = MeasureTextEx(GetFontDefault(), mText.c_str(), static_cast<float>(mFontSize), spacing);
         Font       font     = GetFontDefault();
-        if (auto fontRsc = mFont.getFont()) {
+        if (auto fontRsc = mFont.getFont())
+        {
             font = *fontRsc;
         }
         DrawTextEx(font,
@@ -16,24 +19,30 @@ namespace rlf::Node {
                    getTint());
     }
 
-    FontResource const& UITextNode::getFontResource() const {
+    FontResource const& UITextNode::getFontResource() const
+    {
         return mFont;
     }
-    void UITextNode::setFontResource(FontResource const& font) {
+    void UITextNode::setFontResource(FontResource const& font)
+    {
         mFont = font;
     }
 
-    void UITextNode::setText(std::string const& text) {
+    void UITextNode::setText(std::string const& text)
+    {
         mText = text;
     }
-    std::string const& UITextNode::getText() const {
+    std::string const& UITextNode::getText() const
+    {
         return mText;
     }
 
-    void UITextNode::setFontSize(u32 const fontSize) {
+    void UITextNode::setFontSize(u32 const fontSize)
+    {
         mFontSize = fontSize;
     }
-    u32 UITextNode::getFontSize() const {
+    u32 UITextNode::getFontSize() const
+    {
         return mFontSize;
     }
 }

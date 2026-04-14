@@ -3,7 +3,7 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     void RenderNode::setActiveImpl([[maybe_unused]] bool const selfActive)
     {
@@ -30,15 +30,6 @@ namespace rlf::Node
     {
     }
 
-    Color const& RenderNode::getTint() const
-    {
-        return mTint;
-    }
-    void RenderNode::setTint(Color const& tint)
-    {
-        mTint = tint;
-    }
-
     i32 RenderNode::getLayer() const
     {
         return mLayer;
@@ -49,9 +40,31 @@ namespace rlf::Node
         {
             return;
         }
-        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->removeRenderNode(as<RenderNode>());
         mLayer = layer;
-        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addRenderNode(this);
+        rlf::Engine::getInstance().getSystem<rlf::RenderSystem>()->addRenderNode(as<RenderNode>());
+    }
+
+    Color const& RenderNode::getTint() const
+    {
+        return mTint;
+    }
+    void RenderNode::setTint(Color const& tint)
+    {
+        mTint = tint;
+    }
+
+    bool RenderNode::getBloom() const
+    {
+        return mBloom;
+    }
+    void RenderNode::setBloom(bool const bloom)
+    {
+        if (mBloom == bloom)
+        {
+            return;
+        }
+        mBloom = bloom;
     }
 
 }

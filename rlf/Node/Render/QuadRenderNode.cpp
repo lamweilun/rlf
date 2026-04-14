@@ -1,7 +1,9 @@
 #include <Node/Render/QuadRenderNode.hpp>
 
-namespace rlf::Node {
-    void QuadRenderNode::renderImpl() {
+namespace rlf
+{
+    void QuadRenderNode::renderImpl()
+    {
         // Can't draw wireframe for now
         // if (getDrawInWireframe()) {
         // } else {

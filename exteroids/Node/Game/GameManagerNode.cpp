@@ -4,53 +4,62 @@
 
 #include <Engine/Engine.hpp>
 
-namespace ext::Node {
-    void GameManagerNode::initImpl() {
+namespace ext
+{
+    void GameManagerNode::initImpl()
+    {
         // Setup Game UI
-        mGameUINode = getFirstChildOfName<rlf::Node::BaseNode>("GameUI").value();
+        mGameUINode = getFirstChildOfName<rlf::BaseNode>("GameUI").value();
 
         // Setup Player
-        mPlayerNode = getRootNode()->getFirstChildOfName<ext::Node::PlayerNode>("PlayerNode").value();
+        mPlayerNode = getRootNode()->getFirstChildOfName<ext::PlayerNode>("PlayerNode").value();
 
         // Setup Asteroids
-        mBigAsteroidNode    = getRootNode()->getFirstChildOfName<ext::Node::AsteroidNode>("BigAsteroid").value();
-        mMediumAsteroidNode = getRootNode()->getFirstChildOfName<ext::Node::AsteroidNode>("MediumAsteroid").value();
-        mSmallAsteroidNode  = getRootNode()->getFirstChildOfName<ext::Node::AsteroidNode>("SmallAsteroid").value();
+        mBigAsteroidNode    = getRootNode()->getFirstChildOfName<ext::AsteroidNode>("BigAsteroid").value();
+        mMediumAsteroidNode = getRootNode()->getFirstChildOfName<ext::AsteroidNode>("MediumAsteroid").value();
+        mSmallAsteroidNode  = getRootNode()->getFirstChildOfName<ext::AsteroidNode>("SmallAsteroid").value();
 
         mGameUINode->setActive(true);
         mPlayerNode->setActive(true);
     }
 
-    void GameManagerNode::spawnBigAsteroid() const {
-        auto asteroid = mBigAsteroidNode->clone()->as<ext::Node::AsteroidNode>();
+    void GameManagerNode::spawnBigAsteroid() const
+    {
+        auto asteroid = mBigAsteroidNode->clone()->as<ext::AsteroidNode>();
         asteroid->setHP(rlf::Range(10u, 12u).getValue());
 
         asteroid->setActive(true);
     }
 
-    void GameManagerNode::spawnMediumAsteroid() const {
-        auto asteroid = mMediumAsteroidNode->clone()->as<ext::Node::AsteroidNode>();
+    void GameManagerNode::spawnMediumAsteroid() const
+    {
+        auto asteroid = mMediumAsteroidNode->clone()->as<ext::AsteroidNode>();
         asteroid->setHP(rlf::Range(7u, 9u).getValue());
 
         asteroid->setActive(true);
     }
-    void GameManagerNode::spawnSmallAsteroid() const {
-        auto asteroid = mSmallAsteroidNode->clone()->as<ext::Node::AsteroidNode>();
+    void GameManagerNode::spawnSmallAsteroid() const
+    {
+        auto asteroid = mSmallAsteroidNode->clone()->as<ext::AsteroidNode>();
         asteroid->setHP(rlf::Range(3u, 5u).getValue());
 
         asteroid->setActive(true);
     }
 
-    void GameManagerNode::updateImpl() {
-        if (IsKeyPressed(KEY_ESCAPE)) {
+    void GameManagerNode::updateImpl()
+    {
+        if (IsKeyPressed(KEY_ESCAPE))
+        {
             rlf::Engine::getInstance().setNextWorldToLoad("world/MainMenu.json");
         }
 
         mCurrentAsteroidSpawnTimer -= GetFrameTime();
-        if (mCurrentAsteroidSpawnTimer <= 0.0f) {
+        if (mCurrentAsteroidSpawnTimer <= 0.0f)
+        {
             mCurrentAsteroidSpawnTimer = mAsteroidSpawnTimer;
             auto const asteroidRange   = rlf::Range(1, 3);
-            switch (asteroidRange.getValue()) {
+            switch (asteroidRange.getValue())
+            {
                 case 1:
                     spawnBigAsteroid();
                     break;

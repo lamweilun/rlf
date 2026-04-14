@@ -3,7 +3,7 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
 
     void UICameraNode::setupImpl()
@@ -52,7 +52,7 @@ namespace rlf::Node
         auto renderSys    = rlf::Engine::getInstance().getSystem<rlf::RenderSystem>();
         if (mIsActiveUICamera)
         {
-            renderSys->setActiveUICameraNode(this);
+            renderSys->setActiveUICameraNode(as<UICameraNode>());
         }
         else
         {

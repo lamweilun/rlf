@@ -7,9 +7,9 @@
 #include <sstream>
 #include <queue>
 
-namespace rlf::Node
+namespace rlf
 {
-    BaseNode* BaseNode::addChild(std::string_view typeName)
+    std::shared_ptr<BaseNode> BaseNode::addChild(std::string_view typeName)
     {
         auto newChild = rlf::Engine::getInstance().getNodeManager().create(typeName);
         if (!newChild.has_value())
@@ -17,12 +17,12 @@ namespace rlf::Node
             return nullptr;
         }
 
-        newChild.value()->mParent = this;
+        newChild.value()->mParent = weak_from_this();
         mNewChildren.push_back(newChild.value());
         return newChild.value();
     }
 
-    std::optional<BaseNode*> BaseNode::getFirstChildOfType(std::string_view typeName) const
+    std::optional<std::shared_ptr<BaseNode>> BaseNode::getFirstChildOfType(std::string_view typeName) const
     {
         for (auto const& child : getChildren())
         {
@@ -34,7 +34,7 @@ namespace rlf::Node
         return std::nullopt;
     }
 
-    BaseNode* BaseNode::addOrGetFirstChildOfType(std::string_view typeName)
+    std::shared_ptr<BaseNode> BaseNode::addOrGetFirstChildOfType(std::string_view typeName)
     {
         auto child = getFirstChildOfType(typeName);
         if (child.has_value())
@@ -98,6 +98,11 @@ namespace rlf::Node
         setRotation(rotationDeg * DEG2RAD);
     }
 
+    rlf::UUID const& BaseNode::getID() const
+    {
+        return mID;
+    }
+
     std::string const& BaseNode::getName() const
     {
         return mName;
@@ -112,9 +117,9 @@ namespace rlf::Node
         bool active = getActiveSelf();
         if (active)
         {
-            if (mParent)
+            if (auto parent = mParent.lock())
             {
-                active = active && mParent->getActive();
+                active = active && parent->getActive();
             }
         }
         return active;
@@ -148,7 +153,7 @@ namespace rlf::Node
         return !hasParent();
     }
 
-    BaseNode* BaseNode::getRootNode()
+    std::shared_ptr<BaseNode> BaseNode::getRootNode()
     {
         return rlf::Engine::getInstance().getRootNode();
     }
@@ -171,7 +176,7 @@ namespace rlf::Node
         if (mGlobalDirty)
         {
             mGlobalTransform = getLocalTransform();
-            if (auto parentNode = mParent)
+            if (auto parentNode = mParent.lock())
             {
                 mGlobalTransform = mGlobalTransform * parentNode->getGlobalTransform();
             }
@@ -244,15 +249,15 @@ namespace rlf::Node
 
     bool BaseNode::hasParent() const
     {
-        return getParent() != nullptr;
+        return !mParent.expired();
     }
 
-    BaseNode* BaseNode::getParent() const
+    std::weak_ptr<BaseNode> BaseNode::getParent() const
     {
         return mParent;
     }
 
-    void BaseNode::setParent(BaseNode* newParent)
+    void BaseNode::setParent(std::shared_ptr<BaseNode> newParent)
     {
         // Return if im the root node
         if (isRootNode())
@@ -260,14 +265,14 @@ namespace rlf::Node
             return;
         }
         // Return if the new parent is myself
-        if (newParent == this)
+        if (newParent == shared_from_this())
         {
             return;
         }
 
         // Return if the new parent is the same as the current parent
         {
-            auto currParent = mParent;
+            auto currParent = mParent.lock();
             if (currParent == newParent)
             {
                 return;
@@ -275,15 +280,14 @@ namespace rlf::Node
         }
 
         // Add this node to the new parent
-        newParent->mNewChildren.push_back(this);
-
+        newParent->mNewChildren.push_back(shared_from_this());
         // Remove this node from the old parent
         {
-            auto  currParent         = mParent;
+            auto  currParent         = mParent.lock();
             auto& currParentChildren = currParent->getChildren();
             for (size_t i = 0; i < currParentChildren.size(); ++i)
             {
-                if (currParentChildren[i] == this)
+                if (currParentChildren[i] == shared_from_this())
                 {
                     currParentChildren.erase(std::begin(currParentChildren) + static_cast<i32>(i));
                     break;
@@ -297,7 +301,7 @@ namespace rlf::Node
         markGlobalDirty();
     }
 
-    std::vector<BaseNode*>& BaseNode::getChildren()
+    std::vector<std::shared_ptr<BaseNode>>& BaseNode::getChildren()
     {
         // Append newly created children and call init on them
         if (!mNewChildren.empty())
@@ -306,6 +310,7 @@ namespace rlf::Node
             size_t const newSize = oldSize + mNewChildren.size();
             mChildren.append_range(mNewChildren);
             mNewChildren.clear();
+            mNewChildren.shrink_to_fit();
             for (size_t i = oldSize; i < newSize; ++i)
             {
                 mChildren[i]->setup();
@@ -336,15 +341,15 @@ namespace rlf::Node
         return mChildren;
     }
 
-    std::vector<BaseNode*> const& BaseNode::getChildren() const
+    std::vector<std::shared_ptr<BaseNode>> const& BaseNode::getChildren() const
     {
         return const_cast<BaseNode&>(*this).getChildren();
     }
 
-    std::vector<BaseNode*> BaseNode::getAllChildren()
+    std::vector<std::shared_ptr<BaseNode>> BaseNode::getAllChildren()
     {
-        std::vector<BaseNode*> allChildren;
-        std::queue<BaseNode*>  childQueue;
+        std::vector<std::shared_ptr<BaseNode>> allChildren;
+        std::queue<std::shared_ptr<BaseNode>>  childQueue;
         for (auto const& child : getChildren())
         {
             childQueue.push(child);
@@ -398,13 +403,13 @@ namespace rlf::Node
 
     void BaseNode::uninit()
     {
-        // Shutdown all children first
-        for ([[maybe_unused]] auto& child : getChildren())
-        {
 #ifndef RLF_EDITOR
+        // Shutdown all children first
+        for (auto& child : getChildren())
+        {
             child->uninit();
-#endif
         }
+#endif
 
         // Calls uninit on self
         if (!mHasInited)
@@ -417,12 +422,13 @@ namespace rlf::Node
 
     void BaseNode::shutdown()
     {
-        // Shutdown all children first
-        for (auto& child : getChildren())
+        // Do NOT call clearChildrenMarkedForDestruction() here - it will call shutdown() again recursively
+        // Mark all children for destruction only - actual clearing/destruction happens in clearChildrenMarkedForDestruction()
+        auto allChildren = getAllChildren();
+        for (auto& child : allChildren)
         {
-            child->shutdown();
+            child->setToDestroy(true);
         }
-        mChildren.clear();
 
         // Calls shutdown on self
         if (!mHasSetup)
@@ -436,6 +442,7 @@ namespace rlf::Node
     void BaseNode::preUpdate()
     {
         clearChildrenMarkedForDestruction();
+
         // If inactive just return
         if (!mActive)
         {
@@ -503,7 +510,7 @@ namespace rlf::Node
     {
         deserializeImpl(j["data"]);
 
-        std::vector<BaseNode*> newChildren;
+        std::vector<std::shared_ptr<BaseNode>> newChildren;
         if (j["data"].contains("children"))
         {
             for (auto const& entry : j["data"]["children"])
@@ -513,11 +520,11 @@ namespace rlf::Node
                 if (!childNodeOpt.has_value())
                 {
                     // If for whatever reason the node type is not registered, replace it with a base node
-                    childNodeOpt = rlf::Engine::getInstance().getNodeManager().create(rlf::Node::BaseNode::getTypeName());
+                    childNodeOpt = rlf::Engine::getInstance().getNodeManager().create(rlf::BaseNode::getTypeName());
                 }
-                BaseNode* childNode = childNodeOpt.value();
+                std::shared_ptr<BaseNode> childNode = childNodeOpt.value();
                 childNode->deserialize(entry);
-                childNode->mParent = this;
+                childNode->mParent = weak_from_this();
                 newChildren.push_back(childNode);
             }
         }
@@ -547,11 +554,11 @@ namespace rlf::Node
         deserialize(j);
     }
 
-    BaseNode* BaseNode::clone()
+    std::shared_ptr<BaseNode> BaseNode::clone()
     {
         auto const nodeJson = serialize();
         auto const nodeType = getTypeNameImpl();
-        auto       newChild = getParent()->addChild(nodeType);
+        auto       newChild = getParent().lock()->addChild(nodeType);
         newChild->deserialize(nodeJson);
         return newChild;
     }
@@ -617,12 +624,7 @@ namespace rlf::Node
 
     void BaseNode::clearChildrenMarkedForDestruction()
     {
-        if (mChildren.empty())
-        {
-            return;
-        }
-
-        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
+        // Safe: work directly on mChildren, no getChildren() to avoid modifying vector during iteration
         size_t newSize = mChildren.size();
         for (size_t i = 0; i < newSize;)
         {
@@ -636,17 +638,44 @@ namespace rlf::Node
                 ++i;
             }
         }
+
+        // First extract all nodes to destroy into local vector
+        std::vector<std::shared_ptr<BaseNode>> nodesToDestroy;
+        nodesToDestroy.reserve(mChildren.size() - newSize);
+
         for (size_t i = newSize; i < mChildren.size(); ++i)
         {
-            for (auto& child : mChildren[i]->getChildren())
-            {
-                child->setToDestroy(true);
-            }
-            mChildren[i]->clearChildrenMarkedForDestruction();
-            mChildren[i]->uninit();
-            mChildren[i]->shutdown();
-            rlf::Engine::getInstance().getNodeManager().destroy(mChildren[i]);
+            nodesToDestroy.push_back(std::move(mChildren[i]));
         }
+
+        // Resize FIRST - this drops parent references NOW
         mChildren.resize(newSize);
+        mChildren.shrink_to_fit();
+
+        // Now safely destroy them with no parent references held
+        for (auto& node : nodesToDestroy)
+        {
+            // First, move any pending new children into mChildren so they get destroyed too
+            if (!node->mNewChildren.empty())
+            {
+                node->mChildren.append_range(node->mNewChildren);
+                node->mNewChildren.clear();
+            }
+
+            // Mark all descendants for destruction first - work directly on children, not getAllChildren()
+            for (auto& child : node->mChildren)
+            {
+                child->mToDestroy = true;
+            }
+
+            // Clear child nodes (this will recurse correctly)
+            node->clearChildrenMarkedForDestruction();
+
+            node->uninit();
+            node->shutdownImpl();
+
+            // Force the node reference to be released NOW
+            node.reset();
+        }
     }
 }

@@ -6,10 +6,12 @@
 
 #include <System/Physics/CollideInfo.hpp>
 
-namespace rlf::Node {
-    class ColliderNode : public BaseNode {
+namespace rlf
+{
+    class ColliderNode : public BaseNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(ColliderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(ColliderNode)
 
         void setCollidedCallback(std::function<void(rlf::CollideInfo const&)> const& callback);
         void invokeCollidedCallback(rlf::CollideInfo const& info) const;

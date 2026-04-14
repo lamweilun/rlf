@@ -3,10 +3,12 @@
 #include <Node/Physics/RigidbodyNode.hpp>
 #include <Node/Physics/CircleColliderNode.hpp>
 
-namespace ext::Node {
-    class AsteroidNode : public rlf::Node::RigidbodyNode {
+namespace ext
+{
+    class AsteroidNode : public rlf::RigidbodyNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(AsteroidNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(AsteroidNode)
 
         void setHP(u32 const hp);
         u32  getHP() const;
@@ -21,7 +23,7 @@ namespace ext::Node {
         RLF_NODE_ACCESS_END
 
     private:
-        rlf::Node::CircleColliderNode* mAsteroidCollider = nullptr;
+        std::shared_ptr<rlf::CircleColliderNode> mAsteroidCollider = nullptr;
 
         u32 mHP             = 1;
         f32 mAnglePerSecond = 0.0f;

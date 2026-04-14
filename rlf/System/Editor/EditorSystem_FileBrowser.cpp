@@ -42,6 +42,8 @@ namespace rlf
                         if (mLoadedWorld != mSelectedPath)
                         {
                             mSelectedNode = nullptr;
+                            mDraggedNode  = nullptr;
+                            mShowChildrenTable.clear();
                             auto rootNode = rlf::Engine::getInstance().getRootNode();
                             rootNode->deserializeFromFile(mSelectedPath);
                             mLoadedWorld = mSelectedPath;

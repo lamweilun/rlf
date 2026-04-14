@@ -5,12 +5,12 @@
 
 namespace rlf
 {
-    void TextureResource::setTexture(std::shared_ptr<::Texture> texture)
+    void TextureResource::setTexture(std::shared_ptr<Texture> texture)
     {
         mTexture = texture;
     }
 
-    std::shared_ptr<::Texture> TextureResource::getTexture() const
+    std::shared_ptr<Texture> TextureResource::getTexture() const
     {
         return mTexture;
     }
@@ -41,6 +41,5 @@ namespace rlf
     {
         std::string filePath = j.get<std::string>();
         rsc                  = rlf::Engine::getInstance().getSystem<rlf::ResourceSystem>()->getTextureResource(filePath);
-        rsc.setFilePath(filePath);
     }
 }

@@ -2,10 +2,12 @@
 
 #include <Node/Render/RenderNode.hpp>
 
-namespace rlf::Node {
-    class UINode : public RenderNode {
+namespace rlf
+{
+    class UINode : public RenderNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(UINode)
+        RLF_NODE_TYPE_REGISTER_QUICK(UINode)
 
         void setLayer(i32 const layer) override;
 

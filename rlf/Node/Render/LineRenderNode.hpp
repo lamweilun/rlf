@@ -2,12 +2,12 @@
 
 #include <Node/Render/RenderNode.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     class LineRenderNode : public RenderNode
     {
     public:
-        RLF_TYPE_REGISTER_QUICK(LineRenderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(LineRenderNode)
 
         void renderImpl() override;
 

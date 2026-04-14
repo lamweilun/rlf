@@ -9,38 +9,38 @@
 
 namespace rlf
 {
-    void RenderSystem::addRenderNode(rlf::Node::RenderNode* const& renderNode)
+    void RenderSystem::addRenderNode(std::shared_ptr<rlf::RenderNode> renderNode)
     {
         mRenderNodes[renderNode->getLayer()].insert(renderNode);
     }
-    void RenderSystem::removeRenderNode(rlf::Node::RenderNode* const& renderNode)
+    void RenderSystem::removeRenderNode(std::shared_ptr<rlf::RenderNode> renderNode)
     {
         mRenderNodes[renderNode->getLayer()].erase(renderNode);
     }
 
-    void RenderSystem::addParticleRenderNode(rlf::Node::ParticleRenderNode* const& renderNode)
+    void RenderSystem::addParticleRenderNode(std::shared_ptr<rlf::ParticleRenderNode> renderNode)
     {
         mParticleRenderNodes[renderNode->getLayer()].insert(renderNode);
     }
-    void RenderSystem::removeParticleRenderNode(rlf::Node::ParticleRenderNode* const& renderNode)
+    void RenderSystem::removeParticleRenderNode(std::shared_ptr<rlf::ParticleRenderNode> renderNode)
     {
         mParticleRenderNodes[renderNode->getLayer()].erase(renderNode);
     }
 
-    void RenderSystem::addUINode(rlf::Node::UINode* const& uiNode)
+    void RenderSystem::addUINode(std::shared_ptr<rlf::UINode> uiNode)
     {
         mUINodes[uiNode->getLayer()].insert(uiNode);
     }
-    void RenderSystem::removeUINode(rlf::Node::UINode* const& uiNode)
+    void RenderSystem::removeUINode(std::shared_ptr<rlf::UINode> uiNode)
     {
         mUINodes[uiNode->getLayer()].erase(uiNode);
     }
 
-    void RenderSystem::addCameraNode(rlf::Node::CameraNode* const& cameraNode)
+    void RenderSystem::addCameraNode(std::shared_ptr<rlf::CameraNode> cameraNode)
     {
         mCameraNodes.insert(cameraNode);
     }
-    void RenderSystem::eraseCameraNode(rlf::Node::CameraNode* const& cameraNode)
+    void RenderSystem::eraseCameraNode(std::shared_ptr<rlf::CameraNode> cameraNode)
     {
         mCameraNodes.erase(cameraNode);
         if (mActiveCameraNode == cameraNode)
@@ -48,7 +48,7 @@ namespace rlf
             mActiveCameraNode = nullptr;
         }
     }
-    void RenderSystem::setActiveCameraNode(rlf::Node::CameraNode* const& cameraNode)
+    void RenderSystem::setActiveCameraNode(std::shared_ptr<rlf::CameraNode> cameraNode)
     {
         if (cameraNode == nullptr)
         {
@@ -66,16 +66,16 @@ namespace rlf
         }
         mActiveCameraNode = cameraNode;
     }
-    rlf::Node::CameraNode* RenderSystem::getActiveCameraNode() const
+    std::shared_ptr<rlf::CameraNode> RenderSystem::getActiveCameraNode() const
     {
         return mActiveCameraNode;
     }
 
-    void RenderSystem::addUICameraNode(rlf::Node::UICameraNode* const& uiCameraNode)
+    void RenderSystem::addUICameraNode(std::shared_ptr<rlf::UICameraNode> uiCameraNode)
     {
         mUICameraNodes.insert(uiCameraNode);
     }
-    void RenderSystem::eraseUICameraNode(rlf::Node::UICameraNode* const& uiCameraNode)
+    void RenderSystem::eraseUICameraNode(std::shared_ptr<rlf::UICameraNode> uiCameraNode)
     {
         mUICameraNodes.erase(uiCameraNode);
         if (mActiveUICameraNode == uiCameraNode)
@@ -83,7 +83,7 @@ namespace rlf
             mActiveUICameraNode = nullptr;
         }
     }
-    void RenderSystem::setActiveUICameraNode(rlf::Node::UICameraNode* const& uiCameraNode)
+    void RenderSystem::setActiveUICameraNode(std::shared_ptr<rlf::UICameraNode> uiCameraNode)
     {
         if (uiCameraNode == nullptr)
         {
@@ -101,7 +101,7 @@ namespace rlf
         }
         mActiveUICameraNode = uiCameraNode;
     }
-    rlf::Node::UICameraNode* RenderSystem::getActiveUICameraNode() const
+    std::shared_ptr<rlf::UICameraNode> RenderSystem::getActiveUICameraNode() const
     {
         return mActiveUICameraNode;
     }
@@ -151,6 +151,16 @@ namespace rlf
             return activeCameraNode->getReferenceResolution();
         }
         return rlf::Vec2f{static_cast<f32>(GetScreenWidth()), static_cast<f32>(GetScreenHeight())};
+    }
+
+    void RenderSystem::init()
+    {
+        mBloomTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+    }
+
+    void RenderSystem::shutdown()
+    {
+        UnloadRenderTexture(mBloomTexture);
     }
 
     void RenderSystem::render()

@@ -1,66 +1,87 @@
 #include <Node/Audio/MusicNode.hpp>
 
-namespace rlf::Node {
+namespace rlf
+{
 
-    void MusicNode::play() const {
-        if (!getActive()) {
+    void MusicNode::play() const
+    {
+        if (!getActive())
+        {
             return;
         }
 
-        if (auto musicStream = mMusicRsc.getMusicStream()) {
+        if (auto musicStream = mMusicRsc.getMusicStream())
+        {
             PlayMusicStream(*musicStream);
         }
     }
 
-    void MusicNode::resume() const {
-        if (!getActive()) {
+    void MusicNode::resume() const
+    {
+        if (!getActive())
+        {
             return;
         }
-        if (auto musicStream = mMusicRsc.getMusicStream()) {
+        if (auto musicStream = mMusicRsc.getMusicStream())
+        {
             ResumeMusicStream(*musicStream);
         }
     }
-    void MusicNode::pause() const {
-        if (!getActive()) {
+    void MusicNode::pause() const
+    {
+        if (!getActive())
+        {
             return;
         }
-        if (auto musicStream = mMusicRsc.getMusicStream()) {
+        if (auto musicStream = mMusicRsc.getMusicStream())
+        {
             PauseMusicStream(*musicStream);
         }
     }
 
-    void MusicNode::stop() const {
-        if (!getActive()) {
+    void MusicNode::stop() const
+    {
+        if (!getActive())
+        {
             return;
         }
-        if (auto musicStream = mMusicRsc.getMusicStream()) {
+        if (auto musicStream = mMusicRsc.getMusicStream())
+        {
             StopMusicStream(*musicStream);
         }
     }
 
-    bool MusicNode::isPlaying() const {
-        if (auto musicStream = mMusicRsc.getMusicStream()) {
+    bool MusicNode::isPlaying() const
+    {
+        if (auto musicStream = mMusicRsc.getMusicStream())
+        {
             return IsMusicStreamPlaying(*musicStream);
         }
         return false;
     }
 
-    void MusicNode::initImpl() {
-        if (mPlayOnInit) {
+    void MusicNode::initImpl()
+    {
+        if (mPlayOnInit)
+        {
             play();
         }
     }
-    void MusicNode::uninitImpl() {
+    void MusicNode::uninitImpl()
+    {
         stop();
     }
-    void MusicNode::setActiveImpl(bool const active) {
+    void MusicNode::setActiveImpl(bool const active)
+    {
         active ? resume() : pause();
     }
 
-    void MusicNode::setMusic(rlf::MusicResource const& musicRsc) {
+    void MusicNode::setMusic(rlf::MusicResource const& musicRsc)
+    {
         mMusicRsc = musicRsc;
     }
-    rlf::MusicResource const& MusicNode::getMusic() const {
+    rlf::MusicResource const& MusicNode::getMusic() const
+    {
         return mMusicRsc;
     }
 }

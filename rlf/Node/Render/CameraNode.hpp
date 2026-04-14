@@ -2,12 +2,12 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     class CameraNode : public BaseNode
     {
     public:
-        RLF_TYPE_REGISTER_QUICK(CameraNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(CameraNode)
 
         Color const& getClearColor() const;
         void         setClearColor(Color const& color);

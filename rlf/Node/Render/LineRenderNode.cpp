@@ -1,6 +1,6 @@
 #include <Node/Render/LineRenderNode.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     void LineRenderNode::renderImpl()
     {

@@ -2,13 +2,10 @@
 
 #include <System/ISystem.hpp>
 
-namespace rlf::Node
-{
-    class BaseNode;
-}
-
 namespace rlf
 {
+    class BaseNode;
+
     class EditorSystem : public ISystem
     {
     public:
@@ -32,8 +29,8 @@ namespace rlf
         std::unordered_map<std::filesystem::path, bool> mShowPathTable;
 
         // Hierarchy
-        rlf::Node::BaseNode*                      mSelectedNode = nullptr;
-        rlf::Node::BaseNode*                      mDraggedNode  = nullptr;
-        std::unordered_map<Node::BaseNode*, bool> mShowChildrenTable;
+        std::shared_ptr<rlf::BaseNode>                      mSelectedNode;
+        std::shared_ptr<rlf::BaseNode>                      mDraggedNode;
+        std::unordered_map<std::shared_ptr<BaseNode>, bool> mShowChildrenTable;
     };
 }

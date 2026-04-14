@@ -1,12 +1,16 @@
 #include <Node/Render/BurstParticleRenderNode.hpp>
 
-namespace rlf::Node {
+namespace rlf
+{
 
-    u64 BurstParticleRenderNode::getBurstCount() const {
+    u64 BurstParticleRenderNode::getBurstCount() const
+    {
         return mBurstCount;
     }
-    void BurstParticleRenderNode::setBurstCount(u64 const burstCount) {
-        if (mBurstCount == burstCount) {
+    void BurstParticleRenderNode::setBurstCount(u64 const burstCount)
+    {
+        if (mBurstCount == burstCount)
+        {
             return;
         }
         mBurstCount     = burstCount;
@@ -14,11 +18,14 @@ namespace rlf::Node {
         unspawnAllParticle();
     }
 
-    u64 BurstParticleRenderNode::getBurstParticleCount() const {
+    u64 BurstParticleRenderNode::getBurstParticleCount() const
+    {
         return mBurstParticleCount;
     }
-    void BurstParticleRenderNode::setBurstParticleCount(u64 const burstParticleCount) {
-        if (mBurstParticleCount == burstParticleCount) {
+    void BurstParticleRenderNode::setBurstParticleCount(u64 const burstParticleCount)
+    {
+        if (mBurstParticleCount == burstParticleCount)
+        {
             return;
         }
         mBurstParticleCount = burstParticleCount;
@@ -26,25 +33,32 @@ namespace rlf::Node {
         unspawnAllParticle();
     }
 
-    bool BurstParticleRenderNode::getToDestroyAfterBurst() const {
+    bool BurstParticleRenderNode::getToDestroyAfterBurst() const
+    {
         return mToDestroyAfterBurst;
     }
-    void BurstParticleRenderNode::setToDestroyAfterBurst(bool const toDestroyAfterBurst) {
+    void BurstParticleRenderNode::setToDestroyAfterBurst(bool const toDestroyAfterBurst)
+    {
         mToDestroyAfterBurst = toDestroyAfterBurst;
     }
 
-    void BurstParticleRenderNode::updateImpl() {
+    void BurstParticleRenderNode::updateImpl()
+    {
         updateLiveParticles();
 
         // Check if we can spawn a new particle
-        if (!mHasBurstSpawned && (mNumberOfBursts < mBurstCount)) {
+        if (!mHasBurstSpawned && (mNumberOfBursts < mBurstCount))
+        {
             mCurrentSpawnRate -= GetFrameTime();
-            if (mCurrentSpawnRate <= 0.0f) {
-                for (u64 i = 0; i < mBurstParticleCount; ++i) {
+            if (mCurrentSpawnRate <= 0.0f)
+            {
+                for (u64 i = 0; i < mBurstParticleCount; ++i)
+                {
                     spawnParticle();
                 }
                 mNumberOfBursts++;
-                if (mNumberOfBursts == mBurstCount) {
+                if (mNumberOfBursts == mBurstCount)
+                {
                     mHasBurstSpawned = true;
                 }
 
@@ -54,16 +68,21 @@ namespace rlf::Node {
 
 #ifdef RLF_EDITOR
         // Checks if it needs to be destroyed
-        if (mHasBurstSpawned && !anyParticleAlive()) {
+        if (mHasBurstSpawned && !anyParticleAlive())
+        {
             mHasBurstSpawned = false;
             mNumberOfBursts  = 0;
         }
 #else
         // Checks if it needs to be destroyed
-        if (mHasBurstSpawned && !anyParticleAlive()) {
-            if (mToDestroyAfterBurst && (mNumberOfBursts == mBurstCount)) {
+        if (mHasBurstSpawned && !anyParticleAlive())
+        {
+            if (mToDestroyAfterBurst && (mNumberOfBursts == mBurstCount))
+            {
                 setToDestroy(true);
-            } else {
+            }
+            else
+            {
                 mHasBurstSpawned = false;
             }
         }

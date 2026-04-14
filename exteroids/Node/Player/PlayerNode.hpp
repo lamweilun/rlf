@@ -4,21 +4,21 @@
 #include <Node/Audio/SoundNode.hpp>
 #include <Node/Player/PlayerBulletNode.hpp>
 
-namespace ext::Node
+namespace ext
 {
-    class PlayerNode : public rlf::Node::RigidbodyNode
+    class PlayerNode : public rlf::RigidbodyNode
     {
     public:
-        RLF_TYPE_REGISTER_QUICK(PlayerNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(PlayerNode)
 
     protected:
         void initImpl() override;
         void updateImpl() override;
 
     private:
-        rlf::Node::SoundNode*        mFireSoudNode = nullptr;
-        ext::Node::PlayerBulletNode* mPlayerBulletNode = nullptr;
-        f32                          mFireRate        = 0.1f;
-        f32                          mCurrentFireRate = 0.0f;
+        std::shared_ptr<rlf::SoundNode>        mFireSoudNode;
+        std::shared_ptr<ext::PlayerBulletNode> mPlayerBulletNode;
+        f32                                    mFireRate        = 0.1f;
+        f32                                    mCurrentFireRate = 0.0f;
     };
 }

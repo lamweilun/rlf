@@ -4,10 +4,12 @@
 
 #include <Resource/SoundResource.hpp>
 
-namespace rlf::Node {
-    class SoundNode : public rlf::Node::BaseNode {
+namespace rlf
+{
+    class SoundNode : public rlf::BaseNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(SoundNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(SoundNode)
 
         void play() const;
         void resume() const;

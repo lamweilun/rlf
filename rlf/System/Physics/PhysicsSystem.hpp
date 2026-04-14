@@ -11,11 +11,11 @@ namespace rlf
     class PhysicsSystem : public ISystem
     {
     public:
-        void addColliderNode(rlf::Node::BoxColliderNode* boxColliderNode);
-        void addColliderNode(rlf::Node::CircleColliderNode* circleCollider);
+        void addColliderNode(std::shared_ptr<rlf::BoxColliderNode> boxColliderNode);
+        void addColliderNode(std::shared_ptr<rlf::CircleColliderNode> circleCollider);
 
-        void removeColliderNode(rlf::Node::BoxColliderNode* boxColliderNode);
-        void removeColliderNode(rlf::Node::CircleColliderNode* circleCollider);
+        void removeColliderNode(std::shared_ptr<rlf::BoxColliderNode> boxColliderNode);
+        void removeColliderNode(std::shared_ptr<rlf::CircleColliderNode> circleCollider);
 
         void update() override;
 
@@ -24,7 +24,7 @@ namespace rlf
 #endif
 
     private:
-        rlf::Table<rlf::Node::BoxColliderNode*>    mBoxColliderNodes;
-        rlf::Table<rlf::Node::CircleColliderNode*> mCircleColliderNodes;
+        rlf::Table<std::shared_ptr<rlf::BoxColliderNode>>    mBoxColliderNodes;
+        rlf::Table<std::shared_ptr<rlf::CircleColliderNode>> mCircleColliderNodes;
     };
 }

@@ -2,7 +2,7 @@
 
 #include <boost/pool/object_pool.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     class BaseNode;
 

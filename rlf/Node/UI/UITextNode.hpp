@@ -3,10 +3,12 @@
 #include <Node/UI/UINode.hpp>
 #include <Resource/FontResource.hpp>
 
-namespace rlf::Node {
-    class UITextNode : public UINode {
+namespace rlf
+{
+    class UITextNode : public UINode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(UITextNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(UITextNode)
 
         void renderImpl() override;
 

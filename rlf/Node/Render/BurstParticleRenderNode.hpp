@@ -2,10 +2,12 @@
 
 #include <Node/Render/ParticleRenderNode.hpp>
 
-namespace rlf::Node {
-    class BurstParticleRenderNode : public rlf::Node::ParticleRenderNode {
+namespace rlf
+{
+    class BurstParticleRenderNode : public rlf::ParticleRenderNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(BurstParticleRenderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(BurstParticleRenderNode)
 
         u64  getBurstCount() const;
         void setBurstCount(u64 const burstCount);
@@ -23,7 +25,7 @@ namespace rlf::Node {
         RLF_NODE_ACCESS_MEMBER_GET_SET("Burst Count", getBurstCount, setBurstCount)
         RLF_NODE_ACCESS_MEMBER_GET_SET("Burst Particle Count", getBurstParticleCount, setBurstParticleCount)
         RLF_NODE_ACCESS_MEMBER_GET_SET("To Destroy After Burst", getToDestroyAfterBurst, setToDestroyAfterBurst)
-        RLF_NODE_ACCESS_PARENT(rlf::Node::ParticleRenderNode)
+        RLF_NODE_ACCESS_PARENT(rlf::ParticleRenderNode)
         RLF_NODE_ACCESS_END
 
     private:

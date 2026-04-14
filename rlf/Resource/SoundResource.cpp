@@ -5,12 +5,12 @@
 
 namespace rlf
 {
-    void SoundResource::setSound(std::shared_ptr<::Sound> sound)
+    void SoundResource::setSound(std::shared_ptr<Sound> sound)
     {
         mSound = sound;
     }
 
-    std::shared_ptr<::Sound> SoundResource::getSound() const
+    std::shared_ptr<Sound> SoundResource::getSound() const
     {
         return mSound;
     }
@@ -24,6 +24,5 @@ namespace rlf
     {
         std::string filePath = j.get<std::string>();
         rsc                  = rlf::Engine::getInstance().getSystem<rlf::ResourceSystem>()->getSoundResource(filePath);
-        rsc.setFilePath(filePath);
     }
 }

@@ -3,10 +3,12 @@
 #include <Node/UI/UINode.hpp>
 #include <Resource/TextureResource.hpp>
 
-namespace rlf::Node {
-    class UISpriteNode : public UINode {
+namespace rlf
+{
+    class UISpriteNode : public UINode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(UISpriteNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(UISpriteNode)
 
         void renderImpl() override;
 

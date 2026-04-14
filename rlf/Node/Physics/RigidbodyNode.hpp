@@ -2,12 +2,12 @@
 
 #include <Node/BaseNode.hpp>
 
-namespace rlf::Node
+namespace rlf
 {
     class RigidbodyNode : public BaseNode
     {
     public:
-        RLF_TYPE_REGISTER_QUICK(RigidbodyNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(RigidbodyNode)
 
         void              setVelocity(rlf::Vec2f const& velocity);
         rlf::Vec2f const& getVelocity() const;

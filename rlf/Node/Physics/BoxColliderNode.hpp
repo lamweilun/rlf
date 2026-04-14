@@ -2,10 +2,12 @@
 
 #include <Node/Physics/ColliderNode.hpp>
 
-namespace rlf::Node {
-    class BoxColliderNode : public ColliderNode {
+namespace rlf
+{
+    class BoxColliderNode : public ColliderNode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(BoxColliderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(BoxColliderNode)
 
     protected:
         void setupImpl() override;

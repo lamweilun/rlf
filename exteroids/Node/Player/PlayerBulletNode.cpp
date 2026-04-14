@@ -4,18 +4,18 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace ext::Node
+namespace ext
 {
 
     void PlayerBulletNode::initImpl()
     {
-        mBulletParticle = getFirstChildOfType<rlf::Node::BurstParticleRenderNode>().value();
+        mBulletParticle = getFirstChildOfType<rlf::BurstParticleRenderNode>().value();
 
-        if (auto const bulletCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>())
+        if (auto const bulletCollider = getFirstChildOfType<rlf::CircleColliderNode>())
         {
             bulletCollider.value()->setCollidedCallback([this](rlf::CollideInfo const& info)
                                                         {
-                                                            if (info.other && info.other->getTag() == "Asteroid")
+                                                            if (info.other->getTag() == "Asteroid")
                                                             {
                                                                 mBulletParticle->setParent(getRootNode());
                                                                 mBulletParticle->setPosition(info.self->getGlobalPosition());
@@ -46,6 +46,6 @@ namespace ext::Node
             setToDestroy(true);
         }
 
-        rlf::Node::RigidbodyNode::updateImpl();
+        rlf::RigidbodyNode::updateImpl();
     }
 }

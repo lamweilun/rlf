@@ -5,14 +5,14 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace ext::Node
+namespace ext
 {
     void AsteroidNode::initImpl()
     {
-        mAsteroidCollider = getFirstChildOfType<rlf::Node::CircleColliderNode>().value();
+        mAsteroidCollider = getFirstChildOfType<rlf::CircleColliderNode>().value();
         mAsteroidCollider->setCollidedCallback([this](rlf::CollideInfo const& info)
                                                {
-                                                   if (info.other && info.other->getTag() == "PlayerBullet")
+                                                   if (info.other->getTag() == "PlayerBullet")
                                                    {
                                                        setHP(getHP() - 1);
                                                    }

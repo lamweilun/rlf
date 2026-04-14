@@ -4,7 +4,7 @@ project(rlf)
 
 # rlf dependencies
 CPMAddPackage("gh:nlohmann/json@3.12.0") # nlohmann_json
-CPMAddPackage("gh:raysan5/raylib#1b084ff9f256bea3406255322fce4618e0b250f0") # raylib
+CPMAddPackage("gh:raysan5/raylib#019cc889fc808b1cfe18e9e4bc10ccdc5de7d430") # raylib
 
 # boost
 CPMAddPackage(
@@ -15,7 +15,7 @@ CPMAddPackage(
         "BOOST_ENABLE_CMAKE ON" 
         "BOOST_SKIP_INSTALL_RULES ON" # Set `OFF` for installation
         "BUILD_SHARED_LIBS OFF" 
-        "BOOST_INCLUDE_LIBRARIES json\\\;pool" # Note the escapes!
+        "BOOST_INCLUDE_LIBRARIES json\\\;uuid\\\;pool" # Note the escapes!
 )
 
 if (RLF_EDITOR)
@@ -46,7 +46,7 @@ add_library(
 
         Engine/Engine.cpp
 
-        Node/NodeManager.cpp
+        Event/EventManager.cpp
 
         Node/Audio/MusicNode.cpp
         Node/Audio/SoundNode.cpp
@@ -74,6 +74,8 @@ add_library(
 
         Node/BaseNode.cpp
 
+        NodeManager/NodeManager.cpp
+
         Resource/IResource.cpp
         Resource/TextureResource.cpp
         Resource/MusicResource.cpp
@@ -93,9 +95,8 @@ add_library(
         Util/Reflection/NamedValue.cpp
 
         Util/Color.cpp
-        
+        Util/UUID.cpp
         Util/Math/Angle.cpp
-        
         Util/Util.cpp
 )
 
@@ -113,6 +114,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ./)
 target_link_libraries(
     ${PROJECT_NAME} PUBLIC 
     Boost::json
+    Boost::uuid
     Boost::pool
     nlohmann_json
     raylib

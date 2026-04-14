@@ -7,10 +7,12 @@
 
 #include <functional>
 
-namespace rlf::Node {
-    class UISliderNode : public UINode {
+namespace rlf
+{
+    class UISliderNode : public UINode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(UISliderNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(UISliderNode)
 
         rlf::Range<f32> const& getValueRange() const;
         void                   setValueRange(rlf::Range<f32> const& valueRange);

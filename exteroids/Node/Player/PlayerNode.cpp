@@ -3,13 +3,13 @@
 #include <Engine/Engine.hpp>
 #include <System/Render/RenderSystem.hpp>
 
-namespace ext::Node
+namespace ext
 {
 
     void PlayerNode::initImpl()
     {
-        mPlayerBulletNode = getRootNode()->getFirstChildOfName<ext::Node::PlayerBulletNode>("PlayerBulletNode").value();
-        mFireSoudNode     = getFirstChildOfType<rlf::Node::SoundNode>().value();
+        mPlayerBulletNode = getRootNode()->getFirstChildOfName<ext::PlayerBulletNode>("PlayerBulletNode").value();
+        mFireSoudNode     = getFirstChildOfType<rlf::SoundNode>().value();
     }
 
     void PlayerNode::updateImpl()
@@ -31,7 +31,7 @@ namespace ext::Node
                 mFireSoudNode->play();
 
                 // Spawn a bullet
-                auto newBullet = mPlayerBulletNode->clone()->as<ext::Node::PlayerBulletNode>();
+                auto newBullet = mPlayerBulletNode->clone()->as<ext::PlayerBulletNode>();
                 newBullet->setRotation(getRotation());
                 newBullet->setPosition(getPosition());
                 newBullet->setVelocity(direction);
@@ -59,6 +59,6 @@ namespace ext::Node
         }
         setVelocity(newVelocity.Normalized());
 
-        rlf::Node::RigidbodyNode::updateImpl();
+        rlf::RigidbodyNode::updateImpl();
     }
 }

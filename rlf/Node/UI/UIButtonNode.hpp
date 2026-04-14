@@ -5,10 +5,12 @@
 
 #include <functional>
 
-namespace rlf::Node {
-    class UIButtonNode : public UINode {
+namespace rlf
+{
+    class UIButtonNode : public UINode
+    {
     public:
-        RLF_TYPE_REGISTER_QUICK(UIButtonNode)
+        RLF_NODE_TYPE_REGISTER_QUICK(UIButtonNode)
 
         rlf::TextureResource const& getTexture() const;
         void                        setTexture(rlf::TextureResource const& textureRsc);

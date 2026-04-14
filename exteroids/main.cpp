@@ -27,11 +27,11 @@ int main()
     config.setup_func = [](rlf::NodeManager& node_manager, rlf::SystemManager&)
     {
         // Register game node types
-        node_manager.registerNodeType<ext::Node::MainMenuManagerNode>();
-        node_manager.registerNodeType<ext::Node::GameManagerNode>();
-        node_manager.registerNodeType<ext::Node::PlayerNode>();
-        node_manager.registerNodeType<ext::Node::PlayerBulletNode>();
-        node_manager.registerNodeType<ext::Node::AsteroidNode>();
+        node_manager.registerNodeType<ext::MainMenuManagerNode>();
+        node_manager.registerNodeType<ext::GameManagerNode>();
+        node_manager.registerNodeType<ext::PlayerNode>();
+        node_manager.registerNodeType<ext::PlayerBulletNode>();
+        node_manager.registerNodeType<ext::AsteroidNode>();
     };
 
 #ifdef RLF_EDITOR

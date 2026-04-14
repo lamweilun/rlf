@@ -1,7 +1,7 @@
 #include <System/Editor/EditorSystem.hpp>
 
 #include <Engine/Engine.hpp>
-#include <Node/NodeManager.hpp>
+#include <NodeManager/NodeManager.hpp>
 #include <Node/BaseNode.hpp>
 
 #include <imgui.h>
@@ -32,8 +32,30 @@ namespace rlf
         if (ImGui::Button("New World"))
         {
             mLoadedWorld.clear();
+
+            mSelectedNode = nullptr;
+            mDraggedNode  = nullptr;
+            mShowChildrenTable.clear();
+
             auto rootNode = rlf::Engine::getInstance().getRootNode();
+
+            if (!rootNode->getChildren().empty())
+            {
+                auto child = rootNode->getChildren().front();
+            }
+
             rootNode->shutdown();
+
+            if (!rootNode->getChildren().empty())
+            {
+                auto child = rootNode->getChildren().front();
+            }
+
+            rootNode->clearChildrenMarkedForDestruction();
+
+            // Force another preUpdate to run any remaining destruction from the preUpdate chain
+            // This ensures textures are released NOW, not on the next frame
+            rootNode->preUpdate();
         }
 
         if (ImGui::Button("Save World"))
@@ -83,7 +105,7 @@ namespace rlf
 
         ImGui::Separator();
 
-        std::function<void(rlf::Node::BaseNode*)> drawChildrenTreeFunc = [&](rlf::Node::BaseNode* node)
+        std::function<void(std::shared_ptr<rlf::BaseNode>)> drawChildrenTreeFunc = [&](std::shared_ptr<rlf::BaseNode> node)
         {
             // Setup unique IDs based on pointer address
             auto              rootNodePtr = node;
@@ -163,9 +185,9 @@ namespace rlf
                 }
             }
 
-            // Delete Button
             if (node == mSelectedNode)
             {
+                // Delete Button
                 ImGui::SameLine();
                 std::string const deleteID = std::string("X") + nodeUniqueID + rlf::Editor::id_DeleteButton;
                 ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.25f, 0.25f, 1.0f)));
@@ -191,12 +213,17 @@ namespace rlf
                 ImGui::PopStyleColor();
 
                 ImGui::SameLine();
+
+                // Clone Button
                 std::string const cloneID = std::string("C") + nodeUniqueID + rlf::Editor::id_CloneButton;
                 ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.5f, 0.0f, 1.0f)));
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.75f, 0.0f, 1.0f)));
                 if (ImGui::Button(cloneID.c_str()))
                 {
-                    mSelectedNode = mSelectedNode->clone();
+                    if (mSelectedNode)
+                    {
+                        mSelectedNode = mSelectedNode->clone();
+                    }
                 }
                 ImGui::PopStyleColor();
                 ImGui::PopStyleColor();

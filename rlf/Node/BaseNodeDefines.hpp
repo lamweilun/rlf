@@ -1,19 +1,15 @@
 #pragma once
 
-#define RLF_TYPE_NAME(NAME)                                \
-    inline static constexpr std::string_view getTypeName() \
-    {                                                      \
-        return NAME;                                       \
-    }
+#include <Util/Reflection/TypeName.hpp>
 
-#define RLF_TYPE_REGISTER(TYPE, NAME)                                \
+#define RLF_NODE_TYPE_REGISTER(TYPE, NAME)                           \
     RLF_TYPE_NAME(NAME)                                              \
     inline virtual std::string_view getTypeNameImpl() const override \
     {                                                                \
         return getTypeName();                                        \
     }
 
-#define RLF_TYPE_REGISTER_QUICK(TYPE) RLF_TYPE_REGISTER(TYPE, #TYPE)
+#define RLF_NODE_TYPE_REGISTER_QUICK(TYPE) RLF_NODE_TYPE_REGISTER(TYPE, #TYPE)
 
 #ifdef RLF_EDITOR
 #define RLF_NODE_ACCESS_START                                        \
@@ -63,4 +59,3 @@
         using T = typename std::decay_t<decltype(*this)>;    \
         acc(NAME, &T::GETTER, &T::SETTER, *this);            \
     }
-    
