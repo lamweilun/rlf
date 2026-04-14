@@ -14,21 +14,21 @@
 #include <Node/BaseNode.hpp>
 
 #include <Node/Audio/MusicNode.hpp>
-#include <Node/Audio/SoundNode.cpp>
+#include <Node/Audio/SoundNode.hpp>
 
-#include <Node/Physics/ColliderNode.cpp>
-#include <Node/Physics/BoxColliderNode.cpp>
-#include <Node/Physics/CircleColliderNode.cpp>
-#include <Node/Physics/RigidbodyNode.cpp>
+#include <Node/Physics/ColliderNode.hpp>
+#include <Node/Physics/BoxColliderNode.hpp>
+#include <Node/Physics/CircleColliderNode.hpp>
+#include <Node/Physics/RigidbodyNode.hpp>
 
-#include <Node/Render/RenderNode.cpp>
+#include <Node/Render/RenderNode.hpp>
 #include <Node/Render/CameraNode.hpp>
-#include <Node/Render/LineRenderNode.cpp>
-#include <Node/Render/CircleRenderNode.cpp>
-#include <Node/Render/QuadRenderNode.cpp>
-#include <Node/Render/SpriteRenderNode.cpp>
-#include <Node/Render/ParticleRenderNode.cpp>
-#include <Node/Render/BurstParticleRenderNode.cpp>
+#include <Node/Render/LineRenderNode.hpp>
+#include <Node/Render/CircleRenderNode.hpp>
+#include <Node/Render/QuadRenderNode.hpp>
+#include <Node/Render/SpriteRenderNode.hpp>
+#include <Node/Render/ParticleRenderNode.hpp>
+#include <Node/Render/BurstParticleRenderNode.hpp>
 
 #include <Node/UI/UINode.hpp>
 #include <Node/UI/UICameraNode.hpp>
