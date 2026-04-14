@@ -283,14 +283,16 @@ namespace rlf
         newParent->mNewChildren.push_back(shared_from_this());
         // Remove this node from the old parent
         {
-            auto  currParent         = mParent.lock();
-            auto& currParentChildren = currParent->getChildren();
-            for (size_t i = 0; i < currParentChildren.size(); ++i)
+            if (auto currParent = mParent.lock())
             {
-                if (currParentChildren[i] == shared_from_this())
+                auto& currParentChildren = currParent->getChildren();
+                for (size_t i = 0; i < currParentChildren.size(); ++i)
                 {
-                    currParentChildren.erase(std::begin(currParentChildren) + static_cast<i32>(i));
-                    break;
+                    if (currParentChildren[i] == shared_from_this())
+                    {
+                        currParentChildren.erase(std::begin(currParentChildren) + static_cast<i32>(i));
+                        break;
+                    }
                 }
             }
         }
@@ -310,7 +312,6 @@ namespace rlf
             size_t const newSize = oldSize + mNewChildren.size();
             mChildren.append_range(mNewChildren);
             mNewChildren.clear();
-            mNewChildren.shrink_to_fit();
             for (size_t i = oldSize; i < newSize; ++i)
             {
                 mChildren[i]->setup();
@@ -556,6 +557,12 @@ namespace rlf
 
     std::shared_ptr<BaseNode> BaseNode::clone()
     {
+        // Should not be able to clone the root node, only its contents
+        if (isRootNode())
+        {
+            return nullptr;
+        }
+
         auto const nodeJson = serialize();
         auto const nodeType = getTypeNameImpl();
         auto       newChild = getParent().lock()->addChild(nodeType);
