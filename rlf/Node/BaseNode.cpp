@@ -624,8 +624,8 @@ namespace rlf
 
     void BaseNode::clearChildrenMarkedForDestruction()
     {
-        // Safe: work directly on mChildren, no getChildren() to avoid modifying vector during iteration
-        size_t newSize = mChildren.size();
+        // For children that are marked for destroy, swap to back, call shutdown, resize to newSize
+        size_t newSize = getChildren().size();
         for (size_t i = 0; i < newSize;)
         {
             if (mChildren[i]->mToDestroy)
@@ -638,44 +638,16 @@ namespace rlf
                 ++i;
             }
         }
-
-        // First extract all nodes to destroy into local vector
-        std::vector<std::shared_ptr<BaseNode>> nodesToDestroy;
-        nodesToDestroy.reserve(mChildren.size() - newSize);
-
         for (size_t i = newSize; i < mChildren.size(); ++i)
         {
-            nodesToDestroy.push_back(std::move(mChildren[i]));
+            for (auto& child : mChildren[i]->getChildren())
+            {
+                child->setToDestroy(true);
+            }
+            mChildren[i]->clearChildrenMarkedForDestruction();
+            mChildren[i]->uninit();
+            mChildren[i]->shutdown();
         }
-
-        // Resize FIRST - this drops parent references NOW
         mChildren.resize(newSize);
-        mChildren.shrink_to_fit();
-
-        // Now safely destroy them with no parent references held
-        for (auto& node : nodesToDestroy)
-        {
-            // First, move any pending new children into mChildren so they get destroyed too
-            if (!node->mNewChildren.empty())
-            {
-                node->mChildren.append_range(node->mNewChildren);
-                node->mNewChildren.clear();
-            }
-
-            // Mark all descendants for destruction first - work directly on children, not getAllChildren()
-            for (auto& child : node->mChildren)
-            {
-                child->mToDestroy = true;
-            }
-
-            // Clear child nodes (this will recurse correctly)
-            node->clearChildrenMarkedForDestruction();
-
-            node->uninit();
-            node->shutdownImpl();
-
-            // Force the node reference to be released NOW
-            node.reset();
-        }
     }
 }

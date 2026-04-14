@@ -42,6 +42,7 @@ namespace rlf
             texture = mLoadedTextures.at(filePath).lock();
         }
         rsc.setTexture(texture);
+        rsc.setFilePath(filePath);
         return rsc;
     }
 
@@ -76,6 +77,7 @@ namespace rlf
             music = mLoadedMusics.at(filePath).lock();
         }
         rsc.setMusicStream(music);
+        rsc.setFilePath(filePath);
         return rsc;
     }
 
@@ -110,6 +112,7 @@ namespace rlf
             sound = mLoadedSounds.at(filePath).lock();
         }
         rsc.setSound(sound);
+        rsc.setFilePath(filePath);
         return rsc;
     }
 
@@ -145,6 +148,7 @@ namespace rlf
             font = mLoadedFonts.at(filePath).lock();
         }
         rsc.setFont(font);
+        rsc.setFilePath(filePath);
         return rsc;
     }
 

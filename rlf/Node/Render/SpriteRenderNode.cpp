@@ -16,6 +16,10 @@ namespace rlf
             Rectangle dstRec = {-frameWidth * 0.5f, -frameHeight * 0.5f, frameWidth, frameHeight};
             DrawTexturePro(*texture, srcRec, dstRec, Vector2Zeros, 0.0f, getTint());
         }
+        else
+        {
+            std::cout << "Texture dont exist " << mTexture.getFilePath() << std::endl;
+        }
     }
 
     rlf::TextureResource const& SpriteRenderNode::getTexture() const
